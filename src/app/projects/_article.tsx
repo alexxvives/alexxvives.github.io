@@ -225,7 +225,7 @@ export function ArticleHeader({
 }) {
   return (
     <header className="container-page mt-10">
-      <div className="max-w-[840px]">
+      <div className="max-w-[840px] mx-auto">
         <p className="font-mono text-xs uppercase tracking-widest text-accent">
           {eyebrow}
         </p>

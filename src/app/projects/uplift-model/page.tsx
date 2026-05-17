@@ -16,7 +16,7 @@ function FourQuadrant() {
   const quadrants = [
     {
       name: "Persuadables",
-      desc: "Low baseline, high treatment response. The gold standard — offer works here.",
+      desc: "Low baseline, high treatment response. The gold standard: offer works here.",
       col: "border-accent/50 bg-accent/5",
       label: "HIGH UPLIFT",
       labelColor: "#a3e635",
@@ -24,7 +24,7 @@ function FourQuadrant() {
     },
     {
       name: "Sure Things",
-      desc: "Would convert regardless. Wasted spend — they buy without the offer.",
+      desc: "Would convert regardless. Wasted spend: they buy without the offer.",
       col: "border-border/50 bg-bg-elev/20",
       label: "WASTED SPEND",
       labelColor: "rgba(255,255,255,0.3)",
@@ -40,7 +40,7 @@ function FourQuadrant() {
     },
     {
       name: "Sleeping Dogs",
-      desc: "Negative uplift — the offer actually reduces their likelihood to convert.",
+      desc: "Negative uplift: the offer actually reduces their likelihood to convert.",
       col: "border-red-500/30 bg-red-500/5",
       label: "SUPPRESS",
       labelColor: "#f87171",
@@ -71,7 +71,7 @@ function FourQuadrant() {
       <figcaption className="mt-3 text-xs text-ink-subtle text-center">
         <span className="text-ink-muted font-medium">Fig 1.</span> The four customer archetypes
         in uplift modeling. Standard propensity models only distinguish &quot;converts&quot; vs
-        &quot;doesn&apos;t convert&quot; — they miss the sleeping dogs entirely.
+        &quot;doesn&apos;t convert&quot;, missing the sleeping dogs entirely.
       </figcaption>
     </figure>
   );
@@ -79,90 +79,120 @@ function FourQuadrant() {
 
 // ── Diagram 2: Qini curve ─────────────────────────────────────────────────────
 
-function QiniCurve() {
-  const W = 560, H = 230;
-  const pl = 44, pr = 20, pt = 20, pb = 42;
+function AUUCCurve() {
+  const W = 580, H = 270;
+  const pl = 50, pr = 24, pt = 30, pb = 50;
   const cW = W - pl - pr, cH = H - pt - pb;
   const xs = (pct: number) => pl + (pct / 100) * cW;
-  const ys = (pct: number) => pt + cH - ((pct + 5) / 105) * cH;
+  const ys = (v: number) => pt + cH * (1 - v);
 
-  // Cumulative incremental conversions as % of audience targeted
-  // random: flat diagonal; propensity: curves up but tails off; uplift: highest then descends at sleeping dogs
-  const random = [0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88];
-  const propensity = [0, 14, 26, 37, 47, 56, 63, 69, 74, 78, 82, 88];
-  const uplift = [0, 18, 34, 48, 60, 70, 77, 82, 85, 86, 87, 88];
+  // 11 points: 0%..100% in steps of 10%
+  const perfect = [0, 0.30, 0.57, 0.80, 0.94, 1.0, 1.0, 0.99, 0.98, 0.96, 0.93];
+  const tLR     = [0, 0.22, 0.44, 0.63, 0.78, 0.88, 0.95, 0.99, 0.98, 0.96, 0.94];
+  const xLR     = [0, 0.21, 0.43, 0.62, 0.77, 0.87, 0.94, 0.97, 0.97, 0.95, 0.93];
+  const rLR     = [0, 0.20, 0.41, 0.60, 0.75, 0.85, 0.92, 0.96, 0.96, 0.94, 0.92];
+  const random  = [0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00];
 
   const makePath = (vals: number[]) =>
-    vals
-      .map((v, i) => {
-        const x = xs((i / (vals.length - 1)) * 100);
-        const y = ys(v);
-        return `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`;
-      })
-      .join(" ");
+    vals.map((v, i) => `${i === 0 ? "M" : "L"}${xs(i * 10).toFixed(1)},${ys(v).toFixed(1)}`).join(" ");
 
   return (
     <figure className="select-none">
       <div className="rounded-xl bg-bg-elev/50 border border-border p-5 pb-3">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" aria-hidden="true">
-          {[0, 25, 50, 75, 100].map((v) => (
+          {/* grid */}
+          {[0, 0.2, 0.4, 0.6, 0.8, 1.0].map((v) => (
             <g key={v}>
               <line x1={pl} y1={ys(v)} x2={pl + cW} y2={ys(v)} stroke="rgba(255,255,255,0.05)" />
-              {v > 0 && (
-                <text x={pl - 6} y={ys(v) + 3} textAnchor="end" fill="rgba(255,255,255,0.28)" fontSize={9}>
-                  {v}%
-                </text>
-              )}
-              <line x1={xs(v)} y1={pt} x2={xs(v)} y2={pt + cH} stroke="rgba(255,255,255,0.05)" />
-              {v > 0 && (
-                <text x={xs(v)} y={pt + cH + 15} textAnchor="middle" fill="rgba(255,255,255,0.28)" fontSize={9}>
-                  {v}%
-                </text>
-              )}
+              <text x={pl - 8} y={ys(v) + 4} textAnchor="end" fill="rgba(255,255,255,0.28)" fontSize={9}>
+                {v.toFixed(1)}
+              </text>
             </g>
           ))}
+          {[0, 25, 50, 75, 100].map((v) => (
+            <g key={v}>
+              <line x1={xs(v)} y1={pt} x2={xs(v)} y2={pt + cH} stroke="rgba(255,255,255,0.05)" />
+              <text x={xs(v)} y={pt + cH + 16} textAnchor="middle" fill="rgba(255,255,255,0.28)" fontSize={9}>
+                {v}%
+              </text>
+            </g>
+          ))}
+          {/* axes */}
           <line x1={pl} y1={pt} x2={pl} y2={pt + cH} stroke="rgba(255,255,255,0.1)" />
           <line x1={pl} y1={pt + cH} x2={pl + cW} y2={pt + cH} stroke="rgba(255,255,255,0.1)" />
-
-          <path d={makePath(random)} fill="none" stroke="rgba(255,255,255,0.2)" strokeDasharray="4,3" strokeWidth={1.5} />
-          <path d={makePath(propensity)} fill="none" stroke="#3b82f6" strokeWidth={2} strokeLinejoin="round" />
-          <path d={makePath(uplift)} fill="none" stroke="#a3e635" strokeWidth={2.5} strokeLinejoin="round" />
-
-          {/* area under uplift */}
+          {/* AUUC fill area under T(LR) */}
           <path
-            d={`${makePath(uplift)} L${xs(100).toFixed(1)},${ys(0).toFixed(1)} L${xs(0).toFixed(1)},${ys(0).toFixed(1)} Z`}
-            fill="#a3e635"
-            fillOpacity={0.06}
+            d={`${makePath(tLR)} L${xs(100).toFixed(1)},${ys(0).toFixed(1)} L${xs(0).toFixed(1)},${ys(0).toFixed(1)} Z`}
+            fill="#3b82f6" fillOpacity={0.07}
           />
-
+          {/* curves */}
+          <path d={makePath(random)}  fill="none" stroke="rgba(180,180,180,0.4)" strokeDasharray="4,3" strokeWidth={1.5} />
+          <path d={makePath(perfect)} fill="none" stroke="#4d7c0f" strokeWidth={2} strokeLinejoin="round" />
+          <path d={makePath(rLR)}     fill="none" stroke="#ca8a04" strokeWidth={2} strokeLinejoin="round" />
+          <path d={makePath(xLR)}     fill="none" stroke="#f97316" strokeWidth={2} strokeLinejoin="round" />
+          <path d={makePath(tLR)}     fill="none" stroke="#3b82f6" strokeWidth={2.5} strokeLinejoin="round" />
           {/* legend */}
-          <rect x={pl + cW - 120} y={pt + 4} width={116} height={56} rx={5} fill="rgba(0,0,0,0.3)" />
-          <line x1={pl + cW - 112} y1={pt + 16} x2={pl + cW - 98} y2={pt + 16} stroke="#a3e635" strokeWidth={2.5} />
-          <text x={pl + cW - 92} y={pt + 20} fill="rgba(255,255,255,0.7)" fontSize={9}>Uplift model</text>
-          <line x1={pl + cW - 112} y1={pt + 32} x2={pl + cW - 98} y2={pt + 32} stroke="#3b82f6" strokeWidth={2} />
-          <text x={pl + cW - 92} y={pt + 36} fill="rgba(255,255,255,0.7)" fontSize={9}>Propensity model</text>
-          <line x1={pl + cW - 112} y1={pt + 48} x2={pl + cW - 98} y2={pt + 48} stroke="rgba(255,255,255,0.3)" strokeDasharray="4,3" />
-          <text x={pl + cW - 92} y={pt + 52} fill="rgba(255,255,255,0.5)" fontSize={9}>Random</text>
-
-          <text x={pl + cW / 2} y={H - 5} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize={9}>
-            % Audience Targeted (high → low uplift)
+          <rect x={pl + 10} y={pt + 8} width={100} height={84} rx={4} fill="rgba(0,0,0,0.45)" />
+          <line x1={pl + 18} y1={pt + 20} x2={pl + 30} y2={pt + 20} stroke="#3b82f6" strokeWidth={2.5} />
+          <text x={pl + 34} y={pt + 24} fill="rgba(255,255,255,0.75)" fontSize={9}>T (LR)</text>
+          <line x1={pl + 18} y1={pt + 34} x2={pl + 30} y2={pt + 34} stroke="#f97316" strokeWidth={2} />
+          <text x={pl + 34} y={pt + 38} fill="rgba(255,255,255,0.75)" fontSize={9}>X (LR)</text>
+          <line x1={pl + 18} y1={pt + 48} x2={pl + 30} y2={pt + 48} stroke="#ca8a04" strokeWidth={2} />
+          <text x={pl + 34} y={pt + 52} fill="rgba(255,255,255,0.75)" fontSize={9}>R (LR)</text>
+          <line x1={pl + 18} y1={pt + 62} x2={pl + 30} y2={pt + 62} stroke="#4d7c0f" strokeWidth={2} />
+          <text x={pl + 34} y={pt + 66} fill="rgba(255,255,255,0.75)" fontSize={9}>Perfect</text>
+          <line x1={pl + 18} y1={pt + 76} x2={pl + 30} y2={pt + 76} stroke="rgba(180,180,180,0.4)" strokeDasharray="4,3" strokeWidth={1.5} />
+          <text x={pl + 34} y={pt + 80} fill="rgba(255,255,255,0.5)" fontSize={9}>Random</text>
+          {/* annotation: "Users with highest uplift" */}
+          <text
+            x={xs(13)} y={ys(0.35)}
+            fill="rgba(100,160,255,0.65)" fontSize={8.5}
+            transform={`rotate(-54 ${xs(13)} ${ys(0.35)})`}
+          >
+            Users with highest uplift
+          </text>
+          {/* annotation: "As good as random targeting" */}
+          <text
+            x={xs(44)} y={ys(0.68)}
+            fill="rgba(100,160,255,0.5)" fontSize={8} textAnchor="middle"
+            transform={`rotate(-28 ${xs(44)} ${ys(0.68)})`}
+          >
+            As good as random targeting
+          </text>
+          {/* annotation: "Little to no incremental benefit" - above peak */}
+          <text x={xs(66)} y={pt - 6} fill="rgba(100,160,255,0.6)" fontSize={8.5} textAnchor="middle">
+            Little to no incremental benefit
+          </text>
+          <line x1={xs(66)} y1={pt - 2} x2={xs(70)} y2={ys(0.99)} stroke="rgba(100,160,255,0.3)" strokeWidth={0.8} />
+          {/* annotation: "Negative incremental impact" - right declining tail */}
+          <text x={xs(83)} y={ys(0.72)} fill="rgba(255,120,120,0.65)" fontSize={8.5} textAnchor="middle">Negative</text>
+          <text x={xs(83)} y={ys(0.65)} fill="rgba(255,120,120,0.65)" fontSize={8.5} textAnchor="middle">incremental impact</text>
+          <line x1={xs(83)} y1={ys(0.74)} x2={xs(86)} y2={ys(0.93)} stroke="rgba(255,120,120,0.3)" strokeWidth={0.8} />
+          {/* "Offer Promos" bottom-left */}
+          <text x={pl + 6} y={pt + cH - 6} fill="rgba(100,220,100,0.5)" fontSize={8}>
+            ← Offer Promos to these consumers!
+          </text>
+          {/* "Stop spamming" bottom-right */}
+          <text x={pl + cW - 6} y={pt + cH - 6} fill="rgba(255,120,120,0.5)" fontSize={8} textAnchor="end">
+            Stop spamming these consumers! →
+          </text>
+          {/* axis labels */}
+          <text x={pl + cW / 2} y={H - 4} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize={9}>
+            Population Targeted (%)
           </text>
           <text
-            x={12}
-            y={pt + cH / 2}
-            textAnchor="middle"
-            fill="rgba(255,255,255,0.3)"
-            fontSize={9}
-            transform={`rotate(-90 12 ${pt + cH / 2})`}
+            x={13} y={pt + cH / 2}
+            textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize={9}
+            transform={`rotate(-90 13 ${pt + cH / 2})`}
           >
-            Cumulative Incremental Conversions
+            Cumulative Uplift
           </text>
         </svg>
       </div>
       <figcaption className="mt-3 text-xs text-ink-subtle text-center">
-        <span className="text-ink-muted font-medium">Fig 2.</span> Qini curves on held-out
-        validation data. The uplift model (green) accumulates incremental conversions faster than
-        propensity-based targeting, and avoids the negative-return tail caused by sleeping dogs.
+        <span className="text-ink-muted font-medium">Fig 2.</span> Area under uplift curve (AUUC) on held-out validation data.
+        T-learner (blue) concentrates the most incremental conversions in the top-targeted percentiles,
+        with the area above the random baseline representing the AUUC gain.
       </figcaption>
     </figure>
   );
@@ -219,7 +249,7 @@ function UpliftByDecile() {
             );
           })}
           <line x1={pl} y1={pt} x2={pl} y2={pt + cH} stroke="rgba(255,255,255,0.1)" />
-          <text x={pl + 4} y={zeroY + 14} fill="rgba(255,255,255,0.65)" fontSize={9}>↑ persuadables</text>
+          <text x={pl + 4} y={zeroY + 14} fill="#a3e635" fontSize={9}>↑ persuadables</text>
           <text x={pl + cW - 4} y={zeroY - 10} textAnchor="end" fill="#f87171" fontSize={9}>sleeping dogs ↓</text>
           <text x={pl + cW / 2} y={H - 4} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize={9}>
             Score Decile (1 = highest uplift)
@@ -228,7 +258,7 @@ function UpliftByDecile() {
       </div>
       <figcaption className="mt-3 text-xs text-ink-subtle text-center">
         <span className="text-ink-muted font-medium">Fig 3.</span> Estimated CATE (treatment
-        effect) by decile. Deciles 8–10 are sleeping dogs — the offer suppresses their conversion
+        effect) by decile. Deciles 8 through 10 are sleeping dogs, and the offer suppresses their conversion
         likelihood. Explicitly suppressing this ~7% of the audience was one of the key results.
       </figcaption>
     </figure>
@@ -244,7 +274,7 @@ export default function UpliftModelPage() {
       <ArticleHeader
         eyebrow="Work · Santander Bank · 2024"
         title="Causal Uplift Model for Credit Card Campaigns"
-        subtitle="Most response models predict who will convert. This one predicts who will convert because of the offer — a subtle but financially critical distinction."
+        subtitle="Most response models predict who will convert. This one predicts who will convert because of the offer, a subtle but financially critical distinction."
         tags={["Causal Inference", "Uplift", "T-Learner", "X-Learner", "Marketing", "A/B Testing"]}
       />
 
@@ -260,12 +290,12 @@ export default function UpliftModelPage() {
           <P>
             The difference matters because high-propensity customers often convert regardless of
             whether they receive an offer. Targeting them wastes budget. Worse, some customers
-            respond negatively to unsolicited outreach — their conversion probability actually
+            respond negatively to unsolicited outreach, and their conversion probability actually
             decreases when contacted. Standard propensity scoring has no way to identify these
             sleeping dogs, let alone suppress them.
           </P>
           <P>
-            Uplift modeling — also called causal response modeling or CATE estimation — directly
+            Uplift modeling (also called causal response modeling or CATE estimation) directly
             targets incremental response. The goal is to estimate the treatment effect for each
             customer, not just their raw probability of converting.
           </P>
@@ -290,7 +320,7 @@ export default function UpliftModelPage() {
         <Prose>
           <P>
             A propensity model tries to maximize the number of customers in the top-right
-            (sure things) — people who look likely to convert. An uplift model tries to
+            (sure things), people who look likely to convert. An uplift model tries to
             maximize targeting of the top-left (persuadables) and suppress the bottom-right
             (sleeping dogs). These are very different audiences.
           </P>
@@ -303,7 +333,7 @@ export default function UpliftModelPage() {
           </SH>
           <P>
             Estimating the Conditional Average Treatment Effect (CATE) requires a holdout-controlled
-            experiment as training data — a campaign where some customers received the offer
+            experiment as training data: a campaign where some customers received the offer
             (treatment) and others didn&apos;t (control), randomly assigned.
           </P>
 
@@ -320,49 +350,49 @@ export default function UpliftModelPage() {
               },
             ]}
             chosenLabel="T-Learner (Two-Model)"
-            reason="Both were validated on held-out controls via Qini curves. The T-learner outperformed slightly and was significantly easier to debug — when CATE estimates looked suspect for a segment, it was easy to inspect which of the two models was driving the issue. For a model going into production, debuggability matters."
+            reason="Both were validated on held-out controls via AUUC. The T-learner outperformed slightly and was significantly easier to debug. When CATE estimates looked suspect for a segment, it was straightforward to inspect which of the two models was driving the issue. For a model going into production, debuggability matters."
           />
 
           <P>
             Features for both models: product holdings, account tenure, transaction patterns,
             prior campaign response history, and ZIP-level demographics. The two models share
-            the same feature set — only their training samples differ (treatment vs control
+            the same feature set, with only their training samples differing (treatment vs control
             customers from the prior campaign).
           </P>
 
           <Callout>
             Holdout control groups are the foundation of uplift modeling. Without a clean
-            random assignment, there&apos;s no way to estimate causal effects — only
+            random assignment, there is no way to estimate causal effects, only
             correlations. The quality of the training data depends entirely on the quality
             of the experiment it was drawn from.
           </Callout>
         </Prose>
 
-        {/* Step 03 — Qini */}
+        {/* Step 03 — AUUC */}
         <Prose>
           <SH id="validation" step="Step 03">
-            Validation with Qini Curves
+            Validation with AUUC
           </SH>
           <P>
-            Standard AUC/accuracy metrics don&apos;t work for uplift models — there&apos;s no
+            Standard AUC/accuracy metrics don&apos;t work for uplift models, as there is no
             single ground truth label for &quot;would respond to this specific treatment.&quot;
-            Instead, we validate with <B>Qini curves</B>: sort customers by predicted CATE
-            (high to low), then measure cumulative incremental conversions as we target more of
-            the audience.
+            Instead, we validate with the <B>Area Under the Uplift Curve (AUUC)</B>: sort customers
+            by predicted CATE from high to low, then measure cumulative incremental conversions
+            as we target progressively more of the audience.
           </P>
         </Prose>
 
         <Wide>
-          <QiniCurve />
+          <AUUCCurve />
         </Wide>
 
         <Prose>
           <P>
-            The area between the model curve and the random baseline (Qini coefficient) is the
-            summary metric. Our T-learner achieved a Qini coefficient of <B>0.38</B> on the
+            The area between the model curve and the random baseline (AUUC) is the
+            summary metric. Our T-learner achieved an AUUC of <B>0.38</B> on the
             held-out validation set vs. <B>0.21</B> for propensity-based targeting. The key
-            difference appears in the right tail — propensity targeting dips negative as it
-            reaches sleeping dogs; the uplift model&apos;s curve flattens instead.
+            difference appears in the right tail: propensity targeting dips negative as it
+            reaches sleeping dogs, while the uplift model&apos;s curve flattens instead.
           </P>
         </Prose>
 
@@ -388,7 +418,7 @@ export default function UpliftModelPage() {
           metrics={[
             { label: "incremental acquisitions vs propensity baseline", value: "+15%", sub: "same marketing budget" },
             { label: "of audience identified as sleeping dogs", value: "~7%", sub: "explicitly suppressed" },
-            { label: "Qini coefficient (uplift vs random)", value: "0.38", sub: "vs 0.21 propensity" },
+            { label: "AUUC (uplift vs random)", value: "0.38", sub: "vs 0.21 propensity" },
             { label: "campaigns now using this pattern", value: "default", sub: "cards + personal loans" },
           ]}
         />
@@ -400,7 +430,7 @@ export default function UpliftModelPage() {
           </SH>
           <P>
             <B>1. Holdout control groups are non-negotiable.</B> Without disciplined random
-            assignment in the training data, CATE estimation collapses into correlation — which
+            assignment in the training data, CATE estimation collapses into correlation, which
             is no better than propensity. The quality of an uplift model is bounded by the
             quality of its training experiment.
           </P>
@@ -413,7 +443,7 @@ export default function UpliftModelPage() {
           <P>
             <B>3. The sleeping dog suppression was worth as much as the persuadable targeting.</B>{" "}
             Removing 7% of the audience who were actively harmed by the offer freed up budget
-            and reduced churn from negative experiences — an ROI lever that pure propensity
+            and reduced churn from negative experiences, an ROI lever that pure propensity
             modeling couldn&apos;t have identified.
           </P>
         </Prose>
