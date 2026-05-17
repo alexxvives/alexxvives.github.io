@@ -6,11 +6,11 @@ import { getProject } from "@/content/projects";
 // ── Layout ─────────────────────────────────────────────────────────────────────
 
 export function Prose({ children }: { children: ReactNode }) {
-  return <div className="max-w-[840px]">{children}</div>;
+  return <div className="max-w-[840px] mx-auto">{children}</div>;
 }
 
 export function Wide({ children }: { children: ReactNode }) {
-  return <div className="max-w-5xl my-10">{children}</div>;
+  return <div className="max-w-5xl my-10 mx-auto">{children}</div>;
 }
 
 // ── Inline typography ──────────────────────────────────────────────────────────
@@ -147,7 +147,7 @@ export function MetricStrip({
   metrics: { label: string; value: string; sub?: string }[];
 }) {
   return (
-    <div className="my-8 max-w-[840px] grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div className="my-8 max-w-[840px] mx-auto grid grid-cols-2 sm:grid-cols-4 gap-3">
       {metrics.map(({ label, value, sub }) => (
         <div
           key={label}
@@ -185,7 +185,7 @@ export function NextProject({ slug }: { slug: string }) {
   const p = getProject(slug);
   if (!p) return null;
   return (
-    <div className="max-w-[840px] mt-24 pt-12 border-t border-border/40">
+    <div className="max-w-[840px] mx-auto mt-24 pt-12 border-t border-border/40">
       <p className="font-mono text-xs uppercase tracking-widest text-ink-subtle mb-4">
         Next project
       </p>

@@ -39,10 +39,6 @@ export function About() {
 
             <div className="pt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm font-mono">
               <div>
-                <div className="text-ink-subtle">Based in</div>
-                <div className="text-ink">{human.location}</div>
-              </div>
-              <div>
                 <div className="text-ink-subtle">Languages</div>
                 <div className="text-ink">EN · ES · CAT · FR</div>
               </div>
