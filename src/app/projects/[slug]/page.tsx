@@ -7,7 +7,9 @@ import { CaseStudyVisual } from "@/components/charts/CaseStudyVisual";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return projects
+    .filter((p) => p.slug !== "ab-test-instagram-shop")
+    .map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -38,7 +40,7 @@ export default async function ProjectPage({
 
   return (
     <article className="pt-32 pb-16">
-      <div className="container-page max-w-6xl">
+      <div className="container-page">
         {/* Back */}
         <Link
           href="/#projects"
@@ -48,7 +50,7 @@ export default async function ProjectPage({
         </Link>
 
         {/* Header */}
-        <header className="mt-10">
+        <header className="mt-10 max-w-3xl">
           <div className="font-mono text-xs uppercase tracking-widest text-accent">
             {project.category} · {project.date} · {project.org}
           </div>
@@ -94,7 +96,7 @@ export default async function ProjectPage({
         )}
 
         {/* Body with sticky TOC on lg+ */}
-        <div className="mt-16 lg:grid lg:grid-cols-[180px_1fr] lg:gap-12">
+        <div className="mt-16 lg:grid lg:grid-cols-[180px_1fr] lg:gap-12 lg:max-w-[900px] lg:mx-auto">
           <aside className="hidden lg:block">
             <nav className="sticky top-32 space-y-2 font-mono text-xs">
               <div className="text-ink-subtle uppercase tracking-widest text-[10px] mb-3">
