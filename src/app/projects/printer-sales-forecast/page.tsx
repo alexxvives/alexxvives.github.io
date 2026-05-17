@@ -204,7 +204,7 @@ export default function PrinterForecastPage() {
         tags={["Time Series", "SARIMA", "ARIMA", "Forecasting", "Supply Chain", "R"]}
       />
 
-      <div className="container-page mt-16">
+      <div className="mt-16">
         {/* Opening */}
         <Prose>
           <P>

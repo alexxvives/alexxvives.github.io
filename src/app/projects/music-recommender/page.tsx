@@ -214,7 +214,7 @@ export default function MusicRecommenderPage() {
         tags={["Unsupervised Learning", "Gaussian Mixture Model", "Spotify API", "TF-IDF + SVD", "Ollama", "Llama 3"]}
       />
 
-      <div className="container-page mt-16">
+      <div className="mt-16">
         {/* Opening */}
         <Prose>
           <P>

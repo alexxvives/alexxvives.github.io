@@ -67,14 +67,6 @@ function FourQuadrant() {
             </div>
           ))}
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-3 text-center">
-          <p className="text-[10px] font-mono text-ink-subtle uppercase tracking-wider">
-            ← Low baseline propensity | High baseline propensity →
-          </p>
-          <p className="text-[10px] font-mono text-ink-subtle uppercase tracking-wider col-start-1 row-start-2">
-            ↑ High treatment effect | Low treatment effect ↓
-          </p>
-        </div>
       </div>
       <figcaption className="mt-3 text-xs text-ink-subtle text-center">
         <span className="text-ink-muted font-medium">Fig 1.</span> The four customer archetypes
@@ -227,8 +219,8 @@ function UpliftByDecile() {
             );
           })}
           <line x1={pl} y1={pt} x2={pl} y2={pt + cH} stroke="rgba(255,255,255,0.1)" />
-          <text x={pl + 4} y={pt + 12} fill="#a3e635" fontSize={9}>persuadables</text>
-          <text x={pl + cW - 4} y={pt + cH - 8} textAnchor="end" fill="#f87171" fontSize={9}>sleeping dogs</text>
+          <text x={pl + 4} y={zeroY + 14} fill="rgba(255,255,255,0.65)" fontSize={9}>↑ persuadables</text>
+          <text x={pl + cW - 4} y={zeroY - 10} textAnchor="end" fill="#f87171" fontSize={9}>sleeping dogs ↓</text>
           <text x={pl + cW / 2} y={H - 4} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize={9}>
             Score Decile (1 = highest uplift)
           </text>
@@ -256,7 +248,7 @@ export default function UpliftModelPage() {
         tags={["Causal Inference", "Uplift", "T-Learner", "X-Learner", "Marketing", "A/B Testing"]}
       />
 
-      <div className="container-page mt-16">
+      <div className="mt-16">
         {/* Opening */}
         <Prose>
           <P>

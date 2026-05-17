@@ -142,7 +142,7 @@ export default function EnertexCTOPage() {
         tags={["E-commerce", "Shopify", "CRO", "Co-founder", "Wellness Tech", "Analytics"]}
       />
 
-      <div className="container-page mt-16">
+      <div className="mt-16">
         {/* Opening */}
         <Prose>
           <P>

@@ -37,9 +37,9 @@ function MLPipeline() {
               {i < steps.length - 1 && (
                 <div className="flex sm:hidden w-6 shrink-0 items-center justify-center text-ink-subtle text-lg">→</div>
               )}
-              {i < steps.length - 1 && (
-                <div className="hidden sm:flex h-5 w-full items-center justify-center text-ink-subtle text-sm">→</div>
-              )}
+              <div className={`hidden sm:flex h-5 w-full items-center justify-center text-ink-subtle text-sm${i < steps.length - 1 ? "" : " invisible"}`}>
+                →
+              </div>
             </div>
           ))}
         </div>
@@ -166,10 +166,11 @@ function LiftCurve() {
           {/* annotation: 64% @ 50% */}
           <circle cx={xs(50)} cy={ys(64)} r={3.5} fill="#a3e635" />
           <line x1={xs(50)} y1={ys(64)} x2={xs(50)} y2={ys(0)} stroke="#a3e635" strokeOpacity={0.3} strokeDasharray="3,2" />
-          <text x={xs(50) + 6} y={ys(64) - 6} fill="#a3e635" fontSize={9}>
+          <rect x={xs(50) + 6} y={ys(64) - 18} width={62} height={28} rx={3} fill="rgba(0,0,0,0.55)" />
+          <text x={xs(50) + 10} y={ys(64) - 6} fill="rgba(255,255,255,0.9)" fontSize={9}>
             64% of value
           </text>
-          <text x={xs(50) + 6} y={ys(64) + 6} fill="#a3e635" fontSize={9}>
+          <text x={xs(50) + 10} y={ys(64) + 7} fill="rgba(255,255,255,0.9)" fontSize={9}>
             @ top 50%
           </text>
           {/* labels */}
@@ -216,7 +217,7 @@ export default function CLTVPage() {
         tags={["Supervised Learning", "XGBoost", "Marketing", "Snowflake", "Isotonic Calibration"]}
       />
 
-      <div className="container-page mt-16">
+      <div className="mt-16">
         {/* Opening */}
         <Prose>
           <P>

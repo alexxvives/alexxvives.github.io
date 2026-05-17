@@ -198,7 +198,7 @@ export default function AITherapistPage() {
         tags={["LLM", "GPT-4", "Whisper", "ElevenLabs", "D-ID", "Mental Health", "48h Hackathon"]}
       />
 
-      <div className="container-page mt-16">
+      <div className="mt-16">
         {/* Opening */}
         <Prose>
           <P>
