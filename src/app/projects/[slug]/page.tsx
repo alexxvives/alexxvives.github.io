@@ -6,9 +6,23 @@ import { getProjectImage } from "@/content/projectImages";
 import { CaseStudyVisual } from "@/components/charts/CaseStudyVisual";
 import type { Metadata } from "next";
 
+const CUSTOM_PAGE_SLUGS = new Set([
+  "ab-test-instagram-shop",
+  "cltv-model",
+  "uplift-model",
+  "fico-approximation",
+  "microsegments-oracle",
+  "printer-sales-forecast",
+  "food-detection",
+  "covid-simulation",
+  "ai-therapist",
+  "music-recommender",
+  "enertex-cto",
+]);
+
 export function generateStaticParams() {
   return projects
-    .filter((p) => p.slug !== "ab-test-instagram-shop")
+    .filter((p) => !CUSTOM_PAGE_SLUGS.has(p.slug))
     .map((p) => ({ slug: p.slug }));
 }
 

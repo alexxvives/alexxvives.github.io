@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 // ── Layout helpers ─────────────────────────────────────────────────────────────
 
 function Prose({ children }: { children: ReactNode }) {
-  return <div className="max-w-2xl mx-auto">{children}</div>;
+  return <div className="max-w-[840px] mx-auto">{children}</div>;
 }
 
 function Wide({ children }: { children: ReactNode }) {
-  return <div className="max-w-4xl mx-auto my-10">{children}</div>;
+  return <div className="max-w-5xl mx-auto my-10">{children}</div>;
 }
 
 // ── Inline typography ──────────────────────────────────────────────────────────
@@ -482,7 +482,7 @@ export default function AbTestPage() {
 
       {/* ── Header */}
       <header className="container-page mt-10">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-[840px] mx-auto">
           <p className="font-mono text-xs uppercase tracking-widest text-accent">
             Work · Meta (Instagram) · Summer 2022
           </p>
