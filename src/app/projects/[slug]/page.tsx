@@ -52,8 +52,8 @@ export default async function ProjectPage({
           <div className="font-mono text-xs uppercase tracking-widest text-accent">
             {project.category} · {project.date} · {project.org}
           </div>
-          <h1 className="h1 mt-4">{project.title}</h1>
-          <p className="mt-6 text-xl text-ink-muted leading-relaxed">
+          <h1 className="font-display text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight mt-4">{project.title}</h1>
+          <p className="mt-6 text-lg text-ink-muted leading-relaxed">
             {project.blurb}
           </p>
 
@@ -123,7 +123,7 @@ export default async function ProjectPage({
             </nav>
           </aside>
 
-          <div className="min-w-0">
+      <div className="min-w-0 max-w-[72ch]">
         <Section id="problem" title="Problem" eyebrow="01">
           <p className="prose-text">{project.problem}</p>
         </Section>
@@ -132,7 +132,7 @@ export default async function ProjectPage({
           <ol className="space-y-4">
             {project.approach.map((step, i) => (
               <li key={i} className="flex gap-4">
-                <span className="font-mono text-xs text-accent shrink-0 mt-1.5 w-6">
+                <span className="font-mono text-xs text-accent shrink-0 mt-[0.35rem] w-6">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span
@@ -147,8 +147,8 @@ export default async function ProjectPage({
         <Section id="results" title="Results" eyebrow="03">
           <ul className="space-y-3">
             {project.results.map((r, i) => (
-              <li key={i} className="flex gap-3">
-                <span className="text-accent mt-1.5">→</span>
+              <li key={i} className="flex gap-3 items-start">
+                <span className="text-accent mt-[0.35rem] shrink-0">→</span>
                 <span
                   className="prose-text flex-1"
                   dangerouslySetInnerHTML={{ __html: renderInline(r) }}
@@ -162,8 +162,8 @@ export default async function ProjectPage({
           <Section id="learnings" title="Learnings" eyebrow="04">
             <ul className="space-y-3">
               {project.learnings.map((l, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="text-accent mt-1.5">✦</span>
+              <li key={i} className="flex gap-3 items-start">
+                <span className="text-accent mt-[0.35rem] shrink-0">✦</span>
                   <span className="prose-text flex-1">{l}</span>
                 </li>
               ))}
@@ -213,11 +213,11 @@ function Section({
 }) {
   return (
     <section id={id} className="mt-16 scroll-mt-32">
-      <div className="flex items-baseline gap-4 mb-6">
+      <div className="flex items-baseline gap-4 mb-8">
         <span className="font-mono text-xs text-accent">{eyebrow}</span>
         <h2 className="h3">{title}</h2>
       </div>
-      <div className="text-ink-muted text-base leading-relaxed">{children}</div>
+      <div>{children}</div>
     </section>
   );
 }

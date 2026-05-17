@@ -89,4 +89,7 @@ body {
   .btn-ghost {
     @apply btn border border-border text-ink hover:border-accent hover:text-accent;
   }
+  .prose-text {
+    @apply text-ink text-[1.0625rem] leading-[1.9] tracking-[0.005em];
+  }
 }

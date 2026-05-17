@@ -83,18 +83,7 @@ export function Hero() {
               </a>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-              className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-ink-subtle"
-            >
-              <span>now → Santander</span>
-              <span className="hidden sm:inline">·</span>
-              <span>prev → Meta · HP</span>
-              <span className="hidden sm:inline">·</span>
-              <span>edu → NYU MS · Purdue BS</span>
-            </motion.div>
+
           </div>
 
           {/* Visual: portrait + floating stats */}
@@ -102,29 +91,32 @@ export function Hero() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="relative mx-auto lg:mx-0 w-full max-w-sm aspect-[4/5]"
+            className="relative mx-auto lg:mx-0 w-full max-w-[280px] sm:max-w-sm aspect-[3/4] sm:aspect-[4/5]"
           >
             <div className="absolute inset-0 rounded-3xl border border-border bg-bg-card overflow-hidden">
               <Portrait />
             </div>
 
             {/* Floating stat chips */}
+            {/* Santander — top center */}
             <FloatingStat
-              className="left-[-1rem] sm:left-[-1.5rem] top-12"
-              value="Purdue"
-              label="engineering"
-              delay={0.6}
-            />
-            <FloatingStat
-              className="right-[-0.5rem] sm:right-[-1rem] top-1/3"
+              className="top-3 left-1/2 -translate-x-1/2"
               value="Santander"
               label="data scientist"
-              delay={0.8}
+              delay={0.6}
             />
+            {/* NYU — bottom left */}
             <FloatingStat
-              className="left-[-1.5rem] sm:left-[-2rem] bottom-16"
+              className="left-[-1rem] sm:left-[-1.5rem] bottom-16"
               value="NYU"
               label="MS data science"
+              delay={0.8}
+            />
+            {/* Purdue — bottom right, aligned with NYU */}
+            <FloatingStat
+              className="right-[-0.5rem] sm:right-[-1rem] bottom-16"
+              value="Purdue"
+              label="engineering"
               delay={1}
             />
           </motion.div>
