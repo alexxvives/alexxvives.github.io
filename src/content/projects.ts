@@ -1,4 +1,4 @@
-﻿export type ProjectCategory = "Work" | "Personal" | "Research";
+export type ProjectCategory = "Work" | "Personal" | "Research";
 
 export type Project = {
   slug: string;
@@ -112,7 +112,7 @@ export const projects: Project[] = [
     ],
     results: [
       "+15% incremental acquisitions vs. propensity-targeting baseline at flat spend.",
-      "Identified ~7% of audience as 'sleeping dogs' (negative uplift), explicitly suppressed.",
+      "Identified ~7% of audience as 'sleeping dogs' (negative uplift) and suppressed them explicitly.",
       "Now a default modeling pattern for credit card and personal loan campaigns.",
     ],
     learnings: [
@@ -149,7 +149,7 @@ export const projects: Project[] = [
       "Marketers can explain exactly why a customer is in the top decile (4-5 flag attributions).",
     ],
     learnings: [
-      "Sometimes the right answer isn't deep learning, it's an interpretable system with a tight feedback loop.",
+      "Sometimes the right answer isn't deep learning. It's an interpretable system with a tight feedback loop.",
       "Explainability is a feature: adoption skyrocketed once marketing trusted the score.",
     ],
   },
@@ -179,7 +179,7 @@ export const projects: Project[] = [
       "3 of 5 recommendations adopted: improved post-purchase notification flow, surfaced save action more prominently, added creator-follow CTA on order confirmation.",
     ],
     learnings: [
-      "Survival analysis communicates retention to PMs better than cohort tables, the curves tell a story.",
+      "Survival analysis communicates retention to PMs better than cohort tables. The curves tell a story.",
       "Effect size × addressable population is the right prioritization metric, not p-values.",
     ],
   },
@@ -295,25 +295,25 @@ export const projects: Project[] = [
     problem:
       "The Shop tab on Instagram already had a gradient-boosted ranker tuned on engineered features. The ML team wanted to replace it with a two-tower retrieval model plus a transformer reranker that learns user and product embeddings directly from behavior. The question was simple to ask and hard to answer: does this model actually make people buy more, not just click more?",
     approach: [
-      "**Frame the experiment around the buyer funnel, not a single metric.** Every shopper moves through six stages: impressions of a product card, clicks into the product, product page views, add-to-cart, checkout started, and order placed. A recommender can win at one stage and silently lose downstream, so I designed the readout to track all six side by side.",
-      "**Pick one primary metric that maps to the business.** Purchases per exposed user over a 14-day window. Clicks and CTR are diagnostic, not decisions.",
-      "**Sanity-check the funnel before launch.** Plot the historical conversion rate at each step (impression → click → view → ATC → checkout → order). The bottleneck was the click-to-view step at around 38%. Any treatment that boosts clicks without lifting views is fake progress, and the funnel view catches that immediately.",
-      "**Hypothesis.** H0 says the new model has no effect on purchases per user. H1 says it lifts purchases per user by at least 1% relative.",
-      "**Unit of randomization.** Users, not sessions. Hash the user_id into 1,000 buckets and split 500/500. Session-level randomization would have leaked across visits and contaminated the readout.",
-      "**Power and sample size.** Worked back from the funnel. Baseline purchase rate is roughly 12% over 14 days. To detect a 1% relative lift at alpha 0.05 and 80% power I needed about 2.1M users per arm. With Instagram Shop traffic that translates into a two-week exposure window after the ramp.",
-      "**Ramp plan.** 1% → 5% → 25% → 50% over the first 7 days, holding for 7 more at 50/50. Daily guardrail review with predefined stopping rules on crash rate, latency, and ads revenue per user.",
-      "**Guardrails.** App crash rate, p95 surface latency, ads revenue per user, hide and report rate, and time spent on non-shopping surfaces. Cannibalization shows up in the last one.",
-      "**Cuts that were pre-registered.** Country (US / LatAm / EU / APAC), tenure (new / engaged / dormant), and purchase frequency (0 / 1–2 / 3+). Pre-registering kills the temptation to fish for a story after the fact.",
-      "**Novelty effect.** Compared week 1 vs week 2 inside the treatment arm to see if the lift was decaying. A 5% holdback ran for 90 more days after the full launch as a long-horizon insurance policy.",
-      "**Network effects.** Followers of the same creator tend to see similar products. To estimate spillover I ran a small cluster-randomized side experiment with creators as clusters, then compared user-randomized and creator-randomized lifts.",
+      "Frame the experiment around the buyer funnel, not a single metric. Every shopper moves through six stages: impressions of a product card, clicks into the product, product page views, add-to-cart, checkout started, and order placed. A recommender can win at one stage and silently lose downstream, so I designed the readout to track all six side by side.",
+      "Pick one primary metric that maps to the business. Purchases per exposed user over a 14-day window. Clicks and CTR are diagnostic, not decisions.",
+      "Sanity-check the funnel before launch. Plot the historical conversion rate at each step (impression → click → view → ATC → checkout → order). The bottleneck was the click-to-view step at around 38%. Any treatment that boosts clicks without lifting views is fake progress, and the funnel view catches that immediately.",
+      "Hypothesis. H0 says the new model has no effect on purchases per user. H1 says it lifts purchases per user by at least 1% relative.",
+      "Unit of randomization. Users, not sessions. Hash the user_id into 1,000 buckets and split 500/500. Session-level randomization would have leaked across visits and contaminated the readout.",
+      "Power and sample size. Worked back from the funnel. Baseline purchase rate is roughly 12% over 14 days. To detect a 1% relative lift at alpha 0.05 and 80% power I needed about 2.1M users per arm. With Instagram Shop traffic that translates into a two-week exposure window after the ramp.",
+      "Ramp plan. 1% → 5% → 25% → 50% over the first 7 days, holding for 7 more at 50/50. Daily guardrail review with predefined stopping rules on crash rate, latency, and ads revenue per user.",
+      "Guardrails. App crash rate, p95 surface latency, ads revenue per user, hide and report rate, and time spent on non-shopping surfaces. Cannibalization shows up in the last one.",
+      "Cuts that were pre-registered. Country (US / LatAm / EU / APAC), tenure (new / engaged / dormant), and purchase frequency (0 / 1–2 / 3+). Pre-registering kills the temptation to fish for a story after the fact.",
+      "Novelty effect. Compared week 1 vs week 2 inside the treatment arm to see if the lift was decaying. A 5% holdback ran for 90 more days after the full launch as a long-horizon insurance policy.",
+      "Network effects. Followers of the same creator tend to see similar products. To estimate spillover I ran a small cluster-randomized side experiment with creators as clusters, then compared user-randomized and creator-randomized lifts.",
     ],
     results: [
-      "**Funnel readout, not a single number.** Impressions per user roughly flat. Click rate +5.4%. Product page views +4.8%. Add-to-cart +4.1%. Checkout started +3.5%. **Orders per user +3.1%.** The lift survives the whole funnel, which is the actual signal worth shipping.",
+      "Funnel readout, not a single number. Impressions per user roughly flat. Click rate +5.4%. Product page views +4.8%. Add-to-cart +4.1%. Checkout started +3.5%. Orders per user +3.1%. The lift survives the whole funnel, which is the actual signal worth shipping.",
       "**GMV per user +4.2%**, driven mostly by long-tail product discovery rather than reranking head products.",
-      "**Latency guardrail.** p95 +18ms, inside the ±25ms budget.",
-      "**Heterogeneity that matters.** Dormant users +6.9%, APAC +5.1%, US-tenured-3+ flat. The legacy ranker was already well tuned on power users.",
-      "**Novelty check.** Week 2 effect was 91% of week 1, so the lift was real and not a launch-day curiosity bump.",
-      "**Decision.** Ship to 100% with a 5% holdback for 90 days of monitoring.",
+      "Latency guardrail. p95 +18ms, inside the ±25ms budget.",
+      "Heterogeneity that matters. Dormant users +6.9%, APAC +5.1%, US-tenured-3+ flat. The legacy ranker was already well tuned on power users.",
+      "Novelty check. Week 2 effect was 91% of week 1, so the lift was real and not a launch-day curiosity bump.",
+      "Decision. Ship to 100% with a 5% holdback for 90 days of monitoring.",
     ],
     learnings: [
       "Looking at the funnel end to end was the most useful framing choice. A click lift that does not show up downstream is a leading indicator of disappointment.",
@@ -340,11 +340,11 @@ export const projects: Project[] = [
     problem:
       "Mental-health care is inaccessible to most people, cost, stigma and waiting lists keep millions from seeking help. Could an LLM, paired with a humanizing avatar and natural voice, lower the barrier to a useful first-line conversational tool?",
     approach: [
-      "**Speech-to-text.** OpenAI Whisper with low-latency streaming chunks.",
-      "**Reasoning.** GPT-4 with a tuned therapist system prompt, Rogerian active-listening, no diagnoses, hard-coded crisis-detection phrases that escalate to suicide-prevention resources.",
-      "**Text-to-speech.** ElevenLabs with a warm, calm voice profile and SSML pauses for naturalness.",
-      "**Avatar.** D-ID for real-time lip-sync to a portrait, framed in a FaceTime-style UI to evoke familiarity.",
-      "**Stack.** React frontend, Flask backend, all four APIs streamed in parallel to keep end-to-end latency under 2s.",
+      "Speech-to-text. OpenAI Whisper with low-latency streaming chunks.",
+      "Reasoning. GPT-4 with a tuned therapist system prompt, Rogerian active-listening, no diagnoses, hard-coded crisis-detection phrases that escalate to suicide-prevention resources.",
+      "Text-to-speech. ElevenLabs with a warm, calm voice profile and SSML pauses for naturalness.",
+      "Avatar. D-ID for real-time lip-sync to a portrait, framed in a FaceTime-style UI to evoke familiarity.",
+      "Stack. React frontend, Flask backend, all four APIs streamed in parallel to keep end-to-end latency under 2s.",
     ],
     results: [
       "Functional end-to-end demo working live on stage at the 48h deadline.",
@@ -374,12 +374,12 @@ export const projects: Project[] = [
     problem:
       "After years of saving songs, my Spotify library was a single undifferentiated bucket of thousands of tracks, unsearchable by mood. I wanted an unsupervised system that would discover the actual *vibes* hiding in my library and rebuild them as standalone playlists, without me having to label anything.",
     approach: [
-      "**Data.** Pulled the full Spotify library via Spotipy OAuth, enriched each track with audio features (`danceability`, `energy`, `valence`, `tempo`, `speechiness`, `acousticness`, `liveness`, `loudness`, `instrumentalness`, `key`, `mode`) from the ReccoBeats API.",
-      "**Feature engineering.** Encoded musical `key` as circular coordinates `(sin, cos)` since C(0) is adjacent to B(11). Standardized numeric features with `StandardScaler`.",
-      "**Genre embedding.** Built a TF-IDF representation of genre tags (vocab cap 600) and reduced it to 48 latent dimensions via Truncated SVD, always on, fused with numeric features.",
-      "**Clustering.** Fit a Gaussian Mixture Model. Auto-selected K in a data-scaled range (`n/200` to `n/80`) optimizing the silhouette score with BIC as a tie-breaker, to avoid hard-coding cluster count.",
-      "**Naming.** Pumped each cluster's centroid + sample tracks into a local Llama 3 via Ollama, which generated human-readable cluster names (e.g. *'late-night focus electronic'*).",
-      "**Write-back.** Created one Spotify playlist per cluster and added tracks in parallel (`ThreadPoolExecutor`, 16 workers) to stay within rate limits.",
+      "Data. Pulled the full Spotify library via Spotipy OAuth, enriched each track with audio features (`danceability`, `energy`, `valence`, `tempo`, `speechiness`, `acousticness`, `liveness`, `loudness`, `instrumentalness`, `key`, `mode`) from the ReccoBeats API.",
+      "Feature engineering. Encoded musical `key` as circular coordinates `(sin, cos)` since C(0) is adjacent to B(11). Standardized numeric features with `StandardScaler`.",
+      "Genre embedding. Built a TF-IDF representation of genre tags (vocab cap 600) and reduced it to 48 latent dimensions via Truncated SVD, always on, fused with numeric features.",
+      "Clustering. Fit a Gaussian Mixture Model. Auto-selected K in a data-scaled range (`n/200` to `n/80`) optimizing the silhouette score with BIC as a tie-breaker, to avoid hard-coding cluster count.",
+      "Naming. Pumped each cluster's centroid + sample tracks into a local Llama 3 via Ollama, which generated human-readable cluster names (e.g. *'late-night focus electronic'*).",
+      "Write-back. Created one Spotify playlist per cluster and added tracks in parallel (`ThreadPoolExecutor`, 16 workers) to stay within rate limits.",
     ],
     results: [
       "Library auto-partitioned into interpretable mood clusters that I actually use.",
@@ -442,7 +442,7 @@ export const projects: Project[] = [
     approach: [
       "Co-founded with three other engineering students passionate about entrepreneurship and community impact.",
       "As Project Acquisition Director, owned the client pipeline: sourced engagements across non-profits, tech startups, and Fortune 500s.",
-      "Designed the multidisciplinary recruiting model, explicitly opened to liberal arts, CS, business, art history, to bring diverse perspectives to client work.",
+      "Designed the multidisciplinary recruiting model, opened to liberal arts, CS, business and art history students to bring diverse perspectives to client work.",
       "Built the case-training curriculum so the club could onboard students with zero prior consulting experience.",
     ],
     results: [
@@ -469,20 +469,20 @@ export const projects: Project[] = [
     problem:
       "Online academies bleed revenue to shared accounts (students paying for 1 seat, accessing with 3+) and to videos getting downloaded and resold on Telegram/WhatsApp. Big platforms have security teams; small academies fight piracy alone with spreadsheets and trust.",
     approach: [
-      "**Anti-sharing core.** One active session per student, logging in from a second device instantly kicks the previous one (<1s). Pattern detection on anomalous behavior runs 24/7 with real-time alerts.",
-      "**Content protection.** Secure HLS streaming with no download button, encrypted at rest, per-class access control, optional playback caps.",
-      "**Dynamic watermarks.** Every video overlays a moving watermark with the student's name, email, ID, and timestamp, leaks become traceable to the exact user, providing legal evidence.",
-      "**Academy OS.** Full management layer: teacher autonomy (each teacher runs their own classes), student lifecycle (enrollment → access → payment → progress), course/cohort structure, role-based permissions.",
-      "**Revenue tooling.** Built-in 'ghost student' calculator surfaces exactly how much an academy loses to shared accounts, a sales asset in itself.",
+      "Anti-sharing core. One active session per student, logging in from a second device instantly kicks the previous one (<1s). Pattern detection on anomalous behavior runs 24/7 with real-time alerts.",
+      "Content protection. Secure HLS streaming with no download button, encrypted at rest, per-class access control, optional playback caps.",
+      "Dynamic watermarks. Every video overlays a moving watermark with the student's name, email, ID and timestamp. Leaks become traceable to the exact user, providing legal evidence.",
+      "Academy OS. Full management layer: teacher autonomy (each teacher runs their own classes), student lifecycle (enrollment → access → payment → progress), course/cohort structure, role-based permissions.",
+      "Revenue tooling. Built-in 'ghost student' calculator surfaces exactly how much an academy loses to shared accounts. A sales asset in itself.",
     ],
     results: [
       "Live SaaS product at akademo-edu.com.",
       "100% of shared-account attempts detected and resolved in <1s.",
-      "Built and shipped solo, product, infra, payments, marketing site.",
+      "Built and shipped solo: product, infra, payments, marketing site.",
     ],
     learnings: [
-      "Anti-piracy is a narrow, intense wedge, small academies are willing to pay specifically for *one* solved problem far more than for a generalist LMS.",
-      "Dynamic watermarks are 90% deterrence and 10% forensics, and the deterrence is what actually moves the needle.",
+      "Anti-piracy is a narrow, intense wedge. Small academies pay for one solved problem far more readily than for a generalist LMS.",
+      "Dynamic watermarks are 90% deterrence and 10% forensics. The deterrence is what actually moves the needle.",
     ],
   },
   {
@@ -501,18 +501,18 @@ export const projects: Project[] = [
       { label: "aircraft tiers covered", value: "5" },
     ],
     problem:
-      "Private aviation is two broken markets at once. Operators fly thousands of 'empty leg' repositioning flights every year with zero passengers, pure burned cost. Customers see private jets as opaque and unaffordable. There was no clean platform in Colombia connecting both sides.",
+      "Private aviation is two broken markets at once. Operators fly thousands of 'empty leg' repositioning flights every year with zero passengers, pure burned cost for them. Customers see private jets as opaque and unaffordable. There was no clean platform in Colombia connecting both sides.",
     approach: [
-      "**Two products on one platform.** (1) By-the-seat marketplace where users browse empty-leg flights with set routes/times and book individual seats at up to 90% off; (2) Full-charter quote flow where users specify itinerary and a sales agent quotes a complete jet.",
-      "**Fleet abstraction.** Modeled 5 aircraft tiers, Light Jets, Midsize, Heavy, Twin Turboprop, Twin Piston, with passenger capacity, range and use-case so customers self-select before contacting sales.",
-      "**Operator pipeline.** Built dedicated operator onboarding (`/operators`) so private-aviation operators can list empty legs without friction.",
-      "**Conversion flow.** WhatsApp and email fallback at every step, luxury travel buyers convert through high-touch channels, not pure self-serve.",
-      "**Stack.** Full-stack build: catalog dashboard, booking flow, quote form, blog, fleet pages, multi-language (ES/EN), responsive design.",
+      "Two products on one platform. (1) By-the-seat marketplace where users browse empty-leg flights with set routes/times and book individual seats at up to 90% off; (2) Full-charter quote flow where users specify itinerary and a sales agent quotes a complete jet.",
+      "Fleet abstraction. Modeled 5 aircraft tiers (Light Jets, Midsize, Heavy, Twin Turboprop, Twin Piston) with passenger capacity, range and use-case so customers self-select before contacting sales.",
+      "Operator pipeline. Built dedicated operator onboarding (`/operators`) so private-aviation operators can list empty legs without friction.",
+      "Conversion flow. WhatsApp and email fallback at every step. Luxury travel buyers convert through high-touch channels, not pure self-serve.",
+      "Stack. Full-stack build: catalog dashboard, booking flow, quote form, blog, fleet pages, multi-language (ES/EN), responsive design.",
     ],
     results: [
       "Live marketplace at priorityfly.com serving the Colombian private aviation market.",
       "5-tier fleet catalog covering everything from short regional hops (Piston) to intercontinental (Heavy Jets).",
-      "Built and shipped solo, product, infra, content, GTM.",
+      "Built and shipped solo: product, infra, content, GTM.",
     ],
     learnings: [
       "Empty-leg as a wedge: customers come for 'private jet at 90% off' and stay for full charter.",
@@ -537,13 +537,13 @@ export const projects: Project[] = [
     problem:
       "Polymarket has public, on-chain trade history for every wallet, which means alpha is observable if you can isolate it. The challenge: out of hundreds of thousands of wallets, find the few with statistically significant edge, then mirror their trades fast enough and safely enough to actually capture it before the price moves.",
     approach: [
-      "**5-stage detection pipeline.** (0) Goldsky on-chain scrape → 287,908 wallets; (0b) leaderboard merge → 17,449; (1) activity gate `unique_markets ≥ 5 AND vol ≥ $1k` → 10,107; (2) alpha gate `α ≥ 0.05` → 919; (3) deep stats (z-scores, calibration, rolling α) → 566 wallets / 218k market entries; (4) advanced metrics (red-flag detection, alpha-by-category) → final Tier-1 watchlist of 6.",
-      "**Watchlist selection.** Tier-1 filter `alpha_60d ≥ 0.15 AND n_60d ≥ 10`. Dormant-elite tier for high-lifetime-α wallets that haven't traded recently.",
-      "**11 risk gates per trade.** Side validation, category skip-list, edge threshold, price band [0.10, 0.80], open-position cap (15), token resolution, per-event exposure cap ($10), slippage buffer (2¢ over alert), alert age (≤300s), book-depth check (≥ 5× trade size), min trade size ($1).",
-      "**Kelly sizing.** `p = clip(alert_price + α)`, fractional Kelly with `bankroll × kelly_fraction × f*`, then capped by `max_per_trade` and remaining event exposure.",
-      "**Execution.** EIP-712 signing on the EOA, funds on the proxy wallet, POLY_1271 signature type, signed orders posted to the Polymarket CLOB. E2E live test: real $1 order placed in **0.14s** and canceled immediately.",
-      "**Ops.** DigitalOcean droplet, cron with `flock` (no overlapping runs): `monitor_wallets` every 1 min, `trade_reconciler` every 30 min, `stage_3 + stage_4` nightly, `stage_0→0b→1→2` weekly. Telegram digest twice daily.",
-      "**Critical bug caught.** `/book` endpoint returned asks/bids in reversed order, every BUY was being incorrectly rejected for slippage. Patched + regression test added.",
+      "5-stage detection pipeline. (0) Goldsky on-chain scrape → 287,908 wallets; (0b) leaderboard merge → 17,449; (1) activity gate `unique_markets ≥ 5 AND vol ≥ $1k` → 10,107; (2) alpha gate `α ≥ 0.05` → 919; (3) deep stats (z-scores, calibration, rolling α) → 566 wallets / 218k market entries; (4) advanced metrics (red-flag detection, alpha-by-category) → final Tier-1 watchlist of 6.",
+      "Watchlist selection. Tier-1 filter `alpha_60d ≥ 0.15 AND n_60d ≥ 10`. Dormant-elite tier for high-lifetime-α wallets that haven't traded recently.",
+      "11 risk gates per trade. Side validation, category skip-list, edge threshold, price band [0.10, 0.80], open-position cap (15), token resolution, per-event exposure cap ($10), slippage buffer (2¢ over alert), alert age (≤300s), book-depth check (≥ 5× trade size), min trade size ($1).",
+      "Kelly sizing. `p = clip(alert_price + α)`, fractional Kelly with `bankroll × kelly_fraction × f*`, then capped by `max_per_trade` and remaining event exposure.",
+      "Execution. EIP-712 signing on the EOA, funds on the proxy wallet, POLY_1271 signature type, signed orders posted to the Polymarket CLOB. E2E live test: real $1 order placed in **0.14s** and canceled immediately.",
+      "Ops. DigitalOcean droplet, cron with `flock` (no overlapping runs): `monitor_wallets` every 1 min, `trade_reconciler` every 30 min, `stage_3 + stage_4` nightly, `stage_0→0b→1→2` weekly. Telegram digest twice daily.",
+      "Critical bug caught. `/book` endpoint returned asks/bids in reversed order, every BUY was being incorrectly rejected for slippage. Patched + regression test added.",
     ],
     results: [
       "Live system running on DigitalOcean with full 24/7 monitoring and Telegram alerting.",
@@ -552,8 +552,8 @@ export const projects: Project[] = [
     ],
     learnings: [
       "Detection > execution. Most of the engineering value sat in the 5-stage statistical funnel, not in the order-placement layer.",
-      "On-chain books lie unless you read them carefully, a reversed-order bug silently killed 100% of BUY orders for days before I caught it.",
-      "In thin markets, the binding constraint is liquidity, not edge, the book-depth gate (5× size) is what keeps the strategy honest.",
+      "On-chain books lie unless you read them carefully. A reversed-order bug silently killed 100% of BUY orders for days before I caught it.",
+      "In thin markets, the binding constraint is liquidity, not edge. The book-depth gate (5× size) is what keeps the strategy honest.",
     ],
   },
 ];

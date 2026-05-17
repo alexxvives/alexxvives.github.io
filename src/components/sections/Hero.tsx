@@ -89,11 +89,11 @@ export function Hero() {
               transition={{ duration: 1, delay: 0.5 }}
               className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-ink-subtle"
             >
-              <span>now → Santander Bank</span>
+              <span>now → Santander</span>
               <span className="hidden sm:inline">·</span>
-              <span>prev → Meta · HP · Purdue Research</span>
+              <span>prev → Meta · HP</span>
               <span className="hidden sm:inline">·</span>
-              <span>edu → NYU MS · Purdue BS · Stanford</span>
+              <span>edu → NYU MS · Purdue BS</span>
             </motion.div>
           </div>
 
@@ -123,8 +123,8 @@ export function Hero() {
             />
             <FloatingStat
               className="left-[-2rem] bottom-16"
-              value="+15%"
-              label="card acquisitions"
+              value="NYU"
+              label="MS data science"
               delay={1}
             />
           </motion.div>

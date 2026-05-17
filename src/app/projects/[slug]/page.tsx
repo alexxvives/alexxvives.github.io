@@ -107,12 +107,28 @@ export default async function ProjectPage({
           </div>
         )}
 
-        {/* Sections */}
-        <Section title="Problem" eyebrow="01">
+        {/* Body with sticky TOC on lg+ */}
+        <div className="mt-16 lg:grid lg:grid-cols-[180px_1fr] lg:gap-12">
+          <aside className="hidden lg:block">
+            <nav className="sticky top-32 space-y-2 font-mono text-xs">
+              <div className="text-ink-subtle uppercase tracking-widest text-[10px] mb-3">
+                On this page
+              </div>
+              <a href="#problem" className="block text-ink-muted hover:text-accent transition-colors">01 · Problem</a>
+              <a href="#approach" className="block text-ink-muted hover:text-accent transition-colors">02 · Approach</a>
+              <a href="#results" className="block text-ink-muted hover:text-accent transition-colors">03 · Results</a>
+              {project.learnings && project.learnings.length > 0 && (
+                <a href="#learnings" className="block text-ink-muted hover:text-accent transition-colors">04 · Learnings</a>
+              )}
+            </nav>
+          </aside>
+
+          <div className="min-w-0">
+        <Section id="problem" title="Problem" eyebrow="01">
           <p className="prose-text">{project.problem}</p>
         </Section>
 
-        <Section title="Approach" eyebrow="02">
+        <Section id="approach" title="Approach" eyebrow="02">
           <ol className="space-y-4">
             {project.approach.map((step, i) => (
               <li key={i} className="flex gap-4">
@@ -128,7 +144,7 @@ export default async function ProjectPage({
           </ol>
         </Section>
 
-        <Section title="Results" eyebrow="03">
+        <Section id="results" title="Results" eyebrow="03">
           <ul className="space-y-3">
             {project.results.map((r, i) => (
               <li key={i} className="flex gap-3">
@@ -143,7 +159,7 @@ export default async function ProjectPage({
         </Section>
 
         {project.learnings && project.learnings.length > 0 && (
-          <Section title="Learnings" eyebrow="04">
+          <Section id="learnings" title="Learnings" eyebrow="04">
             <ul className="space-y-3">
               {project.learnings.map((l, i) => (
                 <li key={i} className="flex gap-3">
@@ -154,6 +170,8 @@ export default async function ProjectPage({
             </ul>
           </Section>
         )}
+          </div>
+        </div>
 
         {/* Next project */}
         <div className="mt-24 pt-12 border-t border-border">
@@ -183,16 +201,18 @@ export default async function ProjectPage({
 }
 
 function Section({
+  id,
   title,
   eyebrow,
   children,
 }: {
+  id?: string;
   title: string;
   eyebrow: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="mt-16">
+    <section id={id} className="mt-16 scroll-mt-32">
       <div className="flex items-baseline gap-4 mb-6">
         <span className="font-mono text-xs text-accent">{eyebrow}</span>
         <h2 className="h3">{title}</h2>

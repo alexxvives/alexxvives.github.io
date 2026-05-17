@@ -17,8 +17,8 @@ export function About() {
           <div className="space-y-6 text-ink-muted text-lg leading-relaxed">
             <p>
               I grew up in Barcelona, studied{" "}
-              <span className="text-ink">Industrial Engineering at Purdue</span> (with a
-              summer at Stanford), and earned an{" "}
+              <span className="text-ink">Industrial Engineering at Purdue</span>, and
+              earned an{" "}
               <span className="text-ink">M.S. in Data Science at NYU</span>. Today I
               work at Santander Bank in Boston, building models that reach millions of
               customers and decide where marketing dollars go.
@@ -35,6 +35,11 @@ export function About() {
               <span className="text-ink">2nd at HackGPT NYC</span> for an LLM-powered
               therapist prototype, founded a consulting club at Purdue, and built
               prediction-market trading strategies as a side project. Always learning.
+            </p>
+            <p>
+              Outside work I&apos;m a runner, climber and a serial side-project starter.
+              Looking to move back to Europe in the next year, ideally to a team that
+              cares about both rigorous experimentation and shipping real products.
             </p>
 
             <div className="pt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm font-mono">

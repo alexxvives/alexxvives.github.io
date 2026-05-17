@@ -17,23 +17,32 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Alexandre Vives · Data Scientist",
+  title: "Alexandre Vives · Data Scientist · Causal inference & ML",
   description:
-    "Data Scientist at Santander. NYU MS in Data Science. Building causal inference, ML, and AI products that move business metrics.",
+    "Barcelona-born data scientist. Causal inference, A/B testing and ML in production at Santander. Previously Meta and HP. NYU MS, Purdue BS. Open to roles across Europe.",
   keywords: [
     "Alexandre Vives",
     "Data Scientist",
     "Machine Learning",
     "Causal Inference",
     "A/B Testing",
+    "Barcelona",
+    "Europe",
     "Portfolio",
   ],
   authors: [{ name: "Alexandre Vives" }],
   openGraph: {
     title: "Alexandre Vives · Data Scientist",
     description:
-      "Causal inference, predictive modeling, and AI products. Santander · ex-Meta · ex-HP.",
+      "Causal inference, A/B testing and ML in production. Santander, ex-Meta, ex-HP. Open to Europe.",
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Alexandre Vives · Data Scientist",
+    description:
+      "Causal inference, A/B testing and ML in production. Santander, ex-Meta, ex-HP. Open to Europe.",
   },
 };
 

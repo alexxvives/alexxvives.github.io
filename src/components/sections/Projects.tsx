@@ -8,14 +8,19 @@ import { getProjectImage } from "@/content/projectImages";
 import { cn } from "@/lib/cn";
 
 const categories: Array<"All" | ProjectCategory> = ["All", "Work", "Personal", "Research"];
+const FEATURED_COUNT = 8;
 
 export function Projects() {
   const [filter, setFilter] = useState<"All" | ProjectCategory>("All");
+  const [showAll, setShowAll] = useState(false);
 
-  const visible = useMemo(
+  const filtered = useMemo(
     () => (filter === "All" ? projects : projects.filter((p) => p.category === filter)),
     [filter]
   );
+  const collapsed = filter === "All" && !showAll;
+  const visible = collapsed ? filtered.slice(0, FEATURED_COUNT) : filtered;
+  const hiddenCount = filtered.length - visible.length;
 
   return (
     <section id="projects" className="section">
@@ -118,6 +123,27 @@ export function Projects() {
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {hiddenCount > 0 && (
+        <div className="mt-10 flex justify-center">
+          <button
+            onClick={() => setShowAll(true)}
+            className="rounded-full px-6 py-2.5 text-xs font-mono border border-border text-ink-muted hover:border-accent hover:text-accent transition-all"
+          >
+            Show {hiddenCount} more projects →
+          </button>
+        </div>
+      )}
+      {filter === "All" && showAll && (
+        <div className="mt-10 flex justify-center">
+          <button
+            onClick={() => setShowAll(false)}
+            className="rounded-full px-6 py-2.5 text-xs font-mono border border-border text-ink-muted hover:border-accent hover:text-accent transition-all"
+          >
+            Show less
+          </button>
+        </div>
+      )}
     </section>
   );
 }
