@@ -38,7 +38,7 @@ export default async function ProjectPage({
 
   return (
     <article className="pt-32 pb-16">
-      <div className="container-page max-w-5xl">
+      <div className="container-page max-w-6xl">
         {/* Back */}
         <Link
           href="/#projects"
@@ -71,21 +71,7 @@ export default async function ProjectPage({
           </div>
         </header>
 
-        {/* Impact */}
-        {project.impact && project.impact.length > 0 && (
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {project.impact.map((m) => (
-              <div key={m.label} className="card p-5">
-                <div className="font-mono text-3xl text-accent font-semibold">
-                  {m.value}
-                </div>
-                <div className="text-[11px] uppercase tracking-widest text-ink-subtle mt-1">
-                  {m.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+
 
         {/* Hero image (splash) */}
         {getProjectImage(project.slug) && (
@@ -125,48 +111,77 @@ export default async function ProjectPage({
 
       <div className="min-w-0 max-w-[72ch]">
         <Section id="problem" title={project.sectionLabels?.problem ?? "Problem"} eyebrow="01">
-          <p className="prose-text">{project.problem}</p>
+          <p className="prose-text" dangerouslySetInnerHTML={{ __html: renderInline(project.problem) }} />
         </Section>
 
         <Section id="approach" title={project.sectionLabels?.approach ?? "Approach"} eyebrow="02">
-          <ol className="space-y-6">
-            {project.approach.map((step, i) => (
-              <li key={i} className="flex gap-4">
-                <span className="font-mono text-xs text-accent shrink-0 mt-[0.35rem] w-6">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span
-                  className="prose-text flex-1"
-                  dangerouslySetInnerHTML={{ __html: renderInline(step) }}
-                />
-              </li>
-            ))}
+          <ol className="space-y-6 list-none">
+            {(() => {
+              let n = 0;
+              return project.approach.map((step, i) => {
+                if (step.startsWith("> ")) {
+                  return (
+                    <li key={i}>
+                      <div className="border-l-2 border-accent/40 pl-5 py-2 my-1 bg-bg-elev/30 rounded-r-lg">
+                        <p className="prose-text italic text-ink/70" dangerouslySetInnerHTML={{ __html: renderInline(step.slice(2)) }} />
+                      </div>
+                    </li>
+                  );
+                }
+                n++;
+                return (
+                  <li key={i} className="flex gap-4">
+                    <span className="font-mono text-xs text-accent shrink-0 mt-[0.35rem] w-6">{String(n).padStart(2, "0")}</span>
+                    <span className="prose-text flex-1" dangerouslySetInnerHTML={{ __html: renderInline(step) }} />
+                  </li>
+                );
+              });
+            })()}
           </ol>
         </Section>
 
         <Section id="results" title={project.sectionLabels?.results ?? "Results"} eyebrow="03">
-          <ul className="space-y-3">
-            {project.results.map((r, i) => (
-              <li key={i} className="flex gap-3 items-start">
-                <span className="text-accent mt-[0.35rem] shrink-0">→</span>
-                <span
-                  className="prose-text flex-1"
-                  dangerouslySetInnerHTML={{ __html: renderInline(r) }}
-                />
-              </li>
-            ))}
+          <ul className="space-y-4 list-none">
+            {project.results.map((r, i) => {
+              if (r.startsWith("> ")) {
+                return (
+                  <li key={i}>
+                    <div className="border-l-2 border-accent/40 pl-5 py-2 my-1 bg-bg-elev/30 rounded-r-lg">
+                      <p className="prose-text italic text-ink/70" dangerouslySetInnerHTML={{ __html: renderInline(r.slice(2)) }} />
+                    </div>
+                  </li>
+                );
+              }
+              return (
+                <li key={i} className="flex gap-3 items-start">
+                  <span className="text-accent mt-[0.35rem] shrink-0">→</span>
+                  <span className="prose-text flex-1" dangerouslySetInnerHTML={{ __html: renderInline(r) }} />
+                </li>
+              );
+            })}
           </ul>
         </Section>
 
         {project.learnings && project.learnings.length > 0 && (
           <Section id="learnings" title={project.sectionLabels?.learnings ?? "Learnings"} eyebrow="04">
-            <ul className="space-y-3">
-              {project.learnings.map((l, i) => (
-              <li key={i} className="flex gap-3 items-start">
-                <span className="text-accent mt-[0.35rem] shrink-0">✦</span>
-                  <span className="prose-text flex-1">{l}</span>
-                </li>
-              ))}
+            <ul className="space-y-4 list-none">
+              {project.learnings.map((l, i) => {
+                if (l.startsWith("> ")) {
+                  return (
+                    <li key={i}>
+                      <div className="border-l-2 border-accent/40 pl-5 py-2 my-1 bg-bg-elev/30 rounded-r-lg">
+                        <p className="prose-text italic text-ink/70" dangerouslySetInnerHTML={{ __html: renderInline(l.slice(2)) }} />
+                      </div>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={i} className="flex gap-3 items-start">
+                    <span className="text-accent mt-[0.35rem] shrink-0">✦</span>
+                    <span className="prose-text flex-1" dangerouslySetInnerHTML={{ __html: renderInline(l) }} />
+                  </li>
+                );
+              })}
             </ul>
           </Section>
         )}
@@ -222,12 +237,13 @@ function Section({
   );
 }
 
-// Minimal inline markdown: **bold** and `code`
+// Inline markdown: **bold**, _italic_, `code`
 function renderInline(s: string): string {
   return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/\*\*(.+?)\*\*/g, '<strong class="text-ink font-semibold">$1</strong>')
+    .replace(/_([^_\n]{2,300})_/g, '<em class="italic text-ink/80">$1</em>')
     .replace(/`([^`]+)`/g, '<code class="font-mono text-xs text-accent bg-bg-elev px-1.5 py-0.5 rounded">$1</code>');
 }
