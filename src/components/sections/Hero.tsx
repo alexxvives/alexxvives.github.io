@@ -6,7 +6,7 @@ import { human } from "@/content/profile";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-24 sm:pt-40 sm:pb-32">
+    <section className="relative overflow-hidden pt-28 pb-16 sm:pt-40 sm:pb-32">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-grid pointer-events-none" />
       <div className="absolute inset-0 bg-grid-fade pointer-events-none" />
@@ -110,19 +110,19 @@ export function Hero() {
 
             {/* Floating stat chips */}
             <FloatingStat
-              className="left-[-1.5rem] top-12"
-              value="+18%"
-              label="deposits / campaign"
+              className="left-[-1rem] sm:left-[-1.5rem] top-12"
+              value="Purdue"
+              label="engineering"
               delay={0.6}
             />
             <FloatingStat
-              className="right-[-1rem] top-1/3"
-              value="−60%"
-              label="bureau pulls"
+              className="right-[-0.5rem] sm:right-[-1rem] top-1/3"
+              value="Santander"
+              label="data scientist"
               delay={0.8}
             />
             <FloatingStat
-              className="left-[-2rem] bottom-16"
+              className="left-[-1.5rem] sm:left-[-2rem] bottom-16"
               value="NYU"
               label="MS data science"
               delay={1}
@@ -150,12 +150,12 @@ function FloatingStat({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay }}
-      className={`absolute ${className} rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-4 py-3 shadow-xl shadow-black/30`}
+      className={`absolute ${className} rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-xl shadow-black/30`}
     >
-      <div className="font-mono text-2xl text-accent font-semibold leading-none">
+      <div className="font-mono text-lg sm:text-2xl text-accent font-semibold leading-none">
         {value}
       </div>
-      <div className="text-[10px] uppercase tracking-widest text-ink-subtle mt-1">
+      <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-subtle mt-1">
         {label}
       </div>
     </motion.div>
@@ -179,7 +179,7 @@ function Portrait() {
       {!failed && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src="/profile_pic.png"
+          src="/profile_pic.png?v=3"
           alt="Alexandre Vives"
           onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}

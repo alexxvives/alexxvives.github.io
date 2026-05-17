@@ -36,11 +36,6 @@ export function About() {
               therapist prototype, founded a consulting club at Purdue, and built
               prediction-market trading strategies as a side project. Always learning.
             </p>
-            <p>
-              Outside work I&apos;m a runner, climber and a serial side-project starter.
-              Looking to move back to Europe in the next year, ideally to a team that
-              cares about both rigorous experimentation and shipping real products.
-            </p>
 
             <div className="pt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm font-mono">
               <div>
@@ -53,7 +48,7 @@ export function About() {
               </div>
               <div>
                 <div className="text-ink-subtle">Currently</div>
-                <div className="text-ink">Santander Bank · Associate DS</div>
+                <div className="text-ink">Santander Bank · Data Scientist</div>
               </div>
             </div>
           </div>

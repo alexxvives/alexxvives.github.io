@@ -10,12 +10,12 @@ export const projectImages: Record<string, string> = {
   "uplift-model": `https://images.unsplash.com/photo-1556761175-5973dc0f32e7${W}`, // marketing / people
   "microsegments-oracle": `https://images.unsplash.com/photo-1551288049-bebda4e38f71${W}`, // dashboard
   // Work — Meta / HP / Research
-  "customer-retention-meta": `https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0${W}`, // instagram on phone
+  // Note: customer-retention-meta is hidden from homepage; image moved to ab-test below.
   "printer-sales-forecast": `https://images.unsplash.com/photo-1553413077-190dd305871c${W}`, // warehouse
   "food-detection": `https://images.unsplash.com/photo-1546069901-ba9599a7e63c${W}`, // plate of food
   "covid-simulation": `https://images.unsplash.com/photo-1584036561566-baf8f5f1b144${W}`, // pandemic / abstract
   // Personal
-  "ab-test-instagram-shop": `https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7${W}`, // phone w/ shopping feed
+  "ab-test-instagram-shop": `https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0${W}`, // instagram on phone (was Meta retention)
   "ai-therapist": `https://images.unsplash.com/photo-1587560699334-cc4ff634909a${W}`, // video call laptop
   "music-recommender": `https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4${W}`, // headphones / music
   "enertex-cto": `https://images.unsplash.com/photo-1513506003901-1e6a229e2d15${W}`, // warm cozy lamp

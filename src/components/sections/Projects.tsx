@@ -26,7 +26,7 @@ export function Projects() {
     <section id="projects" className="section">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
         <div>
-          <p className="eyebrow">03 · Projects</p>
+          <p className="eyebrow">04 · Projects</p>
           <h2 className="h2 mt-4">Selected work.</h2>
           <p className="text-ink-muted mt-3 max-w-xl">
             {projects.length} projects across production ML, applied research, hackathons

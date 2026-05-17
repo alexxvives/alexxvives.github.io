@@ -22,7 +22,7 @@ export type Project = {
   hasCustomVisual?: boolean;
 };
 
-export const projects: Project[] = [
+const allProjects: Project[] = [
   // ───────────── Work ─────────────
   {
     slug: "cltv-model",
@@ -123,7 +123,7 @@ export const projects: Project[] = [
   },
   {
     slug: "microsegments-oracle",
-    title: "Microsegments Oracle (White-box Affinity Scoring)",
+    title: "White-box Affinity Scoring",
     org: "Santander Bank",
     date: "2023",
     category: "Work",
@@ -558,6 +558,29 @@ export const projects: Project[] = [
   },
 ];
 
+// Slugs hidden from the homepage (kept here so old links still resolve if anyone has them).
+const HIDDEN_SLUGS = new Set<string>(["customer-retention-meta"]);
+
+// Display order on the homepage. Slugs not listed here fall to the end.
+const DISPLAY_ORDER = [
+  "cltv-model",
+  "uplift-model",
+  "ab-test-instagram-shop",
+  "fico-approximation",
+  "microsegments-oracle",
+  "printer-sales-forecast",
+];
+
+export const projects: Project[] = allProjects
+  .filter((p) => !HIDDEN_SLUGS.has(p.slug))
+  .sort((a, b) => {
+    const ia = DISPLAY_ORDER.indexOf(a.slug);
+    const ib = DISPLAY_ORDER.indexOf(b.slug);
+    const ra = ia === -1 ? Number.MAX_SAFE_INTEGER : ia;
+    const rb = ib === -1 ? Number.MAX_SAFE_INTEGER : ib;
+    return ra - rb;
+  });
+
 export const featuredSlugs = [
   "ab-test-instagram-shop",
   "uplift-model",
@@ -568,5 +591,5 @@ export const featuredSlugs = [
 ];
 
 export function getProject(slug: string): Project | undefined {
-  return projects.find((p) => p.slug === slug);
+  return allProjects.find((p) => p.slug === slug);
 }

@@ -81,7 +81,7 @@ function CustomerFunnel() {
           const tw = (s.treatment / max) * 100;
           const lift = ((s.treatment - s.control) / s.control) * 100;
           return (
-            <div key={s.stage} className="grid grid-cols-[110px_1fr_70px] items-center gap-3 text-xs">
+            <div key={s.stage} className="grid grid-cols-[80px_1fr_56px] sm:grid-cols-[110px_1fr_70px] items-center gap-2 sm:gap-3 text-[11px] sm:text-xs">
               <div className="font-mono text-ink-muted text-right text-[11px]">
                 <div>{s.stage}</div>
                 <div className="text-ink-subtle text-[10px]">step {i + 1}</div>
