@@ -6,11 +6,11 @@ import { getProject } from "@/content/projects";
 // ── Layout ─────────────────────────────────────────────────────────────────────
 
 export function Prose({ children }: { children: ReactNode }) {
-  return <div className="max-w-[840px] mx-auto px-5 sm:px-8 lg:px-10">{children}</div>;
+  return <div className="max-w-[840px]">{children}</div>;
 }
 
 export function Wide({ children }: { children: ReactNode }) {
-  return <div className="max-w-5xl mx-auto my-10 px-5 sm:px-8 lg:px-10">{children}</div>;
+  return <div className="max-w-5xl my-10">{children}</div>;
 }
 
 // ── Inline typography ──────────────────────────────────────────────────────────
@@ -147,8 +147,7 @@ export function MetricStrip({
   metrics: { label: string; value: string; sub?: string }[];
 }) {
   return (
-    <div className="max-w-[840px] mx-auto px-5 sm:px-8 lg:px-10">
-    <div className="my-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div className="my-8 max-w-[840px] grid grid-cols-2 sm:grid-cols-4 gap-3">
       {metrics.map(({ label, value, sub }) => (
         <div
           key={label}
@@ -161,7 +160,6 @@ export function MetricStrip({
           <p className="text-[11px] text-ink-muted mt-1 leading-snug">{label}</p>
         </div>
       ))}
-    </div>
     </div>
   );
 }
@@ -187,8 +185,7 @@ export function NextProject({ slug }: { slug: string }) {
   const p = getProject(slug);
   if (!p) return null;
   return (
-    <div className="max-w-[840px] mx-auto px-5 sm:px-8 lg:px-10">
-    <div className="mt-24 pt-12 border-t border-border/40">
+    <div className="max-w-[840px] mt-24 pt-12 border-t border-border/40">
       <p className="font-mono text-xs uppercase tracking-widest text-ink-subtle mb-4">
         Next project
       </p>
@@ -210,7 +207,6 @@ export function NextProject({ slug }: { slug: string }) {
         <ArrowUpRight className="h-5 w-5 shrink-0 text-ink-subtle group-hover:text-accent transition-colors mt-1" />
       </Link>
     </div>
-    </div>
   );
 }
 
@@ -228,8 +224,8 @@ export function ArticleHeader({
   tags: string[];
 }) {
   return (
-    <header className="max-w-[840px] mx-auto px-5 sm:px-8 lg:px-10 mt-10">
-      <div>
+    <header className="container-page mt-10">
+      <div className="max-w-[840px]">
         <p className="font-mono text-xs uppercase tracking-widest text-accent">
           {eyebrow}
         </p>
@@ -256,7 +252,7 @@ export function ArticleHeader({
 
 export function BackLink() {
   return (
-    <div className="max-w-[840px] mx-auto px-5 sm:px-8 lg:px-10">
+    <div className="container-page">
       <Link
         href="/#projects"
         className="inline-flex items-center gap-2 text-sm text-ink-muted hover:text-accent transition-colors"

@@ -217,7 +217,7 @@ export default function CLTVPage() {
         tags={["Supervised Learning", "XGBoost", "Marketing", "Snowflake", "Isotonic Calibration"]}
       />
 
-      <div className="mt-16">
+      <div className="container-page mt-16">
         {/* Opening */}
         <Prose>
           <P>

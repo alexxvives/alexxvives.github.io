@@ -248,7 +248,7 @@ export default function UpliftModelPage() {
         tags={["Causal Inference", "Uplift", "T-Learner", "X-Learner", "Marketing", "A/B Testing"]}
       />
 
-      <div className="mt-16">
+      <div className="container-page mt-16">
         {/* Opening */}
         <Prose>
           <P>

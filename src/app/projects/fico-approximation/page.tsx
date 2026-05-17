@@ -240,7 +240,7 @@ export default function FICOPage() {
         tags={["Credit Risk", "Gradient Boosting", "Conformal Prediction", "Onboarding", "Cost Optimization"]}
       />
 
-      <div className="mt-16">
+      <div className="container-page mt-16">
         {/* Opening */}
         <Prose>
           <P>

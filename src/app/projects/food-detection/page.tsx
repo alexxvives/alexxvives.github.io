@@ -218,7 +218,7 @@ export default function FoodDetectionPage() {
         tags={["Computer Vision", "Deep Learning", "ResNet-50", "PyTorch", "Transfer Learning", "Food-101"]}
       />
 
-      <div className="mt-16">
+      <div className="container-page mt-16">
         {/* Opening */}
         <Prose>
           <P>

@@ -267,7 +267,7 @@ export default function CovidSimPage() {
         tags={["Stochastic Simulation", "Agent-Based Modeling", "SEIR", "Monte Carlo", "R", "Public Health"]}
       />
 
-      <div className="mt-16">
+      <div className="container-page mt-16">
         {/* Opening */}
         <Prose>
           <P>

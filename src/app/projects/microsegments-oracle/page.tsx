@@ -247,7 +247,7 @@ export default function MicrosegmentsPage() {
         tags={["White-box ML", "Segmentation", "A/B Testing", "Rolling Windows", "Interpretability"]}
       />
 
-      <div className="mt-16">
+      <div className="container-page mt-16">
         {/* Opening */}
         <Prose>
           <P>
