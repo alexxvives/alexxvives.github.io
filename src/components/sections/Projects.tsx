@@ -56,7 +56,7 @@ export function Projects() {
         </div>
       </div>
 
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <motion.div layout className="max-md:flex max-md:overflow-x-auto max-md:snap-x max-md:snap-mandatory max-md:-mx-5 max-md:px-5 max-md:gap-4 max-md:pb-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-5">
         <AnimatePresence mode="popLayout">
           {visible.map((p, i) => (
             <motion.div
@@ -66,6 +66,7 @@ export function Projects() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.4, delay: Math.min(i * 0.03, 0.3) }}
+              className="max-md:shrink-0 max-md:w-[82vw] max-md:snap-start"
             >
               <Link
                 href={`/projects/${p.slug}`}

@@ -80,21 +80,35 @@ function FourQuadrant() {
 // ── Diagram 2: Qini curve ─────────────────────────────────────────────────────
 
 function AUUCCurve() {
-  const W = 580, H = 270;
-  const pl = 50, pr = 24, pt = 30, pb = 50;
+  const W = 580, H = 280;
+  const pl = 52, pr = 20, pt = 38, pb = 52;
   const cW = W - pl - pr, cH = H - pt - pb;
-  const xs = (pct: number) => pl + (pct / 100) * cW;
+  const xs = (p: number) => pl + (p / 100) * cW;
   const ys = (v: number) => pt + cH * (1 - v);
 
-  // 11 points: 0%..100% in steps of 10%
-  const perfect = [0, 0.30, 0.57, 0.80, 0.94, 1.0, 1.0, 0.99, 0.98, 0.96, 0.93];
-  const tLR     = [0, 0.22, 0.44, 0.63, 0.78, 0.88, 0.95, 0.99, 0.98, 0.96, 0.94];
-  const xLR     = [0, 0.21, 0.43, 0.62, 0.77, 0.87, 0.94, 0.97, 0.97, 0.95, 0.93];
-  const rLR     = [0, 0.20, 0.41, 0.60, 0.75, 0.85, 0.92, 0.96, 0.96, 0.94, 0.92];
-  const random  = [0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00];
+  // Illustrative single T-learner curve: steep rise → plateau → clear decline into sleeping dogs
+  // crossover with random at ~x=83.75%, y≈0.838
+  const posFill = [
+    [0, 0.00], [10, 0.34], [20, 0.61], [30, 0.80], [40, 0.91],
+    [50, 0.96], [60, 0.98], [70, 0.97], [80, 0.89], [83.75, 0.838],
+    // back along random
+    [80, 0.80], [70, 0.70], [60, 0.60], [50, 0.50],
+    [40, 0.40], [30, 0.30], [20, 0.20], [10, 0.10],
+  ].map(([x, y], i) => `${i === 0 ? "M" : "L"}${xs(x).toFixed(1)},${ys(y).toFixed(1)}`).join(" ") + " Z";
 
-  const makePath = (vals: number[]) =>
-    vals.map((v, i) => `${i === 0 ? "M" : "L"}${xs(i * 10).toFixed(1)},${ys(v).toFixed(1)}`).join(" ");
+  const negFill = [
+    [83.75, 0.838], [90, 0.75], [100, 0.58],
+    [100, 1.00], [90, 0.90],
+  ].map(([x, y], i) => `${i === 0 ? "M" : "L"}${xs(x).toFixed(1)},${ys(y).toFixed(1)}`).join(" ") + " Z";
+
+  const tlrPath = [[0,0],[10,0.34],[20,0.61],[30,0.80],[40,0.91],[50,0.96],[60,0.98],[70,0.97],[80,0.89],[90,0.75],[100,0.58]]
+    .map(([x, y], i) => `${i === 0 ? "M" : "L"}${xs(x).toFixed(1)},${ys(y).toFixed(1)}`).join(" ");
+
+  const randPath = [[0,0],[10,0.10],[20,0.20],[30,0.30],[40,0.40],[50,0.50],[60,0.60],[70,0.70],[80,0.80],[90,0.90],[100,1.00]]
+    .map(([x, y], i) => `${i === 0 ? "M" : "L"}${xs(x).toFixed(1)},${ys(y).toFixed(1)}`).join(" ");
+
+  // Region boundary x values
+  const x1 = 50, x2 = 83.75;
 
   return (
     <figure className="select-none">
@@ -120,79 +134,53 @@ function AUUCCurve() {
           {/* axes */}
           <line x1={pl} y1={pt} x2={pl} y2={pt + cH} stroke="rgba(255,255,255,0.1)" />
           <line x1={pl} y1={pt + cH} x2={pl + cW} y2={pt + cH} stroke="rgba(255,255,255,0.1)" />
-          {/* AUUC fill area under T(LR) */}
-          <path
-            d={`${makePath(tLR)} L${xs(100).toFixed(1)},${ys(0).toFixed(1)} L${xs(0).toFixed(1)},${ys(0).toFixed(1)} Z`}
-            fill="#3b82f6" fillOpacity={0.07}
-          />
-          {/* curves */}
-          <path d={makePath(random)}  fill="none" stroke="rgba(180,180,180,0.4)" strokeDasharray="4,3" strokeWidth={1.5} />
-          <path d={makePath(perfect)} fill="none" stroke="#4d7c0f" strokeWidth={2} strokeLinejoin="round" />
-          <path d={makePath(rLR)}     fill="none" stroke="#ca8a04" strokeWidth={2} strokeLinejoin="round" />
-          <path d={makePath(xLR)}     fill="none" stroke="#f97316" strokeWidth={2} strokeLinejoin="round" />
-          <path d={makePath(tLR)}     fill="none" stroke="#3b82f6" strokeWidth={2.5} strokeLinejoin="round" />
+
+          {/* fills */}
+          <path d={posFill} fill="#a3e635" fillOpacity={0.09} />
+          <path d={negFill} fill="#f87171" fillOpacity={0.13} />
+
+          {/* region dividers */}
+          <line x1={xs(x1)} y1={pt + 6} x2={xs(x1)} y2={pt + cH} stroke="rgba(255,255,255,0.12)" strokeDasharray="3,3" />
+          <line x1={xs(x2)} y1={pt + 6} x2={xs(x2)} y2={pt + cH} stroke="rgba(248,113,113,0.25)" strokeDasharray="3,3" />
+
+          {/* random baseline */}
+          <path d={randPath} fill="none" stroke="rgba(180,180,180,0.35)" strokeDasharray="5,4" strokeWidth={1.5} />
+
+          {/* T-learner curve */}
+          <path d={tlrPath} fill="none" stroke="#a3e635" strokeWidth={2.5} strokeLinejoin="round" />
+
+          {/* Region labels at top */}
+          <text x={xs(25)} y={pt + 14} textAnchor="middle" fill="#a3e635" fontSize={8.5} fontWeight="600">OFFER PROMOS</text>
+          <text x={xs(25)} y={pt + 25} textAnchor="middle" fill="rgba(163,230,53,0.55)" fontSize={7.5}>highest uplift</text>
+
+          <text x={xs(67)} y={pt + 14} textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize={8.5}>DIMINISHING RETURNS</text>
+
+          <text x={xs(91.5)} y={pt + 14} textAnchor="middle" fill="#f87171" fontSize={8.5} fontWeight="600">STOP TARGETING</text>
+          <text x={xs(91.5)} y={pt + 25} textAnchor="middle" fill="rgba(248,113,113,0.55)" fontSize={7.5}>sleeping dogs</text>
+
           {/* legend */}
-          <rect x={pl + 10} y={pt + 8} width={100} height={84} rx={4} fill="rgba(0,0,0,0.45)" />
-          <line x1={pl + 18} y1={pt + 20} x2={pl + 30} y2={pt + 20} stroke="#3b82f6" strokeWidth={2.5} />
-          <text x={pl + 34} y={pt + 24} fill="rgba(255,255,255,0.75)" fontSize={9}>T (LR)</text>
-          <line x1={pl + 18} y1={pt + 34} x2={pl + 30} y2={pt + 34} stroke="#f97316" strokeWidth={2} />
-          <text x={pl + 34} y={pt + 38} fill="rgba(255,255,255,0.75)" fontSize={9}>X (LR)</text>
-          <line x1={pl + 18} y1={pt + 48} x2={pl + 30} y2={pt + 48} stroke="#ca8a04" strokeWidth={2} />
-          <text x={pl + 34} y={pt + 52} fill="rgba(255,255,255,0.75)" fontSize={9}>R (LR)</text>
-          <line x1={pl + 18} y1={pt + 62} x2={pl + 30} y2={pt + 62} stroke="#4d7c0f" strokeWidth={2} />
-          <text x={pl + 34} y={pt + 66} fill="rgba(255,255,255,0.75)" fontSize={9}>Perfect</text>
-          <line x1={pl + 18} y1={pt + 76} x2={pl + 30} y2={pt + 76} stroke="rgba(180,180,180,0.4)" strokeDasharray="4,3" strokeWidth={1.5} />
-          <text x={pl + 34} y={pt + 80} fill="rgba(255,255,255,0.5)" fontSize={9}>Random</text>
-          {/* annotation: "Users with highest uplift" */}
-          <text
-            x={xs(13)} y={ys(0.35)}
-            fill="rgba(100,160,255,0.65)" fontSize={8.5}
-            transform={`rotate(-54 ${xs(13)} ${ys(0.35)})`}
-          >
-            Users with highest uplift
-          </text>
-          {/* annotation: "As good as random targeting" */}
-          <text
-            x={xs(44)} y={ys(0.68)}
-            fill="rgba(100,160,255,0.5)" fontSize={8} textAnchor="middle"
-            transform={`rotate(-28 ${xs(44)} ${ys(0.68)})`}
-          >
-            As good as random targeting
-          </text>
-          {/* annotation: "Little to no incremental benefit" - above peak */}
-          <text x={xs(66)} y={pt - 6} fill="rgba(100,160,255,0.6)" fontSize={8.5} textAnchor="middle">
-            Little to no incremental benefit
-          </text>
-          <line x1={xs(66)} y1={pt - 2} x2={xs(70)} y2={ys(0.99)} stroke="rgba(100,160,255,0.3)" strokeWidth={0.8} />
-          {/* annotation: "Negative incremental impact" - right declining tail */}
-          <text x={xs(83)} y={ys(0.72)} fill="rgba(255,120,120,0.65)" fontSize={8.5} textAnchor="middle">Negative</text>
-          <text x={xs(83)} y={ys(0.65)} fill="rgba(255,120,120,0.65)" fontSize={8.5} textAnchor="middle">incremental impact</text>
-          <line x1={xs(83)} y1={ys(0.74)} x2={xs(86)} y2={ys(0.93)} stroke="rgba(255,120,120,0.3)" strokeWidth={0.8} />
-          {/* "Offer Promos" bottom-left */}
-          <text x={pl + 6} y={pt + cH - 6} fill="rgba(100,220,100,0.5)" fontSize={8}>
-            ← Offer Promos to these consumers!
-          </text>
-          {/* "Stop spamming" bottom-right */}
-          <text x={pl + cW - 6} y={pt + cH - 6} fill="rgba(255,120,120,0.5)" fontSize={8} textAnchor="end">
-            Stop spamming these consumers! →
-          </text>
+          <line x1={pl + cW - 84} y1={pt + cH - 26} x2={pl + cW - 72} y2={pt + cH - 26} stroke="#a3e635" strokeWidth={2.5} />
+          <text x={pl + cW - 66} y={pt + cH - 22} fill="rgba(255,255,255,0.65)" fontSize={9}>T-Learner</text>
+          <line x1={pl + cW - 84} y1={pt + cH - 12} x2={pl + cW - 72} y2={pt + cH - 12} stroke="rgba(180,180,180,0.35)" strokeDasharray="5,4" strokeWidth={1.5} />
+          <text x={pl + cW - 66} y={pt + cH - 8} fill="rgba(255,255,255,0.35)" fontSize={9}>Random</text>
+
           {/* axis labels */}
           <text x={pl + cW / 2} y={H - 4} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize={9}>
             Population Targeted (%)
           </text>
           <text
-            x={13} y={pt + cH / 2}
+            x={14} y={pt + cH / 2}
             textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize={9}
-            transform={`rotate(-90 13 ${pt + cH / 2})`}
+            transform={`rotate(-90 14 ${pt + cH / 2})`}
           >
             Cumulative Uplift
           </text>
         </svg>
       </div>
       <figcaption className="mt-3 text-xs text-ink-subtle text-center">
-        <span className="text-ink-muted font-medium">Fig 2.</span> Area under uplift curve (AUUC) on held-out validation data.
-        T-learner (blue) concentrates the most incremental conversions in the top-targeted percentiles,
-        with the area above the random baseline representing the AUUC gain.
+        <span className="text-ink-muted font-medium">Fig 2.</span> Illustrative AUUC curve showing three targeting zones.
+        Offer promos to the top-decile persuadables (green), avoid the long tail of diminishing returns,
+        and suppress sleeping dogs where cumulative uplift declines below the random baseline (red).
       </figcaption>
     </figure>
   );

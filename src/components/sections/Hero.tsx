@@ -98,13 +98,18 @@ export function Hero() {
             </div>
 
             {/* Floating stat chips */}
-            {/* Santander — top center */}
-            <FloatingStat
-              className="top-0 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              value="Santander"
-              label="data scientist"
-              delay={0.6}
-            />
+            {/* Santander — centered at top edge, half overflowing */}
+            <div className="absolute top-0 inset-x-0 flex justify-center pointer-events-none">
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="-translate-y-1/2 rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-xl shadow-black/30 pointer-events-auto"
+              >
+                <div className="font-mono text-lg sm:text-2xl text-accent font-semibold leading-none">Santander</div>
+                <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-subtle mt-1">data scientist</div>
+              </motion.div>
+            </div>
             {/* NYU — bottom left */}
             <FloatingStat
               className="left-[-1rem] sm:left-[-1.5rem] bottom-16"
