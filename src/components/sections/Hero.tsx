@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Download } from "lucide-react";
 import { human } from "@/content/profile";
 
@@ -157,6 +157,17 @@ function FloatingStat({
 function Portrait() {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Handle images that finish loading before React hydrates (cached images)
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img) return;
+    if (img.complete) {
+      if (img.naturalWidth === 0) setFailed(true);
+      else setLoaded(true);
+    }
+  }, []);
 
   return (
     <div className="relative h-full w-full">
@@ -171,7 +182,8 @@ function Portrait() {
       {!failed && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src="/profile_pic.png?v=3"
+          ref={imgRef}
+          src="/profile_pic.png"
           alt="Alexandre Vives"
           onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}
@@ -179,12 +191,6 @@ function Portrait() {
             loaded ? "opacity-100" : "opacity-0"
           }`}
         />
-      )}
-
-      {!loaded && (
-        <div className="absolute inset-0 flex items-end p-5 text-xs font-mono text-ink-muted pointer-events-none">
-          <span>alexandre vives</span>
-        </div>
       )}
     </div>
   );

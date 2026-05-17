@@ -1,0 +1,550 @@
+# tactiq.io free youtube transcript
+# A/B Testing in Data Science Interviews by a Google Data Scientist | DataInterview
+# https://www.youtube.com/watch/DUNk4GPZ9bw
+
+00:00:00.120 if you are preparing for a data science
+00:00:01.640 interview AB testing is a mustn concept
+00:00:05.200 whether it's for Google meta and Uber
+00:00:07.799 and so forth AB testing is a very
+00:00:10.400 popular Topic in interview questions
+00:00:13.200 because data scientists in those
+00:00:15.080 companies will use Ab test as a way to
+00:00:17.600 figure out whether the change that they
+00:00:19.520 have made on those platforms are due to
+00:00:22.000 random chance or because of the actual
+00:00:24.279 change that they have
+00:00:25.599 implemented and so what we are going to
+00:00:27.880 do in this video is I'll provide a walk
+00:00:30.320 through of an AB test based on a real
+00:00:32.719 life example and along the way I'll
+00:00:34.640 pepper in some hints that can be helpful
+00:00:36.840 in terms of acing interview questions on
+00:00:39.200 AB test hey everyone I'm Dan the founder
+00:00:42.000 of data interview.com X Google and
+00:00:43.840 PayPal data scientist in this video
+00:00:46.360 we're going to do a deep dive on AB
+00:00:48.079 testing based on a real life example and
+00:00:50.960 what I will do is I'll walk through the
+00:00:52.760 procedure of setting up an a test and
+00:00:55.600 I'll talk about a couple things that you
+00:00:57.640 should definitely mention when whenever
+00:00:59.039 you're walking through an a AB testing
+00:01:00.640 case now let's get started the first
+00:01:03.039 thing that you need to realize is that
+00:01:04.519 when you are walking through the AB
+00:01:05.840 testing procedure there are essentially
+00:01:07.640 seven steps that you need to consider
+00:01:09.759 the first thing to do is basically
+00:01:12.280 understanding the problem the problem
+00:01:13.759 statement this is where you try to make
+00:01:15.880 sense of the case problem that you need
+00:01:18.040 to solve by asking clarifying questions
+00:01:20.360 to the interviewer and also figuring out
+00:01:23.439 what is this success metric and what is
+00:01:25.159 a user journey and we will definitely do
+00:01:27.159 a deep dive on this topic in a second
+00:01:29.360 the second thing is that you want to
+00:01:30.759 Define your hypothesis testing and what
+00:01:33.159 this basically means is that you set up
+00:01:34.799 what your null hypothesis and
+00:01:36.240 alternative hypothesis is and and you
+00:01:38.680 want to set up some parameter values for
+00:01:40.320 your experiment such as the significance
+00:01:42.000 level and statistical power the third
+00:01:44.119 step is designing the experiment itself
+00:01:46.479 and so this is where you talk about what
+00:01:48.560 is the randomization unit and which user
+00:01:51.520 type you're going to actually Target for
+00:01:53.680 this experiment and various other things
+00:01:55.960 that you definitely need to consider
+00:01:57.320 when you're designing the experiment the
+00:01:59.520 next step is to run the experiment
+00:02:02.360 itself and this is where you need to
+00:02:04.159 think about the instrumentation that is
+00:02:05.680 required to actually collect the data
+00:02:07.560 and analyze the result now once you've
+00:02:09.758 collected data the next thing that you
+00:02:11.599 need to do even before you actually
+00:02:13.400 interpret the result and decide to
+00:02:15.080 launch is basically do some sanity check
+00:02:18.160 or validity checks because if your
+00:02:20.360 experiment design was flawed or if
+00:02:22.360 there's some bias that was implemented
+00:02:24.879 into the data collection itself then you
+00:02:26.840 have flawed result and so you might end
+00:02:29.040 up making poor DEC decision so this is
+00:02:30.519 where doing sending a check even before
+00:02:32.480 you think about the interpretation and
+00:02:34.000 launch decision is very crucial once you
+00:02:37.280 have done the sending check the next
+00:02:38.959 step is to basically interpret the
+00:02:41.040 result in terms of what is the lip that
+00:02:43.120 you saw the P Val in compress interal
+00:02:45.560 and lastly now that you have the
+00:02:48.200 statistical result along with the
+00:02:50.000 business context this is where you make
+00:02:52.040 a decision in terms of whether you're
+00:02:53.680 going to launch the change or not now
+00:02:55.920 with all of the steps covered now let's
+00:02:57.720 do a deep dive on an actual case problem
+00:03:00.640 suppose that an online clothing store
+00:03:02.480 called fashion web store wants to test a
+00:03:04.920 new ranking algorithm to provide
+00:03:07.040 products more relevant to customers how
+00:03:10.280 would you design an experiment so in
+00:03:12.519 order to tackle this problem that
+00:03:14.239 requires AB testing we want to first of
+00:03:16.560 all understand the nature of this
+00:03:18.599 product so we know that this is an
+00:03:20.480 e-commerce store that sells Goods such
+00:03:23.360 as basically clothing Goods such as
+00:03:25.319 clothes shoes bags and other type of
+00:03:28.680 merchandise and what this store uses are
+00:03:32.680 basically a product recommendation
+00:03:34.760 system an algorithm where once the user
+00:03:37.480 searches some keyword let's just say
+00:03:39.720 clothing for instance it's going to
+00:03:41.439 generate a result with product that's
+00:03:44.480 could be relevant for the customer based
+00:03:46.239 on let's just say their profile
+00:03:48.439 transaction history and so forth and so
+00:03:50.920 what we want to test in this example is
+00:03:52.599 that if we change the recommendation
+00:03:54.840 system maybe we're providing more
+00:03:56.480 relevant products to the users thereby
+00:03:59.079 it should boost the revenue sales of
+00:04:01.560 this e-commerce store so we have some
+00:04:03.480 general sense about what this problem
+00:04:05.799 involves and one thing I want to mention
+00:04:08.280 is that I've worked with the number of
+00:04:10.000 clients on AB testing interview
+00:04:11.879 questions one thing I've noticed is that
+00:04:13.760 clients will often skip this problem
+00:04:16.720 statement part and jump right into
+00:04:19.358 basically thetical methodology proposing
+00:04:22.360 what the experiment design is you don't
+00:04:24.160 want to engage the interview question
+00:04:26.040 that way you always want to start with
+00:04:27.880 the business context and then and segue
+00:04:30.479 over to the sisal methodology now as
+00:04:33.039 you're fleshing out the business goal of
+00:04:34.759 this problem one thing that you want to
+00:04:36.520 do is basically clarify what is the user
+00:04:39.280 Journey or the product experience that
+00:04:41.000 you're trying to change so this
+00:04:42.720 e-commerce store has the following user
+00:04:44.960 funnel a user will visit meaning they
+00:04:48.240 land on this Landing site and then they
+00:04:50.479 will search an item which basically
+00:04:52.680 produces a result based on the
+00:04:55.120 recommendation and then there a user is
+00:04:57.160 going to browse couple items and then
+00:04:59.039 eventually they might might click an
+00:05:00.120 item and then they'll purchase it which
+00:05:02.000 is the ultimate success that we seek to
+00:05:04.600 achieve through the change now thinking
+00:05:07.160 about the user journey is important
+00:05:09.320 because later down the road when you're
+00:05:11.360 thinking about what is a success metric
+00:05:14.000 and what is a target user population you
+00:05:17.000 want to think about at what stage do you
+00:05:19.520 want to consider the user to be
+00:05:21.680 participant for the experiment and this
+00:05:23.919 is something we're going to talk about
+00:05:25.479 very soon now one pro tip I definitely
+00:05:27.479 want to mention is that when you have an
+00:05:29.720 a testing interview round whether it's
+00:05:31.759 for meta Google go through the
+00:05:34.759 individual product basically the core
+00:05:36.800 product the core features of that
+00:05:38.840 platform and then create an outline of
+00:05:41.960 what that user journey is once you have
+00:05:44.800 done this this is going to be really
+00:05:46.840 helpful when you are in the actual
+00:05:48.400 interview setting and you're asked to
+00:05:49.919 design an AB test based on that
+00:05:51.759 particular product once you have staish
+00:05:53.759 the user Journey the next thing to do is
+00:05:56.240 basically Define the success metric so
+00:05:59.280 what what is it that you need to move in
+00:06:01.520 order to basically be certain that the
+00:06:04.319 change that you're applying is actually
+00:06:05.919 better for the platform overall now when
+00:06:08.319 you think about the success metric you
+00:06:10.080 want to think about a couple qualities
+00:06:12.039 so the first thing that you need to
+00:06:13.160 think about is that is it measurable so
+00:06:15.639 is it the type of user Behavior you can
+00:06:17.759 actually collect through the
+00:06:19.520 instrumentation or the platform and the
+00:06:21.960 next quality you want to think about is
+00:06:24.280 is your metric attributable and what
+00:06:27.039 this basically means is that can you
+00:06:28.560 establish a clear linkage that the cause
+00:06:31.199 the treatment that you applied to the
+00:06:33.400 platform is has led to the effect that
+00:06:36.160 you saw the change in the metric in this
+00:06:38.160 case the next quality that you want to
+00:06:40.400 think about is is your metric sensitive
+00:06:43.000 and you essentially have a metric that
+00:06:44.919 serves as a proxy that yes the there is
+00:06:49.120 a a genuine difference in terms of the
+00:06:51.720 user experience in terms of the old
+00:06:55.199 algorithm versus a new algorithm and so
+00:06:58.120 statistically speaking you you want to
+00:06:59.840 find a metric that has low variability
+00:07:02.960 and a bad metric for in this case let's
+00:07:05.479 just say time span on the website so the
+00:07:08.319 total time spent on the uh on the
+00:07:10.080 website for a given user might have high
+00:07:12.240 variability and so you cannot clearly
+00:07:14.639 tell whether there is an actual
+00:07:16.479 difference in terms of the how the user
+00:07:18.720 is engaging the e-commerce given that
+00:07:21.680 there are some underlying changes to the
+00:07:23.400 ranking algorithm the fourth thing is
+00:07:26.000 that AB experiments needs to be very
+00:07:28.960 quick it's very it's a very iterative
+00:07:31.479 process as a way to improve a product
+00:07:33.639 very quickly and so you want to ensure
+00:07:36.039 that what you're measuring is timely you
+00:07:38.720 don't want to wait weeks and months to
+00:07:41.120 observe a user behavior and then
+00:07:42.960 eventually make the change because
+00:07:44.599 that's a very costly way of running an
+00:07:46.879 experiment so you want to think about
+00:07:49.240 what is that short-term behavior that
+00:07:51.599 can serve as a proxy for long-term
+00:07:55.080 desired Behavior So based on these four
+00:07:57.720 qualities ultimately the success metric
+00:08:00.599 that we want to use for this case is the
+00:08:04.080 revenue per day per user now once you
+00:08:07.120 establish the prom statement clearly the
+00:08:09.280 next thing to do is establish your
+00:08:11.159 hypothesis testing so this is where you
+00:08:13.159 state your no hypothesis and alternative
+00:08:15.440 hypothesis so the no hypothesis in this
+00:08:18.319 case is going to be the average revenue
+00:08:20.840 per day per user between the Baseline
+00:08:23.039 and the variant ranking algorithms are
+00:08:25.159 the same and the alternative hypothesis
+00:08:27.159 in this case is going to be that the
+00:08:29.319 average revenue per day per user between
+00:08:32.320 the Baseline and the variant ranking
+00:08:34.080 algorithms are different once you've
+00:08:36.080 State the hypothesis statements the next
+00:08:37.958 thing that you want to do is you want to
+00:08:39.440 set the significance level or your Alpha
+00:08:41.519 in this case so the significance level
+00:08:43.479 is basically the decision threshold if
+00:08:45.680 the probability of observing a
+00:08:47.120 particular event is very low then it is
+00:08:50.519 deemed statistically significant and so
+00:08:52.399 in this example case the significance
+00:08:54.240 level that we want to set is 005 and
+00:08:57.120 that's the usual value that is often set
+00:08:59.079 in in online experiments the next value
+00:09:01.880 that we want to set is the statistical
+00:09:03.760 power the statistical power usually is
+00:09:06.160 set
+00:09:07.160 as80 and what 080 basically means is is
+00:09:10.600 the 80% probability of detecting effect
+00:09:13.640 given that the alternative hypothesis is
+00:09:15.680 true and lastly what you want to set is
+00:09:18.680 your practical significance basically
+00:09:20.560 the minimum detectable effect and
+00:09:22.680 typically for a large online platform
+00:09:24.560 with millions of users the MD is 1%
+00:09:27.640 lived once you've set up the hpth
+00:09:29.640 testing the next thing that you want to
+00:09:31.160 do is design the experiment itself so
+00:09:33.839 the first thing that you want to
+00:09:35.160 consider as you design the experiment is
+00:09:36.920 you want to consider what is the
+00:09:38.320 randomization unit in this case we're
+00:09:40.680 going to randomly assign at at the user
+00:09:43.279 level um basically randomly assign them
+00:09:45.720 in terms of the control group or the
+00:09:48.480 treatment group once you have defined
+00:09:50.880 the randomization unit you need to think
+00:09:52.839 about which population of the users you
+00:09:55.120 want to Target and this is something
+00:09:57.200 that I talked about earlier in terms of
+00:09:59.320 the user funnel right so you have a user
+00:10:01.560 that visits you have a user that
+00:10:03.120 searches they browse they will visit an
+00:10:05.720 item and then they'll eventually
+00:10:07.200 purchase so at what level do you want to
+00:10:09.519 allow the user to participate in the
+00:10:11.320 experiment so in this case we actually
+00:10:14.040 want to Target users who have actually
+00:10:16.720 started searching something why because
+00:10:20.320 this is where the algorithm actually
+00:10:22.240 kicks in and then they're actually
+00:10:24.000 exposed to the treatment in this case
+00:10:26.079 which is either the uh the old algorithm
+00:10:29.120 or the new algorithm the third thing
+00:10:31.320 that you want to Define is your sample
+00:10:33.200 size the general rule of thumb is the
+00:10:35.079 following formula which is that n is
+00:10:37.480 approximately equal to 16 * the variance
+00:10:41.360 / by the Delta Square where Delta
+00:10:44.320 essentially represents the difference of
+00:10:47.040 the key metric between the treatment and
+00:10:50.000 the control and this formula is based on
+00:10:53.120 your the assumption that your
+00:10:54.360 significance level is 05 and your
+00:10:56.920 statistical power is 80 once you have
+00:10:59.519 determined your sample size the next
+00:11:01.399 thing that you want to do is determine
+00:11:03.000 the duration of your experiment and the
+00:11:05.079 typical duration of the experiment is
+00:11:06.800 going to be 1 to two weeks you don't
+00:11:08.880 want to run the experiment less than one
+00:11:10.720 week because you want to account for the
+00:11:13.200 day of the week effect meaning that
+00:11:15.079 there could be some underlying
+00:11:16.240 difference in terms of the how the user
+00:11:18.079 engages the website during the weekdays
+00:11:20.399 versus the weekends once you have
+00:11:22.160 designed the experiment the next thing
+00:11:23.800 that you want to do is you want to run
+00:11:25.160 the experiment and this is where you use
+00:11:28.079 instrumentation some experiment
+00:11:30.360 platforms as a way to collect the data
+00:11:32.040 and track your result now it is very
+00:11:34.440 important that while you're running the
+00:11:36.519 experiment you do not Peak at the P
+00:11:39.040 value meaning you don't make any
+00:11:40.440 decision in terms of whether you're
+00:11:42.120 going to launch or not while the
+00:11:44.200 experiment hasn't been completed yet the
+00:11:46.399 reason is that when you're peaking
+00:11:48.440 there's a chance that when you have low
+00:11:50.560 sample sies for instance there's a lot
+00:11:52.279 of variability in terms of where that
+00:11:53.600 lift goes and so you might falsely
+00:11:56.079 conclude that there is an underlying
+00:11:58.120 difference when there is so once you
+00:11:59.920 have determined what the experiment time
+00:12:01.839 is given your statiscal power and your
+00:12:04.040 sample size you have to ensure that you
+00:12:06.399 weigh it out otherwise you're going to
+00:12:08.240 increase the chance that you falsely
+00:12:10.120 reject the null hypothesis given that it
+00:12:13.000 is actually true after you have run the
+00:12:15.000 experiment the next thing that you want
+00:12:16.480 to do is you want to perform validity
+00:12:18.440 checks so this is where you conduct
+00:12:20.440 sanity checks including instrumentation
+00:12:22.880 effect are there any bugs or glitches
+00:12:26.000 that could potentially affect the
+00:12:28.000 experiment results another potential
+00:12:30.160 issues that you want to look at are
+00:12:31.600 external factors so maybe you run the
+00:12:34.440 experiment during the holiday or when
+00:12:36.600 competion launch something very
+00:12:38.639 important or it could be some general
+00:12:41.079 economic conditions like covid or
+00:12:43.440 recessions and when you run an
+00:12:45.279 experiment when some external
+00:12:47.360 disruptions happen this could
+00:12:49.000 potentially impact your experiment
+00:12:51.040 result so ideally you want to run an
+00:12:53.399 experiment that avoids periods like this
+00:12:55.680 the next thing that you want to do is
+00:12:56.880 you want to check for selection bias and
+00:12:59.000 what this basically means is that you
+00:13:00.560 want to assume that the underlying
+00:13:02.639 distribution between the control and the
+00:13:04.959 treatment group even before they're
+00:13:06.720 exposed to the treatment condition in
+00:13:08.760 this case is that they're homogeneous
+00:13:11.360 and so one way to confirm that the
+00:13:13.320 distributions are the same is to
+00:13:15.360 basically run an AA test the next thing
+00:13:17.880 that you want to check is a simple ratio
+00:13:19.800 mismatch and what it basically means is
+00:13:22.320 that if you're randomly assigning a user
+00:13:25.120 into the control or the treatment group
+00:13:27.839 then out of all the part partipants of
+00:13:29.360 the experiment 50% of them should be in
+00:13:31.959 the control and 50% of them should be in
+00:13:34.279 the treatment but there are cases where
+00:13:37.079 because of some flaws with the
+00:13:38.519 randomization algorithm that the ratio
+00:13:40.800 is actually not 50 to
+00:13:42.760 50% it might be 49 to
+00:13:45.600 51% so in order to ensure whether this
+00:13:48.839 could pose a potential issue later down
+00:13:51.120 the road you want to use a Kai squore
+00:13:53.759 test as a way to ensure that the ratio
+00:13:55.959 between the two samples is sound the
+00:13:58.040 next item you you want to check is the
+00:13:59.639 nty effect what this basically means is
+00:14:02.560 that if you made some change to the
+00:14:05.320 website itself a user might have reacted
+00:14:08.519 simply because there's a novelty behind
+00:14:10.839 being exposed to something new one way
+00:14:13.360 to detect a novelty effect is basically
+00:14:15.959 look at it by user segment look at the
+00:14:18.880 underlying difference of the success
+00:14:20.839 metric in terms of new visitors versus
+00:14:23.199 the recurrent visitors and if you see
+00:14:25.600 that there is a change between the two
+00:14:27.680 then there is a presence novelty effect
+00:14:30.000 so you may actually want to run the
+00:14:31.600 experiment where you segment it by the
+00:14:34.360 new visitor group versus the recurrent
+00:14:36.240 group ver you've conducted the
+00:14:38.120 validating check and there's no issue
+00:14:40.160 with the experiment now you can actually
+00:14:42.399 interpret the result and when you
+00:14:44.160 interpret the result you want to look at
+00:14:45.800 the direction of the success metric is a
+00:14:47.920 left negative or positive and you want
+00:14:50.240 to consider the P value because it helps
+00:14:52.160 you establish whether the lift that you
+00:14:54.320 saw is statistically significant or not
+00:14:57.040 and you also want to consider the the
+00:14:58.959 confidence interval in this case so
+00:15:01.199 based on the experiment that we ran for
+00:15:02.920 this example what we see is that the
+00:15:05.160 average revenue per day per user in the
+00:15:07.720 control group is
+00:15:09.399 $25 whereas in the treatment group it's
+00:15:13.199 $26.10 this produce the following lift
+00:15:15.199 so in terms of the absolute difference
+00:15:16.279 is $110 in terms of relative lift it is
+00:15:19.759 an increase of
+00:15:21.360 4.4% and the lip we saw is statistically
+00:15:24.639 significant because we seen that the P
+00:15:26.600 value 01 is is less than the Staal
+00:15:30.440 significance at
+00:15:32.240 05 and we also see that the confidence
+00:15:34.839 interval at the significance level of 05
+00:15:37.880 is between 3.4 and 5.4% lift so the
+00:15:42.319 initial interpretation based on what we
+00:15:44.680 see is the following there is
+00:15:46.759 statistical significance to reject the
+00:15:48.759 null hypothesis and conclude that the
+00:15:51.199 average revenue per day per user between
+00:15:54.040 the Baseline and the varant ranking
+00:15:56.240 algorithms are different with this
+00:15:58.199 result
+00:15:59.120 we can now consider whether we want to
+00:16:01.160 launch or not now when you think about
+00:16:03.240 whether you want to launch it or not and
+00:16:05.079 in this step there are three factors
+00:16:07.000 that you want to consider the first
+00:16:08.720 factor is the metric tradeoff so you
+00:16:11.079 might have a case where the success
+00:16:13.040 metric might have improved but the guard
+00:16:15.639 R make metrics or the secondary metrics
+00:16:17.800 might have declined and so you have to
+00:16:20.600 think about what are the pros and cons
+00:16:22.360 of launching it considering that the
+00:16:24.839 guard one metrics might have declined
+00:16:26.759 the next Factor you want to consider is
+00:16:28.560 the cost of launching if you see that
+00:16:30.880 the cost of building this out basically
+00:16:33.399 rolling out to all of the users and the
+00:16:36.160 cost of maintaining this change is
+00:16:38.639 highly costly then maybe this isn't
+00:16:41.160 something that you want to actually
+00:16:42.279 launch the last Factor you want to
+00:16:44.319 consider is a risk of committing false
+00:16:47.040 positive or your typon error rate for
+00:16:49.240 instance if you falsely conclude that
+00:16:51.519 there is an effect when there isn't and
+00:16:54.000 you've made a change then it might have
+00:16:56.360 a negative consequence to the user you
+00:16:58.279 might might end up providing poor
+00:17:00.000 experience to users and they might turn
+00:17:02.639 and ultimately that is going to
+00:17:04.039 negatively affect the bottom line of the
+00:17:06.559 product so these are three important
+00:17:08.439 business factors that you want to
+00:17:09.839 consider now you want to kind of go back
+00:17:11.880 to the interpretation of the result that
+00:17:13.799 you got from the experiment and along
+00:17:15.520 with the business context and the
+00:17:16.880 statistical result ultimately you want
+00:17:18.480 to decide whether you're going to launch
+00:17:19.760 it or not so what we're going to do is
+00:17:22.039 we're going to look at a couple example
+00:17:23.880 cases where we'll look at a possible
+00:17:26.799 range of lift along with the com tabl
+00:17:29.400 and then think about what is a sound
+00:17:32.039 decision based on the result that we
+00:17:34.440 have seen so in this first case what we
+00:17:37.240 see is that the lift is placed at a
+00:17:39.280 positive value but it's still less than
+00:17:41.880 practical significance and you also see
+00:17:44.880 that the lower bound and the upper bound
+00:17:47.240 of the confidence interval are less than
+00:17:49.799 the Practical significance in this case
+00:17:52.000 which is going to be positive 1% so in
+00:17:54.600 this case what you want to consider is
+00:17:56.919 that maybe you want to change CH the
+00:17:58.679 algorithm or scrap the idea all of it
+00:18:00.799 together in the next Cas what we see is
+00:18:03.080 that the lift and the bounds the
+00:18:05.960 comperable is uh practically significant
+00:18:09.360 so this provides a strong support that
+00:18:11.720 we should make a launch in the third
+00:18:14.080 case we see that the entire interval is
+00:18:16.280 less than zero so it's in a negative
+00:18:17.840 territory in this case you want to
+00:18:19.440 consider perhaps iterating the idea or
+00:18:21.880 scrapping it all together and the next
+00:18:23.919 example is you have a positive direction
+00:18:26.760 in the expected LIF but then the bounds
+00:18:29.280 are in the negative territory and the
+00:18:30.880 positive directory and you can see that
+00:18:32.520 it's a very wide bound now what is very
+00:18:35.320 important to note is that the upper
+00:18:37.280 bound as interval is practically
+00:18:39.240 significant it's greater than 1% so
+00:18:41.320 there is still some likelihood that you
+00:18:43.720 might see a lip with practical
+00:18:46.039 significance so what you want to
+00:18:47.760 consider in this case is actually to
+00:18:49.400 rerun the experiment with increased
+00:18:51.159 physical power and this is going to help
+00:18:53.520 improve the Precision of that lift that
+00:18:55.400 you're saying and in the last case you
+00:18:57.440 see that the lift itself you see that
+00:18:59.360 the expected lift is practically
+00:19:01.240 significant but you see that the lower
+00:19:03.159 bound of this is not practically
+00:19:05.320 significant but it's still in the
+00:19:06.679 positive territory and the best thing to
+00:19:08.600 do in this case is to rerun the
+00:19:10.520 experiment with increased statistical
+00:19:12.320 power just to be absolutely sure that
+00:19:14.440 the underlying change is practically
+00:19:16.200 significant So based on all of these
+00:19:18.440 considerations in terms of the business
+00:19:20.440 context along with various statistical
+00:19:23.240 outcomes ultimately what the decision
+00:19:25.640 you want to make is that you want to
+00:19:27.080 launch this new algorithm as a way to
+00:19:30.400 provide a more relevant product
+00:19:32.200 recommendations to the users thereby
+00:19:34.440 improving Revenue overall so there you
+00:19:36.880 have it guys this is the endtoend
+00:19:38.919 process of how to walk through an AB
+00:19:42.000 test how to actually address an AB
+00:19:44.559 testing interview question I hope you
+00:19:46.840 found this video really helpful if you
+00:19:49.280 need any help in terms of mock interview
+00:19:52.120 coaching or um courses that comes with a
+00:19:55.840 testing courses and various business
+00:19:57.559 case problems and SL Community Access
+00:20:00.200 definitely check out datant tv.com and
+00:20:03.120 if you have any questions along the way
+00:20:05.640 uh feel free to drop a comment down
+00:20:07.200 below or feel free to send me an email
+00:20:09.080 at Dan dat nv.com I'll see you in the
+00:20:12.440 next video

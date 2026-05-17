@@ -114,22 +114,22 @@ export default async function ProjectPage({
               <div className="text-ink-subtle uppercase tracking-widest text-[10px] mb-3">
                 On this page
               </div>
-              <a href="#problem" className="block text-ink-muted hover:text-accent transition-colors">01 · Problem</a>
-              <a href="#approach" className="block text-ink-muted hover:text-accent transition-colors">02 · Approach</a>
-              <a href="#results" className="block text-ink-muted hover:text-accent transition-colors">03 · Results</a>
+              <a href="#problem" className="block text-ink-muted hover:text-accent transition-colors">01 · {project.sectionLabels?.problem ?? "Problem"}</a>
+              <a href="#approach" className="block text-ink-muted hover:text-accent transition-colors">02 · {project.sectionLabels?.approach ?? "Approach"}</a>
+              <a href="#results" className="block text-ink-muted hover:text-accent transition-colors">03 · {project.sectionLabels?.results ?? "Results"}</a>
               {project.learnings && project.learnings.length > 0 && (
-                <a href="#learnings" className="block text-ink-muted hover:text-accent transition-colors">04 · Learnings</a>
+                <a href="#learnings" className="block text-ink-muted hover:text-accent transition-colors">04 · {project.sectionLabels?.learnings ?? "Learnings"}</a>
               )}
             </nav>
           </aside>
 
       <div className="min-w-0 max-w-[72ch]">
-        <Section id="problem" title="Problem" eyebrow="01">
+        <Section id="problem" title={project.sectionLabels?.problem ?? "Problem"} eyebrow="01">
           <p className="prose-text">{project.problem}</p>
         </Section>
 
-        <Section id="approach" title="Approach" eyebrow="02">
-          <ol className="space-y-4">
+        <Section id="approach" title={project.sectionLabels?.approach ?? "Approach"} eyebrow="02">
+          <ol className="space-y-6">
             {project.approach.map((step, i) => (
               <li key={i} className="flex gap-4">
                 <span className="font-mono text-xs text-accent shrink-0 mt-[0.35rem] w-6">
@@ -144,7 +144,7 @@ export default async function ProjectPage({
           </ol>
         </Section>
 
-        <Section id="results" title="Results" eyebrow="03">
+        <Section id="results" title={project.sectionLabels?.results ?? "Results"} eyebrow="03">
           <ul className="space-y-3">
             {project.results.map((r, i) => (
               <li key={i} className="flex gap-3 items-start">
@@ -159,7 +159,7 @@ export default async function ProjectPage({
         </Section>
 
         {project.learnings && project.learnings.length > 0 && (
-          <Section id="learnings" title="Learnings" eyebrow="04">
+          <Section id="learnings" title={project.sectionLabels?.learnings ?? "Learnings"} eyebrow="04">
             <ul className="space-y-3">
               {project.learnings.map((l, i) => (
               <li key={i} className="flex gap-3 items-start">

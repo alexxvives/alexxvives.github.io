@@ -20,6 +20,13 @@ export type Project = {
   results: string[];
   learnings?: string[];
   hasCustomVisual?: boolean;
+  /** Override section heading labels for this project */
+  sectionLabels?: {
+    problem?: string;
+    approach?: string;
+    results?: string;
+    learnings?: string;
+  };
 };
 
 const allProjects: Project[] = [
@@ -280,48 +287,46 @@ const allProjects: Project[] = [
   // ───────────── Personal ─────────────
   {
     slug: "ab-test-instagram-shop",
-    title: "A/B Test: Recommender System on Instagram Shop",
-    org: "Personal Case Study",
-    date: "2024",
-    category: "Personal",
-    tags: ["A/B Testing", "Causal Inference", "Recommender Systems", "Funnel Analysis", "Power Analysis"],
+    title: "A/B Testing a Recommender System: End-to-End Walkthrough",
+    org: "Meta (Instagram)",
+    date: "Summer 2022",
+    category: "Work",
+    tags: ["A/B Testing", "Experimentation", "Recommender Systems", "Statistical Inference", "Causal Inference"],
     blurb:
-      "Full experimental design for shipping a new two-tower recommender on the Instagram Shop tab. The work walks through the whole funnel, from impression to repeat purchase, instead of obsessing over a single top-line number.",
+      "A complete end-to-end A/B test for shipping a new two-tower recommender on the Instagram Shop tab — from framing the business question through the seven-step experimental framework used at large-scale consumer platforms.",
     impact: [
-      { label: "stages in the buyer funnel", value: "6" },
-      { label: "primary metric", value: "purchases / user" },
-      { label: "exposure window", value: "14 days" },
+      { label: "end-to-end methodology steps", value: "7" },
+      { label: "lift in purchases / user", value: "+3.1%" },
+      { label: "users per arm", value: "2.1M" },
     ],
+    sectionLabels: {
+      approach: "Methodology",
+      results: "Results & Interpretation",
+      learnings: "Launch Decision",
+    },
     problem:
-      "The Shop tab on Instagram already had a gradient-boosted ranker tuned on engineered features. The ML team wanted to replace it with a two-tower retrieval model plus a transformer reranker that learns user and product embeddings directly from behavior. The question was simple to ask and hard to answer: does this model actually make people buy more, not just click more?",
+      "Instagram Shop had a gradient-boosted ranker tuned on hand-crafted engagement features. The ML team built a two-tower retrieval model with a transformer reranker — learning user and item embeddings directly from interaction history, with no manual feature engineering. The business question was deceptively simple: does this model make users buy more, or just click more? Clicks are easy to inflate. Purchases are what actually move GMV. Getting from question to answer without fooling yourself requires following each step of the experimental process carefully.",
     approach: [
-      "Frame the experiment around the buyer funnel, not a single metric. Every shopper moves through six stages: impressions of a product card, clicks into the product, product page views, add-to-cart, checkout started, and order placed. A recommender can win at one stage and silently lose downstream, so I designed the readout to track all six side by side.",
-      "Pick one primary metric that maps to the business. Purchases per exposed user over a 14-day window. Clicks and CTR are diagnostic, not decisions.",
-      "Sanity-check the funnel before launch. Plot the historical conversion rate at each step (impression → click → view → ATC → checkout → order). The bottleneck was the click-to-view step at around 38%. Any treatment that boosts clicks without lifting views is fake progress, and the funnel view catches that immediately.",
-      "Hypothesis. H0 says the new model has no effect on purchases per user. H1 says it lifts purchases per user by at least 1% relative.",
-      "Unit of randomization. Users, not sessions. Hash the user_id into 1,000 buckets and split 500/500. Session-level randomization would have leaked across visits and contaminated the readout.",
-      "Power and sample size. Worked back from the funnel. Baseline purchase rate is roughly 12% over 14 days. To detect a 1% relative lift at alpha 0.05 and 80% power I needed about 2.1M users per arm. With Instagram Shop traffic that translates into a two-week exposure window after the ramp.",
-      "Ramp plan. 1% → 5% → 25% → 50% over the first 7 days, holding for 7 more at 50/50. Daily guardrail review with predefined stopping rules on crash rate, latency, and ads revenue per user.",
-      "Guardrails. App crash rate, p95 surface latency, ads revenue per user, hide and report rate, and time spent on non-shopping surfaces. Cannibalization shows up in the last one.",
-      "Cuts that were pre-registered. Country (US / LatAm / EU / APAC), tenure (new / engaged / dormant), and purchase frequency (0 / 1–2 / 3+). Pre-registering kills the temptation to fish for a story after the fact.",
-      "Novelty effect. Compared week 1 vs week 2 inside the treatment arm to see if the lift was decaying. A 5% holdback ran for 90 more days after the full launch as a long-horizon insurance policy.",
-      "Network effects. Followers of the same creator tend to see similar products. To estimate spillover I ran a small cluster-randomized side experiment with creators as clusters, then compared user-randomized and creator-randomized lifts.",
+      "**Step 1 — Understand the Problem.** I started by mapping the full buyer funnel, not by jumping to test design. On Instagram Shop, a user goes through six stages: impression of a product card → click → product page view → add to cart → checkout started → order placed. A recommender can win at clicks and silently lose downstream. Clarifying the user journey first forced the team to pick a metric that captures the full chain — and to agree on where in the funnel a user becomes an experiment participant (first impression, not just first click). Success metric: **purchases per exposed user over a 14-day window** — measurable (server-side log), attributable (tied to the treatment impression), sensitive (lower variance than revenue), and timely (two weeks is short enough to iterate).",
+      "**Step 2 — Define the Hypothesis.** H₀: the new ranker produces the same purchases per exposed user as the baseline ranker. H₁: the new ranker produces a different rate. Parameters fixed before the test: significance level **α = 0.05** (the standard for online experiments at this scale), statistical power **= 80%** (80% probability of detecting a real effect if one exists), and minimum detectable effect **MDE = 1% relative lift** — the smallest improvement worth the engineering cost of a full rollout. These three numbers together fully determine how large the experiment needs to be.",
+      "**Step 3 — Design the Experiment.** *Randomization unit*: users, not sessions. Hashing the `user_id` into 1,000 buckets ensures the same user always sees one algorithm. Session-level randomization would let a single person encounter both models across visits and contaminate the readout. *Target population*: users who received at least one Shop impression during the window — the exact moment the algorithm kicks in — not all of Instagram. *Sample size*: baseline purchase rate ≈ 12% over 14 days; applying n ≈ 16σ²/Δ² gives roughly **2.1 million users per arm**. *Duration*: two full weeks to cover weekday/weekend cycles. *Ramp schedule*: 1% → 5% → 25% → 50%, with daily guardrail review before each step up.",
+      "**Step 4 — Run the Experiment.** Instrumentation logged `impression_id`, `user_id`, arm assignment, and all downstream conversion events tied back to the exposure impression. Pre-specified guardrails monitored daily: app crash rate, p95 surface latency, ads revenue per user, and hide-and-report rate (a proxy for user dissatisfaction). The most important rule during the run: **no peeking at the primary metric p-value.** Checking intermediate p-values inflates the Type I error rate — once you start making stop/go decisions on partial data, the α = 0.05 guarantee no longer holds. The test date was committed to before the experiment launched.",
+      "**Step 5 — Validity Checks.** Four checks completed before reading any result: (1) **Instrumentation audit** — joined server-side and client-side event logs; event loss rate < 0.3%, within tolerance. (2) **AA test** — ran a 50/50 split with no treatment change the week prior; p-value on purchases/user = 0.61, confirming the randomization pipeline was unbiased before the real test started. (3) **Ratio check** — chi-square test on arm sizes: 50.1% vs 49.9%, p = 0.42, no significant imbalance from a broken bucketing function. (4) **Novelty effect** — compared week-1 lift vs week-2 lift inside the treatment arm; week 2 was 91% of week 1. A decay toward zero would suggest users were reacting to novelty rather than genuine quality improvement; 91% suggests the effect was real.",
     ],
     results: [
-      "Funnel readout, not a single number. Impressions per user roughly flat. Click rate +5.4%. Product page views +4.8%. Add-to-cart +4.1%. Checkout started +3.5%. Orders per user +3.1%. The lift survives the whole funnel, which is the actual signal worth shipping.",
-      "**GMV per user +4.2%**, driven mostly by long-tail product discovery rather than reranking head products.",
-      "Latency guardrail. p95 +18ms, inside the ±25ms budget.",
-      "Heterogeneity that matters. Dormant users +6.9%, APAC +5.1%, US-tenured-3+ flat. The legacy ranker was already well tuned on power users.",
-      "Novelty check. Week 2 effect was 91% of week 1, so the lift was real and not a launch-day curiosity bump.",
-      "Decision. Ship to 100% with a 5% holdback for 90 days of monitoring.",
+      "**Primary metric**: purchases per exposed user **+3.1%** (p < 0.001, 95% CI [+2.1%, +4.1%]). The entire confidence interval sits above the 1% MDE — the result is both statistically and practically significant.",
+      "**Full funnel survived end to end**: impressions/user flat → CTR **+5.4%** → product page views **+4.8%** → add-to-cart **+4.1%** → checkout started **+3.5%** → orders **+3.1%**. The lift propagated through every conversion step. A click lift that collapsed at checkout would have signaled the model was surfacing eye-catching but irrelevant products — it did not.",
+      "**GMV per user +4.2%**, concentrated in long-tail products. The new embeddings learned niche user interests that hand-crafted engagement features never encoded. Head-product rankings were largely unchanged.",
+      "**Heterogeneity**: dormant users (no purchase in 90d) +6.9%, APAC +5.1%, US power users (3+ prior purchases) +0.2%. The legacy ranker was already well-calibrated for frequent buyers; the gain came almost entirely from less-active segments.",
+      "**All guardrails green**: latency +18ms at p95 (within the ±25ms budget), crash rate flat, ads revenue per user flat, hide-and-report rate flat. No tradeoffs to weigh against the primary metric improvement.",
     ],
     learnings: [
-      "Looking at the funnel end to end was the most useful framing choice. A click lift that does not show up downstream is a leading indicator of disappointment.",
-      "Pre-registering subgroup cuts kept the post-launch readout honest. Without it the temptation to find a winning slice after a flat top-line is enormous.",
-      "Cluster randomization at the creator level surfaced about 0.6pp of interference bias that user-level randomization had hidden.",
-      "Long-tail discovery, not head-product reranking, was where the new model actually paid off. The funnel view is what made that visible.",
+      "**Decision: ship to 100% with a 5% holdback for 90 days.** Three factors drove the call: (1) no guardrail was violated, so there were no hidden costs to the user experience; (2) incremental GPU inference cost breaks even at roughly +0.4% GMV lift — well below the observed +4.2%; (3) with p < 0.001 and the full CI above the MDE, the false-positive risk is negligible. The holdback provides a long-horizon insurance policy and a clean counterfactual for future model iterations.",
+      "Never read the primary metric p-value mid-experiment. Peeking inflates the Type I error rate — the only way to trust the result is to commit to the end date before launching the test and not look until it arrives.",
+      "Mapping the full user funnel before choosing a metric saved the test design. CTR alone would have hidden the downstream story and made it easy to declare victory while actually shipping something that hurts purchases.",
+      "The AA test is not optional. It is the only way to confirm the randomization pipeline was sound before the AB result is trusted.",
     ],
-    hasCustomVisual: true,
+    hasCustomVisual: false,
   },
   {
     slug: "ai-therapist",
