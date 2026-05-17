@@ -6,7 +6,7 @@ export function Contact() {
   return (
     <section id="contact" className="section">
       <Reveal>
-        <div className="card p-10 sm:p-14 text-center relative overflow-hidden">
+          <div className="card p-6 sm:p-14 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-grid-fade pointer-events-none" />
           <div className="relative">
             <p className="eyebrow justify-center">05 · Contact</p>

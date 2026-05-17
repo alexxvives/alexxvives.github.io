@@ -6,13 +6,13 @@ import { human } from "@/content/profile";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pt-28 pb-16 sm:pt-40 sm:pb-32">
+    <section className="relative overflow-hidden pt-20 pb-10 sm:pt-40 sm:pb-32">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-grid pointer-events-none" />
       <div className="absolute inset-0 bg-grid-fade pointer-events-none" />
 
       <div className="container-page relative">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-12 items-center">
           {/* Copy */}
           <div>
             <motion.div
@@ -98,15 +98,15 @@ export function Hero() {
             </div>
 
             {/* Floating stat chips */}
-            {/* Santander — centered at top edge, half overflowing */}
+            {/* Santander Bank — centered, half overflowing above portrait */}
             <div className="absolute top-0 inset-x-0 flex justify-center pointer-events-none">
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="-translate-y-1/2 rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-xl shadow-black/30 pointer-events-auto"
+                className="-translate-y-[60%] rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-xl shadow-black/30 pointer-events-auto"
               >
-                <div className="font-mono text-lg sm:text-2xl text-accent font-semibold leading-none">Santander</div>
+                <div className="font-mono text-lg sm:text-2xl text-accent font-semibold leading-none">Santander Bank</div>
                 <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-subtle mt-1">data scientist</div>
               </motion.div>
             </div>

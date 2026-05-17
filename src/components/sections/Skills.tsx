@@ -9,10 +9,10 @@ export function Skills() {
         <h2 className="h2 mt-4">Skills, education & awards.</h2>
       </Reveal>
 
-      <div className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="mt-8 sm:mt-14 grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8">
         {/* Skills */}
         <Reveal className="lg:col-span-2">
-          <div className="card p-6 h-full">
+          <div className="card p-4 sm:p-6 h-full">
             <h3 className="h3 mb-6">Skills & Tools</h3>
             <div className="space-y-5">
               {Object.entries(skills).map(([group, items]) => (
@@ -38,8 +38,8 @@ export function Skills() {
 
         {/* Education */}
         <Reveal delay={0.05}>
-          <div className="card p-6 h-full">
-            <h3 className="h3 mb-6">Education</h3>
+          <div className="card p-4 sm:p-6 h-full">
+            <h3 className="h3 mb-4 sm:mb-6">Education</h3>
             <ul className="space-y-5">
               {education.map((e) => (
                 <li key={e.school} className="border-l-2 border-border pl-4">
@@ -58,9 +58,9 @@ export function Skills() {
 
       {/* Awards */}
       <Reveal>
-        <div className="card mt-8 p-6">
-          <h3 className="h3 mb-6">Awards & Certifications</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="card mt-5 sm:mt-8 p-4 sm:p-6">
+          <h3 className="h3 mb-4 sm:mb-6">Awards & Certifications</h3>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {awards.map((a) => (
               <div
                 key={a.title}

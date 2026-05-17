@@ -9,11 +9,11 @@ export function Experience() {
         <h2 className="h2 mt-4">A timeline of building things.</h2>
       </Reveal>
 
-      <div className="mt-16 relative">
+      <div className="mt-8 sm:mt-16 relative">
         {/* Vertical line */}
         <div className="absolute left-3 sm:left-1/2 top-0 bottom-0 w-px bg-border -translate-x-px" />
 
-        <ul className="space-y-12">
+        <ul className="space-y-8 sm:space-y-12">
           {experiences.map((exp, i) => (
             <Reveal key={exp.company} delay={i * 0.05}>
               <li className="relative grid sm:grid-cols-2 gap-6 sm:gap-12">

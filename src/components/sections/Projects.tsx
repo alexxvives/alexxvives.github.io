@@ -24,7 +24,7 @@ export function Projects() {
 
   return (
     <section id="projects" className="section">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
         <div>
           <p className="eyebrow">04 · Projects</p>
           <h2 className="h2 mt-4">Selected work.</h2>
@@ -126,7 +126,7 @@ export function Projects() {
       </motion.div>
 
       {hiddenCount > 0 && (
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10 hidden md:flex justify-center">
           <button
             onClick={() => setShowAll(true)}
             className="rounded-full px-6 py-2.5 text-xs font-mono border border-border text-ink-muted hover:border-accent hover:text-accent transition-all"
@@ -136,7 +136,7 @@ export function Projects() {
         </div>
       )}
       {filter === "All" && showAll && (
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10 hidden md:flex justify-center">
           <button
             onClick={() => setShowAll(false)}
             className="rounded-full px-6 py-2.5 text-xs font-mono border border-border text-ink-muted hover:border-accent hover:text-accent transition-all"

@@ -14,7 +14,7 @@ export function About() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="space-y-6 text-ink-muted text-lg leading-relaxed">
+          <div className="space-y-5 text-ink-muted text-base sm:text-lg leading-relaxed">
             <p>
               I grew up in Barcelona, studied{" "}
               <span className="text-ink">Industrial Engineering at Purdue</span>, and

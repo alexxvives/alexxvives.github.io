@@ -153,8 +153,6 @@ function AUUCCurve() {
           <text x={xs(25)} y={pt + 14} textAnchor="middle" fill="#a3e635" fontSize={8.5} fontWeight="600">OFFER PROMOS</text>
           <text x={xs(25)} y={pt + 25} textAnchor="middle" fill="rgba(163,230,53,0.55)" fontSize={7.5}>highest uplift</text>
 
-          <text x={xs(67)} y={pt + 14} textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize={8.5}>DIMINISHING RETURNS</text>
-
           <text x={xs(91.5)} y={pt + 14} textAnchor="middle" fill="#f87171" fontSize={8.5} fontWeight="600">STOP TARGETING</text>
           <text x={xs(91.5)} y={pt + 25} textAnchor="middle" fill="rgba(248,113,113,0.55)" fontSize={7.5}>sleeping dogs</text>
 
