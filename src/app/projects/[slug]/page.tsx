@@ -68,11 +68,6 @@ export default async function ProjectPage({
                 <ExternalLink className="h-3.5 w-3.5" /> {project.link.label}
               </a>
             )}
-            <div className="flex flex-wrap gap-1.5">
-              {project.tags.map((t) => (
-                <span key={t} className="chip">{t}</span>
-              ))}
-            </div>
           </div>
         </header>
 

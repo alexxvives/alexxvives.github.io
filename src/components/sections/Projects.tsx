@@ -111,14 +111,7 @@ export function Projects() {
                   </div>
                 )}
 
-                <div className="mt-5 flex flex-wrap gap-1.5">
-                  {p.tags.slice(0, 3).map((t) => (
-                    <span key={t} className="chip">{t}</span>
-                  ))}
-                  {p.tags.length > 3 && (
-                    <span className="chip">+{p.tags.length - 3}</span>
-                  )}
-                </div>
+
                 </div>
               </Link>
             </motion.div>
