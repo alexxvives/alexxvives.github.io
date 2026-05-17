@@ -63,7 +63,7 @@ export function UpliftVisuals() {
       <div className="card p-6">
         <h3 className="text-sm font-semibold text-ink">Uplift by decile</h3>
         <p className="text-xs text-ink-subtle mt-0.5 mb-4">
-          Bottom decile shows negative uplift — &quot;sleeping dogs&quot; suppressed in campaign
+          Bottom decile shows negative uplift · &quot;sleeping dogs&quot; suppressed in campaign
         </p>
         <ResponsiveContainer width="100%" height={260}>
           <LineChart data={decileData} margin={{ top: 8, right: 16, left: -8, bottom: 0 }}>

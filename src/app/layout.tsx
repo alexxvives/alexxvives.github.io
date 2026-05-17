@@ -17,7 +17,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Alexandre Vives — Data Scientist",
+  title: "Alexandre Vives · Data Scientist",
   description:
     "Data Scientist at Santander. NYU MS in Data Science. Building causal inference, ML, and AI products that move business metrics.",
   keywords: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Alexandre Vives" }],
   openGraph: {
-    title: "Alexandre Vives — Data Scientist",
+    title: "Alexandre Vives · Data Scientist",
     description:
       "Causal inference, predictive modeling, and AI products. Santander · ex-Meta · ex-HP.",
     type: "website",

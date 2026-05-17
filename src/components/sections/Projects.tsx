@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { projects, type ProjectCategory } from "@/content/projects";
+import { getProjectImage } from "@/content/projectImages";
 import { cn } from "@/lib/cn";
 
 const categories: Array<"All" | ProjectCategory> = ["All", "Work", "Personal", "Research"];
@@ -20,7 +21,7 @@ export function Projects() {
     <section id="projects" className="section">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
         <div>
-          <p className="eyebrow">03 — Projects</p>
+          <p className="eyebrow">03 · Projects</p>
           <h2 className="h2 mt-4">Selected work.</h2>
           <p className="text-ink-muted mt-3 max-w-xl">
             {projects.length} projects across production ML, applied research, hackathons
@@ -63,8 +64,21 @@ export function Projects() {
             >
               <Link
                 href={`/projects/${p.slug}`}
-                className="group block h-full card p-6 hover:translate-y-[-2px]"
+                className="group block h-full card overflow-hidden hover:translate-y-[-2px]"
               >
+                {getProjectImage(p.slug) && (
+                  <div className="relative aspect-[16/9] overflow-hidden bg-bg-elev">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={getProjectImage(p.slug)}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover opacity-75 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg-card via-bg-card/20 to-transparent pointer-events-none" />
+                  </div>
+                )}
+                <div className="p-6">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="font-mono text-[10px] uppercase tracking-widest text-accent">
@@ -104,6 +118,7 @@ export function Projects() {
                   {p.tags.length > 3 && (
                     <span className="chip">+{p.tags.length - 3}</span>
                   )}
+                </div>
                 </div>
               </Link>
             </motion.div>

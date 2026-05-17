@@ -18,11 +18,11 @@ export const experiences: Experience[] = [
     end: "Present",
     current: true,
     bullets: [
-      "CLTV model → +18% lift in avg deposits per campaign",
-      "FICO approximation → −60% bureau pulls, thin-file inclusion",
-      "Microsegments Oracle → +29% lift in product openings",
-      "Causal uplift model → +15% credit card acquisitions at flat spend",
-      "Snowflake + Streamlit deployment pipeline for monthly scoring",
+      "CLTV model that lifted average deposits per campaign by 18%",
+      "FICO approximation that cut bureau pulls 60% and brought thin-file customers into approval",
+      "Microsegments Oracle: white-box affinity scoring, +29% lift in product openings",
+      "Causal uplift model that grew credit card acquisitions 15% at flat spend",
+      "Snowflake + Streamlit pipeline for monthly scoring across the marketing org",
     ],
   },
   {
@@ -97,9 +97,9 @@ export const education = [
 ];
 
 export const awards = [
-  { title: "HackGPT — 2nd Place", year: "2023", detail: "LLM Hackathon, NYC" },
-  { title: "Deloitte Case Competition — 1st Place", year: "2021", detail: "Undergraduate" },
-  { title: "Laser Pulse Hackathon — 3rd Place", year: "2020", detail: "Venezuela Migration Crisis" },
+  { title: "HackGPT · 2nd Place", year: "2023", detail: "LLM Hackathon, NYC" },
+  { title: "Deloitte Case Competition · 1st Place", year: "2021", detail: "Undergraduate" },
+  { title: "Laser Pulse Hackathon · 3rd Place", year: "2020", detail: "Venezuela Migration Crisis" },
   { title: "Stanford Machine Learning", year: "2020", detail: "Coursera" },
   { title: "Harvard Data Science with R", year: "2019", detail: "edX" },
   { title: "MIT Computational Thinking & Simulation", year: "2018", detail: "edX" },
@@ -124,8 +124,10 @@ export const human = {
   name: "Alexandre Vives",
   role: "Data Scientist",
   tagline:
-    "Causal inference, predictive modeling, and AI products that move business metrics.",
+    "Causal inference, predictive modeling and AI products that move business metrics.",
   location: "Boston, MA",
+  origin: "Barcelona, Spain",
+  openTo: "Open to roles across Europe",
   email: "alexxvives@gmail.com",
   phone: "+1 (917) 257-4883",
   github: "https://github.com/alexxvives",

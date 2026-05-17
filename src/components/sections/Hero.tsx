@@ -22,7 +22,7 @@ export function Hero() {
               className="eyebrow mb-6"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-glow" />
-              available · data scientist · {human.location}
+              data scientist · based in {human.location} · open to Europe
             </motion.div>
 
             <motion.h1
@@ -55,12 +55,13 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.15 }}
               className="mt-8 max-w-xl text-lg text-ink-muted leading-relaxed"
             >
-              I&apos;m {human.name.split(" ")[0]} — a Data Scientist at Santander Bank.
-              I&apos;ve shipped causal inference, ML and AI systems that lifted credit
-              card acquisitions <span className="text-ink">+15%</span>, cut bureau pulls{" "}
-              <span className="text-ink">−60%</span>, and grew deposits{" "}
-              <span className="text-ink">+18%</span>. Previously at Meta and HP, NYU MS in
-              Data Science.
+              I&apos;m {human.name.split(" ")[0]}, a Barcelona-born data scientist
+              currently at Santander Bank in Boston. I work on causal inference,
+              predictive modeling and AI products. Recent wins include lifting
+              credit card acquisitions <span className="text-ink">+15%</span>,
+              cutting bureau pulls <span className="text-ink">60%</span> and
+              growing deposits per campaign <span className="text-ink">+18%</span>.
+              Previously at Meta and HP. NYU MS in Data Science.
             </motion.p>
 
             <motion.div
@@ -188,9 +189,8 @@ function Portrait() {
         />
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-br from-accent/15 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute inset-0 flex items-end justify-between p-5 text-xs font-mono text-ink-muted">
-        <span>alexandre vives</span>
+      <div className="absolute inset-0 flex items-end justify-between p-5 text-xs font-mono text-ink-muted pointer-events-none">
+        <span>{loaded ? "" : "alexandre vives"}</span>
         <span className="text-accent">▲</span>
       </div>
     </div>

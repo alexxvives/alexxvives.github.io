@@ -31,9 +31,12 @@ export function Navbar() {
       )}
     >
       <nav className="container-page flex h-16 items-center justify-between">
-        <Link href="/" className="font-mono text-sm tracking-tight">
-          <span className="text-accent">●</span>{" "}
-          <span className="text-ink font-semibold">alexandre.vives</span>
+        <Link
+          href="/"
+          aria-label="Home"
+          className="group inline-flex items-center justify-center h-9 w-9 rounded-lg border border-border bg-bg-elev/60 backdrop-blur-md font-mono text-xs font-semibold text-ink hover:border-accent hover:text-accent transition-colors"
+        >
+          AV
         </Link>
         <ul className="hidden md:flex items-center gap-8 text-sm text-ink-muted">
           {links.map((l) => (

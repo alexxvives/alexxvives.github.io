@@ -6,7 +6,7 @@ export function About() {
     <section id="about" className="section">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12">
         <Reveal>
-          <p className="eyebrow">01 — About</p>
+          <p className="eyebrow">01 · About</p>
           <h2 className="h2 mt-4">
             Engineer by training,<br />
             <span className="text-ink-muted">scientist by craft.</span>
@@ -27,7 +27,7 @@ export function About() {
               The work I care about sits at the intersection of{" "}
               <span className="text-accent">causal inference</span>,{" "}
               <span className="text-accent">predictive modeling</span> and the messy
-              reality of shipping into production — A/B tests, monotonic constraints,
+              reality of shipping into production · A/B tests, monotonic constraints,
               conformal intervals, things that survive contact with risk and compliance.
             </p>
             <p>

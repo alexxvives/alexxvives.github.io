@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
 import { getProject, projects } from "@/content/projects";
+import { getProjectImage } from "@/content/projectImages";
 import { CaseStudyVisual } from "@/components/charts/CaseStudyVisual";
 import type { Metadata } from "next";
 
@@ -88,6 +89,19 @@ export default async function ProjectPage({
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Hero image (splash) */}
+        {getProjectImage(project.slug) && (
+          <div className="mt-12 relative overflow-hidden rounded-2xl border border-border bg-bg-elev aspect-[16/8]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={getProjectImage(project.slug)}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-bg/60 via-transparent to-transparent" />
           </div>
         )}
 

@@ -11,13 +11,10 @@ import {
   Bar,
   Legend,
   ReferenceLine,
-  Cell,
 } from "recharts";
 
 const ACCENT = "#a3e635";
 const MUTED = "#a1a1aa";
-const RED = "#f87171";
-const BLUE = "#60a5fa";
 
 // ─── Cumulative conversion lift over ramp ───
 const rampData = Array.from({ length: 14 }, (_, i) => {
@@ -53,19 +50,78 @@ const hteData = [
   { group: "US · 3+ purch.", lift: 0.2 },
 ];
 
-// ─── CUPED variance reduction ───
-const cupedData = [
-  { name: "No CUPED", variance: 100, color: MUTED },
-  { name: "CUPED (θ=0.71)", variance: 58, color: ACCENT },
+// ─── Buyer funnel: per-stage conversion, control vs. treatment ───
+// Values are "per 1,000 exposed users" so the visual is intuitive.
+const funnelStages = [
+  { stage: "Impressions",      control: 1000, treatment: 1000 },
+  { stage: "Product clicks",   control:  420, treatment:  443 }, // +5.4%
+  { stage: "Product views",    control:  160, treatment:  168 }, // +4.8%
+  { stage: "Add to cart",      control:   58, treatment:   60.4 }, // +4.1%
+  { stage: "Checkout started", control:   31, treatment:   32.1 }, // +3.5%
+  { stage: "Orders placed",    control:   20, treatment:   20.6 }, // +3.1%
 ];
+
+function CustomerFunnel() {
+  const max = funnelStages[0].control;
+  return (
+    <div className="card p-6">
+      <div className="mb-2">
+        <h3 className="text-sm font-semibold text-ink">Buyer funnel · per 1,000 exposed users</h3>
+        <p className="text-xs text-ink-subtle mt-0.5">
+          Control vs. treatment at each step. The win has to survive the whole funnel, not just the click.
+        </p>
+      </div>
+      <div className="mt-6 flex items-center gap-4 text-[11px] font-mono text-ink-muted">
+        <span className="inline-flex items-center gap-1.5"><span className="h-2 w-3 rounded-sm" style={{ background: MUTED }} /> control</span>
+        <span className="inline-flex items-center gap-1.5"><span className="h-2 w-3 rounded-sm" style={{ background: ACCENT }} /> treatment</span>
+      </div>
+      <div className="mt-4 space-y-3">
+        {funnelStages.map((s, i) => {
+          const cw = (s.control / max) * 100;
+          const tw = (s.treatment / max) * 100;
+          const lift = ((s.treatment - s.control) / s.control) * 100;
+          return (
+            <div key={s.stage} className="grid grid-cols-[110px_1fr_70px] items-center gap-3 text-xs">
+              <div className="font-mono text-ink-muted text-right text-[11px]">
+                <div>{s.stage}</div>
+                <div className="text-ink-subtle text-[10px]">step {i + 1}</div>
+              </div>
+              <div className="space-y-1.5">
+                <div className="relative h-3.5 w-full">
+                  <div className="absolute inset-y-0 left-0 rounded-sm" style={{ width: `${cw}%`, background: MUTED, opacity: 0.55 }} />
+                  <span className="absolute right-0 -top-0.5 text-[10px] font-mono text-ink-subtle">{s.control.toLocaleString()}</span>
+                </div>
+                <div className="relative h-3.5 w-full">
+                  <div className="absolute inset-y-0 left-0 rounded-sm" style={{ width: `${tw}%`, background: ACCENT }} />
+                  <span className="absolute right-0 -top-0.5 text-[10px] font-mono text-accent">{s.treatment.toLocaleString()}</span>
+                </div>
+              </div>
+              <div className={`text-right font-mono font-semibold ${lift > 0 ? "text-accent" : "text-ink-subtle"}`}>
+                {lift > 0 ? "+" : ""}{lift.toFixed(1)}%
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p className="mt-5 text-[11px] text-ink-subtle leading-relaxed">
+        Click lift would have looked great in isolation. The real test is whether each step downstream still moves.
+        Here it does, attenuating from <span className="text-ink">+5.4% clicks</span> to <span className="text-accent">+3.1% orders</span>.
+        A treatment that lit up clicks but flatlined at add-to-cart would have been a clear no-ship.
+      </p>
+    </div>
+  );
+}
 
 export function ABTestVisuals() {
   return (
     <div className="space-y-12">
+      {/* Buyer funnel — headline visual */}
+      <CustomerFunnel />
+
       {/* Conversion ramp */}
       <ChartCard
-        title="Primary metric: 28-day buyer conversion (%)"
-        subtitle="Treatment vs. control over 14-day ramp · user-level randomization"
+        title="Primary metric: orders per exposed user (%)"
+        subtitle="Treatment vs. control over the 14-day exposure window · user-level randomization"
       >
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={rampData} margin={{ top: 8, right: 16, left: -8, bottom: 0 }}>
@@ -177,25 +233,32 @@ export function ABTestVisuals() {
           </ResponsiveContainer>
         </ChartCard>
 
-        {/* CUPED variance */}
+        {/* Ramp plan illustration */}
         <ChartCard
-          title="CUPED variance reduction"
-          subtitle="Relative variance of estimator with vs. without pre-period covariate"
+          title="Ramp plan"
+          subtitle="Traffic share to treatment over the first week, with daily guardrail review"
         >
           <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={cupedData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+            <BarChart
+              data={[
+                { day: "D1", share: 1 },
+                { day: "D2", share: 5 },
+                { day: "D3", share: 25 },
+                { day: "D4", share: 50 },
+                { day: "D5", share: 50 },
+                { day: "D6", share: 50 },
+                { day: "D7", share: 50 },
+              ]}
+              margin={{ top: 8, right: 16, left: -8, bottom: 0 }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#1f1f23" vertical={false} />
-              <XAxis dataKey="name" stroke={MUTED} fontSize={11} />
-              <YAxis stroke={MUTED} fontSize={11} tickFormatter={(v) => `${v}%`} />
+              <XAxis dataKey="day" stroke={MUTED} fontSize={11} />
+              <YAxis stroke={MUTED} fontSize={11} tickFormatter={(v) => `${v}%`} domain={[0, 60]} />
               <Tooltip
                 contentStyle={{ background: "#111113", border: "1px solid #1f1f23", borderRadius: 8, fontSize: 12 }}
-                formatter={(v: number) => `${v}% var`}
+                formatter={(v: number) => `${v}% traffic`}
               />
-              <Bar dataKey="variance" radius={[8, 8, 0, 0]}>
-                {cupedData.map((e, i) => (
-                  <Cell key={i} fill={e.color} />
-                ))}
-              </Bar>
+              <Bar dataKey="share" radius={[6, 6, 0, 0]} fill={ACCENT} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>

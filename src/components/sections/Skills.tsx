@@ -5,7 +5,7 @@ export function Skills() {
   return (
     <section id="skills" className="section">
       <Reveal>
-        <p className="eyebrow">04 — Toolkit</p>
+        <p className="eyebrow">04 · Toolkit</p>
         <h2 className="h2 mt-4">Skills, education & awards.</h2>
       </Reveal>
 

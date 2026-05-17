@@ -9,13 +9,13 @@ export function Contact() {
         <div className="card p-10 sm:p-14 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-grid-fade pointer-events-none" />
           <div className="relative">
-            <p className="eyebrow justify-center">05 — Contact</p>
+            <p className="eyebrow justify-center">05 · Contact</p>
             <h2 className="h2 mt-4 max-w-2xl mx-auto">
               Have a problem worth modeling?
             </h2>
             <p className="text-ink-muted mt-4 max-w-lg mx-auto">
               I&apos;m always interested in causal inference, ML at scale, and applied AI
-              problems. Drop me a line — I read everything.
+              problems. Drop me a line · I read everything.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
