@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/cn";
-import { withBase } from "@/lib/base";
 
 const links = [
   { href: "#about", label: "About" },
@@ -46,7 +45,7 @@ export function Navbar() {
           ))}
         </ul>
         <a
-          href={withBase("/Alexandre_Vives_resume.pdf")}
+          href="/Alexandre_Vives_resume.pdf"
           target="_blank"
           rel="noopener"
           className="btn-ghost text-xs"

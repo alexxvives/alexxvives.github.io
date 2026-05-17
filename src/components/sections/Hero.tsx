@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { ArrowRight, Download } from "lucide-react";
 import { human } from "@/content/profile";
-import { withBase } from "@/lib/base";
 
 export function Hero() {
   return (
@@ -74,7 +73,7 @@ export function Hero() {
                 View projects <ArrowRight className="h-4 w-4" />
               </a>
               <a
-                href={withBase(human.resume)}
+                href={human.resume}
                 target="_blank"
                 rel="noopener"
                 className="btn-ghost"
@@ -165,7 +164,6 @@ function FloatingStat({
 function Portrait() {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
   return (
     <div className="relative h-full w-full">
@@ -180,7 +178,7 @@ function Portrait() {
       {!failed && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={`${basePath}/me.jpg`}
+          src="/profile_pic.png"
           alt="Alexandre Vives"
           onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}
