@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 // ── Layout helpers ─────────────────────────────────────────────────────────────
 
 function Prose({ children }: { children: ReactNode }) {
-  return <div className="max-w-[840px] mx-auto">{children}</div>;
+  return <>{children}</>;
 }
 
 function Wide({ children }: { children: ReactNode }) {
@@ -174,8 +174,8 @@ function ResultsMetrics() {
 function FunnelDiagram() {
   const layers = [
     { label: "Enters Instagram Shop", pct: 100, color: "#3b82f6", tag: false },
-    { label: "Searches for an Item", pct: 82, color: "#22c55e", tag: false },
-    { label: "Browses Product Page", pct: 65, color: "#ca8a04", tag: true },
+    { label: "Searches for an Item", pct: 82, color: "#22c55e", tag: true },
+    { label: "Browses Product Page", pct: 65, color: "#ca8a04", tag: false },
     { label: "Add to Cart", pct: 48, color: "#f97316", tag: false },
     { label: "Checkout", pct: 34, color: "#ef4444", tag: false },
     { label: "Sale", pct: 22, color: "#9333ea", tag: false },
@@ -208,7 +208,7 @@ function FunnelDiagram() {
       </div>
       <figcaption className="text-center text-xs text-ink-subtle mt-3">
         <span className="text-ink-muted font-medium">Fig 1.</span> The Shop tab user journey.
-        The ranking algorithm activates at &ldquo;Browses Product Page&rdquo; and shapes
+        The ranking algorithm activates at &ldquo;Searches for an Item&rdquo; and shapes
         everything downstream.
       </figcaption>
     </figure>
@@ -483,7 +483,7 @@ export default function AbTestPage() {
 
       {/* ── Header */}
       <header className="container-page mt-10">
-        <div className="max-w-[840px] mx-auto">
+        <div>
           <p className="font-mono text-xs uppercase tracking-widest text-accent">
             Work · Meta (Instagram) · Summer 2022
           </p>
@@ -535,8 +535,8 @@ export default function AbTestPage() {
           </SH>
           <P>
             The user journey on the Shop tab has six steps. The ranking algorithm kicks in at{" "}
-            <B>Browses Product Page</B> — it decides which products show up in search results, and
-            in what order. Everything that happens after that is shaped by that ranking.
+            <B>Searches for an Item</B> — it decides which products show up when a user types a
+            query, and in what order. Everything that happens after that is shaped by that ranking.
           </P>
         </Prose>
 
@@ -693,11 +693,17 @@ export default function AbTestPage() {
             Shop traffic volumes, that&apos;s roughly 1 to 2 weeks from the target population.
           </P>
 
-          <SH3>Ramp Schedule</SH3>
+          <SH3>Canary Rollout</SH3>
           <P>
-            The experiment ramps from <C>1%</C> → <C>5%</C> → <C>25%</C> → <C>50%</C> with daily
-            guardrail checks between each step. If crash rate spikes, latency degrades, or ads
-            revenue drops at any stage, the experiment halts before reaching more users.
+            Before the main experiment, a <B>1/99 canary</B> deploys the new algorithm to 1% of
+            traffic while 99% stays on control. The only thing checked during the canary is
+            guardrails: crash rate, p95 latency, ads revenue per user, and hide and report rate. If
+            any guardrail breaches, the canary stops. If all clear, the canary data is discarded
+            and the 50/50 experiment starts fresh.
+          </P>
+          <P>
+            Discarding the 1% matters. Mixing canary and experiment data breaks the clean pre/post
+            boundary the analysis depends on.
           </P>
         </Prose>
 
@@ -706,7 +712,7 @@ export default function AbTestPage() {
           <SH id="run" step="Step 04">
             Running the Experiment
           </SH>
-          <P>Three things matter during the run:</P>
+          <P>Two things matter during the run:</P>
           <ol className="mt-5 space-y-4 list-none">
             {(
               [
@@ -716,18 +722,14 @@ export default function AbTestPage() {
                   d: (
                     <>
                       Every impression, click, add to cart, and purchase gets logged with{" "}
-                      <C>user_id</C>, arm assignment, and a session ID so events can be attributed
-                      to the correct treatment exposure. Target event loss rate: &lt; 0.5%.
+                      <C>user_id</C>, arm assignment, and a timestamp. If event loss differs
+                      between arms it biases the revenue-per-user denominator, so logging
+                      correctness is verified in the validity checks before results are read.
                     </>
                   ),
                 },
                 {
                   n: "2",
-                  t: "Guardrail monitoring",
-                  d: "Daily checks on crash rate, p95 latency, ads revenue per user, and hide and report rate. These catch unintended regressions before they affect too many users.",
-                },
-                {
-                  n: "3",
                   t: "No peeking at the primary metric p-value",
                   d: "The end date is committed to before launch and doesn't change based on what the data looks like at day 7. This is the most violated rule in online experimentation.",
                 },
