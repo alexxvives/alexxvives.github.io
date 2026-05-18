@@ -7,7 +7,7 @@ import { projects, type ProjectCategory } from "@/content/projects";
 import { getProjectImage } from "@/content/projectImages";
 import { cn } from "@/lib/cn";
 import { useLang } from "@/lib/lang";
-import { t } from "@/content/translations";
+import { t, projectsEs } from "@/content/translations";
 
 const FEATURED_COUNT = 8;
 
@@ -101,7 +101,7 @@ export function Projects() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="font-mono text-[10px] uppercase tracking-widest text-accent">
-                      {p.category} · {p.date}
+                      {categoryLabels[p.category] ?? p.category} · {p.date}
                     </div>
                     <h3 className="mt-2 font-display text-lg font-semibold text-ink group-hover:text-accent transition-colors">
                       {p.title}
@@ -112,12 +112,12 @@ export function Projects() {
                 </div>
 
                 <p className="mt-4 text-sm text-ink-muted leading-relaxed line-clamp-3">
-                  {p.blurb}
+                  {(lang === "es" && projectsEs[p.slug]?.blurb) ? projectsEs[p.slug].blurb : p.blurb}
                 </p>
 
                 {p.impact && p.impact.length > 0 && (
                   <div className="mt-5 pt-4 border-t border-border grid grid-cols-2 gap-3">
-                    {p.impact.slice(0, 2).map((m) => (
+                    {(lang === "es" && projectsEs[p.slug]?.impact ? projectsEs[p.slug].impact : p.impact).slice(0, 2).map((m) => (
                       <div key={m.label}>
                         <div className="font-mono text-base text-accent font-semibold">
                           {m.value}

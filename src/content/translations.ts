@@ -306,3 +306,98 @@ export const t = {
     },
   },
 } as const;
+
+// ─── Spanish project card overrides ──────────────────────────────────────────
+// Only blurb and impact labels need translation; values (numbers/%) stay the same.
+
+export const projectsEs: Record<string, { blurb: string; impact: { label: string; value: string }[] }> = {
+  "cltv-model": {
+    blurb: "Modelo de aprendizaje supervisado que predice la rentabilidad a 2 años por cliente, usado para redirigir el gasto de marketing hacia adquisición de valor.",
+    impact: [
+      { label: "aumento en depósitos medios por campaña", value: "+18%" },
+      { label: "horizonte de rentabilidad por cliente", value: "2 años" },
+    ],
+  },
+  "fico-approximation": {
+    blurb: "Modelo interno que aproxima el FICO de bureau en el onboarding para reducir consultas costosas en ~60% y habilitar decisiones instantáneas para clientes sin historial.",
+    impact: [
+      { label: "reducción en consultas a bureaus", value: "−60%" },
+      { label: "clientes sin historial ahora valorables", value: "12k+" },
+    ],
+  },
+  "uplift-model": {
+    blurb: "Marco de uplift de dos modelos que identifica los clientes más persuadibles por una oferta, incrementando adquisiciones un +15% con el mismo presupuesto.",
+    impact: [
+      { label: "adquisiciones de tarjetas vs. control", value: "+15%" },
+      { label: "variación en presupuesto de marketing", value: "0%" },
+    ],
+  },
+  "microsegments-oracle": {
+    blurb: "Sistema interpretable que usa 1.000+ indicadores de comportamiento para clasificar clientes por afinidad de producto, actualizado automáticamente con ventana de 90 días.",
+    impact: [
+      { label: "apertura de productos por campaña", value: "+29%" },
+      { label: "indicadores de comportamiento", value: "1.000+" },
+      { label: "coste de reentrenamiento", value: "$0" },
+    ],
+  },
+  "customer-retention-meta": {
+    blurb: "Análisis de retención de compradores en Instagram Shopping que identificó los factores conductuales clave para retargeting y el roadmap de producto.",
+    impact: [
+      { label: "factores conductuales identificados", value: "5" },
+      { label: "recomendaciones adoptadas por el equipo", value: "3" },
+    ],
+  },
+  "printer-sales-forecast": {
+    blurb: "Pipeline de pronóstico AR/MA/ARIMA/SARIMA para SKUs de impresoras que mejoró la precisión un ~27% y apoyó la planificación global de supply chain.",
+    impact: [
+      { label: "mejora en precisión del pronóstico", value: "+27%" },
+      { label: "SKUs pronosticados", value: "120+" },
+    ],
+  },
+  "food-detection": {
+    blurb: "Pipeline de visión por computadora para detectar, segmentar y clasificar alimentos en fotos de comidas. Publicado en la Conferencia de Investigación de Purdue.",
+    impact: [
+      { label: "precisión de clasificación top-1", value: "82%" },
+      { label: "clases de alimentos", value: "101" },
+    ],
+  },
+  "covid-simulation": {
+    blurb: "Simulación estocástica basada en agentes de la propagación del COVID-19 en el condado de Tippecanoe, evaluando mascarillas, cierres escolares y teletrabajo.",
+    impact: [
+      { label: "agentes en la población sintética", value: "~200k" },
+      { label: "escenarios de mitigación", value: "12" },
+    ],
+  },
+  "ab-test-instagram-shop": {
+    blurb: "Guía completa de un A/B test para un cambio de algoritmo de ranking en Instagram Shop — desde el mapeo del viaje del usuario hasta los 7 pasos del framework experimental.",
+    impact: [
+      { label: "pasos metodológicos", value: "7" },
+      { label: "aumento en ingresos medios por usuario y día", value: "+4.4%" },
+      { label: "usuarios por grupo", value: "2.1M" },
+    ],
+  },
+  "ai-therapist": {
+    blurb: "Terapeuta virtual con IA al estilo FaceTime con voz en tiempo real y avatar animado, construido en 48h en HackGPT NYC. 2.º puesto de ~80 equipos.",
+    impact: [
+      { label: "clasificación en el hackathon", value: "2.º / ~80" },
+      { label: "tiempo de construcción", value: "48h" },
+      { label: "latencia extremo a extremo", value: "<2s" },
+    ],
+  },
+  "music-recommender": {
+    blurb: "Herramienta que descarga una biblioteca de Spotify, agrupa canciones en 'ambientes' latentes con un Modelo de Mezcla Gaussiana sobre 11 características de audio, nombra cada clúster con un LLM local y recrea las playlists en Spotify.",
+    impact: [
+      { label: "características de audio modeladas", value: "11" },
+      { label: "dims. de embeddings de género (TF-IDF + SVD)", value: "48" },
+      { label: "rango de K automático", value: "n/200, n/80" },
+    ],
+  },
+  "enertex-cto": {
+    blurb: "Co-fundé y lidero la tecnología de Enertex, un e-commerce de bienestar que vende productos de filtrado electromagnético Spiro e iluminación sin luz azul en Europa.",
+    impact: [
+      { label: "clientes atendidos", value: "5.000+" },
+      { label: "tiempo de envío", value: "<24h" },
+      { label: "rol", value: "co-fundador" },
+    ],
+  },
+};
