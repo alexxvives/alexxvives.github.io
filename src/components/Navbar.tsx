@@ -40,7 +40,7 @@ export function Navbar() {
           : "bg-transparent"
       )}
     >
-      <nav className="container-page flex h-16 items-center justify-between">
+      <nav className="container-page flex h-16 items-center justify-between relative">
         <Link
           href="/"
           aria-label="Home"
@@ -63,7 +63,7 @@ export function Navbar() {
             href="/Alexandre_Vives_resume.pdf"
             target="_blank"
             rel="noopener"
-            className="btn-ghost text-xs"
+            className="btn-ghost text-xs max-md:absolute max-md:left-1/2 max-md:-translate-x-1/2"
           >
             Resume ↗
           </a>

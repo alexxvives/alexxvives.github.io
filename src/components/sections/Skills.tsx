@@ -48,7 +48,7 @@ export function Skills() {
                   </div>
                   <div className="font-semibold text-ink mt-1">{e.school}</div>
                   <div className="text-sm text-ink-muted">{e.degree}</div>
-                  <div className="text-xs text-ink-subtle mt-1">{e.detail}</div>
+                  <div className="text-xs text-ink-muted mt-1 leading-relaxed">{e.detail}</div>
                 </li>
               ))}
             </ul>

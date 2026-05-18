@@ -116,8 +116,8 @@ export const skills = {
     "Time Series",
     "Bayesian Methods",
   ],
-  "Data & Cloud": ["Snowflake", "AWS", "Streamlit", "dbt", "Airflow"],
-  Visualization: ["Tableau", "Streamlit", "Recharts", "Matplotlib"],
+  "Data & Cloud": ["Snowflake", "AWS", "Streamlit"],
+  Visualization: ["Tableau", "Matplotlib", "Seaborn", "Power BI"],
 };
 
 export const human = {

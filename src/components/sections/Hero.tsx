@@ -68,7 +68,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.25 }}
-              className="mt-10 flex flex-wrap items-center gap-4"
+              className="mt-10 flex items-center gap-4"
             >
               <a href="#projects" className="btn-primary">
                 View projects <ArrowRight className="h-4 w-4" />
