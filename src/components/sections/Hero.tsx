@@ -140,14 +140,6 @@ export function Hero() {
     </section>
   );
 }
-              delay={1}
-            />
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function FloatingStat({
   value,
