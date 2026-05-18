@@ -146,8 +146,8 @@ function ResultsMetrics() {
     <div className="my-8 rounded-xl border border-border bg-bg-elev/40 p-5">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
         {[
-          { val: "$25.00", label: "Control avg. revenue / user / day", accent: false },
-          { val: "$26.10", label: "Treatment avg. revenue / user / day", accent: true },
+          { val: "$8.50", label: "Control avg. revenue / user / 14 days", accent: false },
+          { val: "$8.87", label: "Treatment avg. revenue / user / 14 days", accent: true },
           { val: "+4.4%", label: "Relative lift", accent: true },
           { val: "p = 0.01", label: "p-value (threshold: 0.05)", accent: false },
         ].map(({ val, label, accent }) => (
@@ -226,11 +226,11 @@ function RevenueChart() {
     pb = 45;
   const cW = W - pl - pr,
     cH = H - pt - pb;
-  const treatment = [72, 68, 74, 70, 80, 66, 58, 52, 48, 54, 44, 48, 42, 46];
-  const control = [55, 48, 60, 62, 56, 52, 34, 30, 28, 35, 24, 30, 22, 26];
+  const treatment = [0.64, 0.62, 0.65, 0.63, 0.64, 0.62, 0.62, 0.64, 0.62, 0.64, 0.65, 0.62, 0.63, 0.63];
+  const control = [0.61, 0.57, 0.63, 0.58, 0.62, 0.57, 0.59, 0.61, 0.56, 0.60, 0.64, 0.58, 0.59, 0.61];
   const n = treatment.length;
   const xv = (i: number) => pl + (i / (n - 1)) * cW;
-  const yv = (v: number) => pt + ((90 - v) / 90) * cH;
+  const yv = (v: number) => pt + ((0.72 - v) / (0.72 - 0.42)) * cH;
   const line = (pts: number[]) =>
     pts.map((v, i) => `${i === 0 ? "M" : "L"}${xv(i).toFixed(1)},${yv(v).toFixed(1)}`).join(" ");
 
@@ -238,10 +238,10 @@ function RevenueChart() {
     <figure className="select-none">
       <div className="rounded-xl bg-bg-elev/50 border border-border p-5 pb-2">
         <p className="text-center text-sm font-medium text-ink mb-2">
-          Average Revenue per Day per User
+          Average Daily Revenue per User ($)
         </p>
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" aria-hidden="true">
-          {[20, 40, 60, 80].map((v) => (
+          {[0.50, 0.58, 0.66].map((v) => (
             <line
               key={v}
               x1={pl}
@@ -760,7 +760,7 @@ export default function AbTestPage() {
             Validity Checks
           </SH>
           <P>
-            Four checks need to pass before any result gets read. All four do the same thing: rule
+            Five checks need to pass before any result gets read. All five do the same thing: rule
             out alternative explanations before attributing what you see to the treatment.
           </P>
           <div className="mt-6 space-y-3">
@@ -771,19 +771,23 @@ export default function AbTestPage() {
                   t: "Instrumentation audit",
                   d: (
                     <>
-                      Cross-reference server logs and client logs. Event loss rate: <B>&lt; 0.3%</B>.
-                      Within tolerance.
+                      Checks that events are captured correctly and that neither arm has a systematic
+                      logging gap. We verify server-side impression logs against client-side
+                      click/purchase logs, confirm p95 logging latency is stable across arms, and
+                      check that event loss is symmetric. Loss rate:{" "}
+                      <B>&lt; 0.3%</B>, distributed evenly across arms. All checks passed.
                     </>
                   ),
                 },
                 {
                   n: "02",
-                  t: "AA test",
+                  t: "AA test (pre-experiment)",
                   d: (
                     <>
-                      A 50/50 split ran with no treatment applied the prior week — identical
-                      algorithm in both arms. p-value on revenue/user: <C>0.61</C>. Randomization
-                      pipeline is unbiased.
+                      Ran the week before the experiment launched: both arms on the identical
+                      algorithm, no treatment. Reviewing the result here confirms the groups were
+                      comparable before treatment started. Revenue-per-user p-value:{" "}
+                      <C>0.61</C>. Randomization is unbiased.
                     </>
                   ),
                 },
@@ -801,6 +805,18 @@ export default function AbTestPage() {
                   n: "04",
                   t: "Novelty effect",
                   d: "Week 2 lift was 91% of week 1. A decay toward zero would mean users are reacting to novelty, not quality. 91% is stable.",
+                },
+                {
+                  n: "05",
+                  t: "External validity",
+                  d: (
+                    <>
+                      The window (Jul 12 – Jul 26) was chosen to avoid major shopping events. No
+                      holidays, promotional pushes, or competitor sales overlapped the run.
+                      Concurrent experiments touching the same population were checked for
+                      interference via the SUTVA log. None found.
+                    </>
+                  ),
                 },
               ] as { n: string; t: string; d: ReactNode }[]
             ).map(({ n, t, d }) => (
@@ -829,7 +845,7 @@ export default function AbTestPage() {
           <SH id="results" step="Step 06">
             The Results
           </SH>
-          <P>All four validity checks cleared. Then we read the results.</P>
+          <P>All five validity checks cleared. Then we read the results.</P>
         </Prose>
 
         <Prose>
@@ -842,9 +858,9 @@ export default function AbTestPage() {
 
         <Prose>
           <P>
-            Revenue per user moved from <B>$25.00</B> in control to <B>$26.10</B> in treatment, a
-            relative lift of <B>+4.4%</B>. The p-value came in at 0.01, below the prespecified
-            α = 0.05 threshold. H₀ rejected.
+            Revenue per user moved from <B>$8.50</B> in control to <B>$8.87</B> in treatment over
+            the 14-day window, a relative lift of <B>+4.4%</B>. The p-value came in at 0.01, below
+            the prespecified α = 0.05 threshold. H₀ rejected.
           </P>
           <P>
             The 95% confidence interval is <B>[+3.4%, +5.4%]</B>. The entire interval sits above
