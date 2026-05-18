@@ -110,23 +110,16 @@ function OptionBox({
           return (
             <div
               key={label}
-              className={`flex items-start gap-3 px-4 py-3 rounded-lg transition-colors ${
+              className={`flex flex-col items-center text-center px-4 py-3 rounded-lg transition-colors ${
                 chosen
                   ? "bg-accent/10 border border-accent/30"
                   : "opacity-50 border border-transparent"
               }`}
             >
-              <div
-                className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-                  chosen ? "bg-accent" : "bg-ink-subtle"
-                }`}
-              />
-              <div>
-                <p className={`text-sm font-medium ${chosen ? "text-ink" : "text-ink-muted"}`}>
-                  {label}
-                </p>
-                <p className="text-xs text-ink-muted mt-0.5 leading-relaxed">{desc}</p>
-              </div>
+              <p className={`text-sm font-medium ${chosen ? "text-ink" : "text-ink-muted"}`}>
+                {label}
+              </p>
+              <p className="text-xs text-ink-muted mt-0.5 leading-relaxed">{desc}</p>
             </div>
           );
         })}
@@ -159,10 +152,10 @@ function ResultsMetrics() {
           </div>
         ))}
       </div>
-      <div className="mt-5 pt-4 border-t border-border/50 flex items-baseline gap-3">
+      <div className="mt-5 pt-4 border-t border-border/50 flex flex-col items-center text-center gap-1">
         <span className="font-mono text-xl font-bold text-accent">[+3.4%, +5.4%]</span>
         <span className="text-xs text-ink-subtle">
-          95% confidence interval — entirely above the 1% MDE
+          95% confidence interval, entirely above the 1% MDE
         </span>
       </div>
     </div>
@@ -314,8 +307,8 @@ function RevenueChart() {
       </div>
       <figcaption className="text-center text-xs text-ink-subtle mt-3">
         <span className="text-ink-muted font-medium">Fig 2.</span> Treatment (orange)
-        consistently outperforms control (blue) across the 14-day window with no late decay
-        — confirming the effect is genuine, not novelty-driven.
+        consistently outperforms control (blue) across the 14-day window with no late decay,
+        confirming the effect is genuine, not novelty-driven.
       </figcaption>
     </figure>
   );
@@ -429,7 +422,7 @@ function CIForestPlot() {
       <figcaption className="mt-3 text-xs text-ink-subtle text-center">
         <span className="text-ink-muted font-medium">Fig 3.</span> Five possible experiment
         outcomes plotted by where the 95% CI falls relative to the ±1% MDE thresholds. Scenario
-        2 (green) — CI entirely above +1% — is a clean launch signal. Our result landed here.
+        2 (green), CI entirely above +1%, is a clean launch signal. Our result landed here.
       </figcaption>
     </figure>
   );
@@ -517,9 +510,8 @@ export default function AbTestPage() {
         <Prose>
           <P>
             The Shop tab uses a ranking algorithm to decide which products to show you, and in what
-            order. The ML team built a new version and wanted to roll it out. Before that, we needed
-            real evidence it actually moved the numbers, and that the evidence wasn&apos;t just an
-            artifact of a badly designed test.
+            order. The ML team built a new version and wanted to roll it out. To do that, I built
+            an A/B test to make sure that the new ranking was actually worth deploying.
           </P>
           <P>
             Most of the real work in experimentation happens before you touch any analysis code.
@@ -535,8 +527,8 @@ export default function AbTestPage() {
           </SH>
           <P>
             The user journey on the Shop tab has six steps. The ranking algorithm kicks in at{" "}
-            <B>Searches for an Item</B> — it decides which products show up when a user types a
-            query, and in what order. Everything that happens after that is shaped by that ranking.
+            <B>Searches for an Item</B>, deciding which products show up when a user types a query,
+            and in what order. Everything after that is shaped by that ranking.
           </P>
         </Prose>
 
@@ -632,11 +624,11 @@ export default function AbTestPage() {
             ].map(({ label, val, desc }) => (
               <div
                 key={label}
-                className="flex gap-4 rounded-lg bg-bg-elev/30 border border-border px-4 py-3"
+                className="flex flex-col items-center text-center rounded-lg bg-bg-elev/30 border border-border px-4 py-4 gap-1.5"
               >
-                <div className="shrink-0 w-36 sm:w-44">
-                  <p className="text-xs text-ink-muted font-medium">{label}</p>
-                  <p className="font-mono text-sm text-accent mt-0.5">{val}</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-ink-muted font-medium">{label}:</span>
+                  <span className="font-mono text-sm text-accent">{val}</span>
                 </div>
                 <p className="text-xs text-ink-subtle leading-relaxed">{desc}</p>
               </div>
@@ -696,14 +688,11 @@ export default function AbTestPage() {
           <SH3>Canary Rollout</SH3>
           <P>
             Before the main experiment, a <B>1/99 canary</B> deploys the new algorithm to 1% of
-            traffic while 99% stays on control. The only thing checked during the canary is
-            guardrails: crash rate, p95 latency, ads revenue per user, and hide and report rate. If
-            any guardrail breaches, the canary stops. If all clear, the canary data is discarded
-            and the 50/50 experiment starts fresh.
-          </P>
-          <P>
-            Discarding the 1% matters. Mixing canary and experiment data breaks the clean pre/post
-            boundary the analysis depends on.
+            traffic while 99% stays on control. The only guardrails monitored are crash rate,
+            p95 latency, and hide and report rate. If any breach, the canary stops. If all clear,
+            the canary data is{" "}
+            <span className="text-red-400 font-medium">discarded</span> and the 50/50 experiment
+            runs on that same 99%.
           </P>
         </Prose>
 
@@ -722,9 +711,8 @@ export default function AbTestPage() {
                   d: (
                     <>
                       Every impression, click, add to cart, and purchase gets logged with{" "}
-                      <C>user_id</C>, arm assignment, and a timestamp. If event loss differs
-                      between arms it biases the revenue-per-user denominator, so logging
-                      correctness is verified in the validity checks before results are read.
+                      <C>user_id</C>, arm assignment, and a timestamp. Logging completeness is
+                      verified in the validity checks before results are read.
                     </>
                   ),
                 },
