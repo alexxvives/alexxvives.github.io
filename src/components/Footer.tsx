@@ -1,7 +1,13 @@
+"use client";
 import { human } from "@/content/profile";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { useLang } from "@/lib/lang";
+import { t } from "@/content/translations";
 
 export function Footer() {
+  const { lang } = useLang();
+  const tx = t[lang].footer;
+
   return (
     <footer className="border-t border-border mt-24">
       <div className="container-page py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
@@ -10,7 +16,7 @@ export function Footer() {
             © {new Date().getFullYear()} {human.name}
           </p>
           <p className="text-xs text-ink-subtle mt-1">
-            Built with Next.js, Tailwind & a lot of coffee ☕
+            {tx.built}
           </p>
         </div>
         <div className="flex items-center gap-4">

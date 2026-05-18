@@ -1,24 +1,31 @@
+"use client";
 import { Reveal } from "@/components/Reveal";
 import { skills, education, awards } from "@/content/profile";
+import { useLang } from "@/lib/lang";
+import { t, educationEs } from "@/content/translations";
 
 export function Skills() {
+  const { lang } = useLang();
+  const tx = t[lang].skills;
+  const edu = lang === "es" ? educationEs : education;
+
   return (
     <section id="skills" className="section">
       <Reveal>
-        <p className="eyebrow">03 · Toolkit</p>
-        <h2 className="h2 mt-4">Skills, education & awards.</h2>
+        <p className="eyebrow">{tx.eyebrow}</p>
+        <h2 className="h2 mt-4">{tx.headline}</h2>
       </Reveal>
 
       <div className="mt-8 sm:mt-14 grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8">
         {/* Skills */}
         <Reveal className="lg:col-span-2">
           <div className="card p-4 sm:p-6 h-full">
-            <h3 className="h3 mb-6">Skills & Tools</h3>
+            <h3 className="h3 mb-6">{tx.skillsTitle}</h3>
             <div className="space-y-5">
               {Object.entries(skills).map(([group, items]) => (
                 <div key={group}>
                   <div className="font-mono text-[11px] uppercase tracking-widest text-ink-subtle mb-2">
-                    {group}
+                    {tx.skillCategories[group] ?? group}
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {items.map((s) => (
@@ -39,9 +46,9 @@ export function Skills() {
         {/* Education */}
         <Reveal delay={0.05}>
           <div className="card p-4 sm:p-6 h-full">
-            <h3 className="h3 mb-4 sm:mb-6">Education</h3>
+            <h3 className="h3 mb-4 sm:mb-6">{tx.educationTitle}</h3>
             <ul className="space-y-5">
-              {education.map((e) => (
+              {edu.map((e) => (
                 <li key={e.school} className="border-l-2 border-border pl-4">
                   <div className="font-mono text-[10px] uppercase tracking-widest text-accent">
                     {e.end}
@@ -59,7 +66,7 @@ export function Skills() {
       {/* Awards */}
       <Reveal>
         <div className="card mt-5 sm:mt-8 p-4 sm:p-6">
-          <h3 className="h3 mb-4 sm:mb-6">Awards & Certifications</h3>
+          <h3 className="h3 mb-4 sm:mb-6">{tx.awardsTitle}</h3>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {awards.map((a) => (
               <div
@@ -79,3 +86,4 @@ export function Skills() {
     </section>
   );
 }
+

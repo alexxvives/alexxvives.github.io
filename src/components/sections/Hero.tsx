@@ -3,8 +3,14 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Download } from "lucide-react";
 import { human } from "@/content/profile";
+import { useLang } from "@/lib/lang";
+import { t } from "@/content/translations";
 
 export function Hero() {
+  const { lang } = useLang();
+  const tx = t[lang].hero;
+  const name = human.name.split(" ")[0];
+
   return (
     <section className="relative overflow-hidden pt-20 pb-10 sm:pt-40 sm:pb-32">
       {/* Backdrop */}
@@ -14,7 +20,7 @@ export function Hero() {
       <div className="container-page relative">
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-12 items-center">
           {/* Copy */}
-          <div>
+          <div className="pb-16 lg:pb-0">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -22,7 +28,7 @@ export function Hero() {
               className="eyebrow mb-6"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-glow" />
-              data scientist · open to Europe
+              {tx.eyebrow}
             </motion.div>
 
             <motion.h1
@@ -31,9 +37,9 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
               className="h1"
             >
-              I build models that{" "}
+              {tx.h1_prefix}{" "}
               <span className="relative whitespace-nowrap">
-                <span className="text-accent">move metrics.</span>
+                <span className="text-accent">{tx.h1_accent}</span>
                 <svg
                   className="absolute -bottom-2 left-0 w-full text-accent/50"
                   viewBox="0 0 300 8"
@@ -55,35 +61,33 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.15 }}
               className="mt-8 max-w-xl text-lg text-ink-muted leading-relaxed"
             >
-              I&apos;m {human.name.split(" ")[0]}, a Barcelona-born data scientist.
-              I studied engineering at <span className="text-ink">Purdue</span>{" "}
-              and data science at <span className="text-ink">NYU</span>, then worked
-              on time-series forecasting at <span className="text-ink">HP</span>,
-              experimentation and A/B testing at <span className="text-ink">Meta</span>,
-              and now build models with the marketing and risk teams at{" "}
-              <span className="text-ink">Santander</span>.
+              {tx.bio.intro} {name}{tx.bio.p1}{" "}
+              <span className="text-ink">Purdue</span>{" "}
+              {tx.bio.p2} <span className="text-ink">NYU</span>
+              {tx.bio.p3} <span className="text-ink">HP</span>
+              {tx.bio.p4} <span className="text-ink">Meta</span>
+              {tx.bio.p5}{" "}
+              <span className="text-ink">Santander</span>{tx.bio.end}
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.25 }}
-              className="mt-10 flex items-center gap-4"
+              className="mt-10 flex items-center gap-4 max-sm:justify-center"
             >
               <a href="#projects" className="btn-primary">
-                View projects <ArrowRight className="h-4 w-4" />
+                {tx.viewProjects} <ArrowRight className="h-4 w-4" />
               </a>
               <a
                 href={human.resume}
                 target="_blank"
                 rel="noopener"
-                className="btn-ghost"
+                className="btn-ghost hidden sm:inline-flex"
               >
-                <Download className="h-4 w-4" /> Download resume
+                <Download className="h-4 w-4" /> {tx.downloadResume}
               </a>
             </motion.div>
-
-
           </div>
 
           {/* Visual: portrait + floating stats */}
@@ -112,7 +116,7 @@ export function Hero() {
                   className="rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-xl shadow-black/30"
                 >
                   <div className="font-mono text-lg sm:text-2xl text-accent font-semibold leading-none">Santander Bank</div>
-                  <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-subtle mt-1">data scientist</div>
+                  <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-subtle mt-1">{tx.floatRole}</div>
                 </motion.div>
               </motion.div>
             </div>
@@ -120,14 +124,22 @@ export function Hero() {
             <FloatingStat
               className="left-[-1rem] sm:left-[-1.5rem] bottom-16"
               value="NYU"
-              label="MS data science"
+              label={tx.floatNyu}
               delay={0.8}
             />
             {/* Purdue — bottom right, aligned with NYU */}
             <FloatingStat
               className="right-[-0.5rem] sm:right-[-1rem] bottom-16"
               value="Purdue"
-              label="engineering"
+              label={tx.floatPurdue}
+              delay={1}
+            />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
               delay={1}
             />
           </motion.div>

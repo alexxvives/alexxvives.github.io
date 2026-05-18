@@ -1,21 +1,26 @@
+"use client";
 import { Reveal } from "@/components/Reveal";
 import { human } from "@/content/profile";
 import { Mail, Linkedin, Github, ArrowRight } from "lucide-react";
+import { useLang } from "@/lib/lang";
+import { t } from "@/content/translations";
 
 export function Contact() {
+  const { lang } = useLang();
+  const tx = t[lang].contact;
+
   return (
     <section id="contact" className="section">
       <Reveal>
           <div className="card p-6 sm:p-14 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-grid-fade pointer-events-none" />
           <div className="relative">
-            <p className="eyebrow justify-center">05 · Contact</p>
+            <p className="eyebrow justify-center">{tx.eyebrow}</p>
             <h2 className="h2 mt-4 max-w-2xl mx-auto">
-              Have a problem worth modeling?
+              {tx.headline}
             </h2>
             <p className="text-ink-muted mt-4 max-w-lg mx-auto">
-              I&apos;m always interested in causal inference, ML at scale, and applied AI
-              problems. Drop me a line · I read everything.
+              {tx.description}
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">

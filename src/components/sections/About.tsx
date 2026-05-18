@@ -1,49 +1,53 @@
+"use client";
 import { Reveal } from "@/components/Reveal";
 import { human } from "@/content/profile";
+import { useLang } from "@/lib/lang";
+import { t } from "@/content/translations";
 
 export function About() {
+  const { lang } = useLang();
+  const tx = t[lang].about;
+
   return (
     <section id="about" className="section">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12">
         <Reveal>
-          <p className="eyebrow">01 · About</p>
+          <p className="eyebrow">{ tx.eyebrow}</p>
           <h2 className="h2 mt-4">
-            Engineer by training,<br />
-            <span className="text-ink-muted">scientist by craft.</span>
+            {tx.h2_line1}<br />
+            <span className="text-ink-muted">{tx.h2_line2}</span>
           </h2>
         </Reveal>
 
         <Reveal delay={0.1}>
           <div className="space-y-5 text-ink-muted text-base sm:text-lg leading-relaxed">
             <p>
-              I grew up in Barcelona, studied{" "}
-              <span className="text-ink">Industrial Engineering at Purdue</span>, and
-              earned an{" "}
-              <span className="text-ink">M.S. in Data Science at NYU</span>. Today I
-              work at Santander Bank in Boston, building models that reach millions of
-              customers and decide where marketing dollars go.
+              {tx.p1_before}{" "}
+              <span className="text-ink">{tx.p1_hl1}</span>
+              {tx.p1_mid}{" "}
+              <span className="text-ink">{tx.p1_hl2}</span>
+              {tx.p1_after}
             </p>
             <p>
-              The work I care about sits at the intersection of{" "}
-              <span className="text-accent">causal inference</span>,{" "}
-              <span className="text-accent">predictive modeling</span> and the messy
-              reality of shipping into production · A/B tests, monotonic constraints,
-              conformal intervals, things that survive contact with risk and compliance.
+              {tx.p2_before}{" "}
+              <span className="text-accent">{tx.p2_hl1}</span>
+              {tx.p2_sep}{" "}
+              <span className="text-accent">{tx.p2_hl2}</span>{" "}
+              {tx.p2_after}
             </p>
             <p>
-              I&apos;ve also placed{" "}
-              <span className="text-ink">2nd at HackGPT NYC</span> for an LLM-powered
-              therapist prototype, founded a consulting club at Purdue, and built
-              prediction-market trading strategies as a side project. Always learning.
+              {tx.p3_before}{" "}
+              <span className="text-ink">{tx.p3_hl}</span>{" "}
+              {tx.p3_after}
             </p>
 
             <div className="pt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm font-mono">
               <div>
-                <div className="text-ink-subtle">Languages</div>
+                <div className="text-ink-subtle">{tx.lab_languages}</div>
                 <div className="text-ink">EN · ES · CAT · FR</div>
               </div>
               <div>
-                <div className="text-ink-subtle">Currently</div>
+                <div className="text-ink-subtle">{tx.lab_currently}</div>
                 <div className="text-ink">Santander Bank · Data Scientist</div>
               </div>
             </div>
@@ -53,3 +57,4 @@ export function About() {
     </section>
   );
 }
+

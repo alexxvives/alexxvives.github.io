@@ -6,11 +6,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { projects, type ProjectCategory } from "@/content/projects";
 import { getProjectImage } from "@/content/projectImages";
 import { cn } from "@/lib/cn";
+import { useLang } from "@/lib/lang";
+import { t } from "@/content/translations";
 
-const categories: Array<"All" | ProjectCategory> = ["All", "Work", "Personal", "Research"];
 const FEATURED_COUNT = 8;
 
 export function Projects() {
+  const { lang } = useLang();
+  const tx = t[lang].projects;
+
+  const categories: Array<"All" | ProjectCategory> = [
+    "All", "Work", "Personal", "Research",
+  ];
+  const categoryLabels: Record<string, string> = {
+    All: tx.all,
+    Work: tx.work,
+    Personal: tx.personal,
+    Research: tx.research,
+  };
+
   const [filter, setFilter] = useState<"All" | ProjectCategory>("All");
   const [showAll, setShowAll] = useState(false);
 
@@ -26,11 +40,10 @@ export function Projects() {
     <section id="projects" className="section">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
         <div>
-          <p className="eyebrow">04 · Projects</p>
-          <h2 className="h2 mt-4">Selected work.</h2>
+          <p className="eyebrow">{tx.eyebrow}</p>
+          <h2 className="h2 mt-4">{tx.headline}</h2>
           <p className="text-ink-muted mt-3 max-w-xl">
-            {projects.length} projects across production ML, applied research, hackathons
-            and personal experiments. Filter or dive into a case study.
+            {tx.description(projects.length)}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -45,7 +58,7 @@ export function Projects() {
                   : "border-border text-ink-muted hover:border-accent hover:text-accent"
               )}
             >
-              {c}
+              {categoryLabels[c]}
               <span className="ml-1.5 opacity-60">
                 {c === "All"
                   ? projects.length
@@ -131,7 +144,7 @@ export function Projects() {
             onClick={() => setShowAll(true)}
             className="rounded-full px-6 py-2.5 text-xs font-mono border border-border text-ink-muted hover:border-accent hover:text-accent transition-all"
           >
-            Show {hiddenCount} more projects →
+            {tx.showMore(hiddenCount)}
           </button>
         </div>
       )}
@@ -141,7 +154,7 @@ export function Projects() {
             onClick={() => setShowAll(false)}
             className="rounded-full px-6 py-2.5 text-xs font-mono border border-border text-ink-muted hover:border-accent hover:text-accent transition-all"
           >
-            Show less
+            {tx.showLess}
           </button>
         </div>
       )}
