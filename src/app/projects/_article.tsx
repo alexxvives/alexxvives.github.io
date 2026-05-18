@@ -1,7 +1,10 @@
+"use client";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { getProject } from "@/content/projects";
+import { useLang } from "@/lib/lang";
+import { t } from "@/content/translations";
 
 // ── Layout ─────────────────────────────────────────────────────────────────────
 
@@ -95,6 +98,8 @@ export function OptionBox({
   chosenLabel: string;
   reason: string;
 }) {
+  const { lang } = useLang();
+  const tx = t[lang].article;
   return (
     <div className="my-8 rounded-2xl border border-border bg-bg-card p-6">
       <p className="font-mono text-[10px] uppercase tracking-widest text-ink-subtle mb-4">
@@ -115,7 +120,7 @@ export function OptionBox({
               <div className="flex items-center gap-2 mb-2">
                 {chosen && (
                   <span className="text-[10px] font-mono uppercase tracking-wider text-accent">
-                    ✓ chosen
+                    ✓ {tx.chosen}
                   </span>
                 )}
                 <span
@@ -132,7 +137,7 @@ export function OptionBox({
         })}
       </div>
       <p className="text-sm leading-relaxed text-ink-muted border-t border-border/40 pt-4">
-        <span className="text-ink-subtle font-medium">Why: </span>
+        <span className="text-ink-subtle font-medium">{tx.why} </span>
         {reason}
       </p>
     </div>
@@ -182,12 +187,14 @@ export function CheckList({ items }: { items: string[] }) {
 // ── NextProject ────────────────────────────────────────────────────────────────
 
 export function NextProject({ slug }: { slug: string }) {
+  const { lang } = useLang();
+  const tx = t[lang].article;
   const p = getProject(slug);
   if (!p) return null;
   return (
     <div className="mt-24 pt-12 border-t border-border/40">
       <p className="font-mono text-xs uppercase tracking-widest text-ink-subtle mb-4">
-        Next project
+        {tx.nextProject}
       </p>
       <Link
         href={`/projects/${p.slug}`}
@@ -251,13 +258,15 @@ export function ArticleHeader({
 // ── BackLink ───────────────────────────────────────────────────────────────────
 
 export function BackLink() {
+  const { lang } = useLang();
+  const tx = t[lang].article;
   return (
     <div className="container-page">
       <Link
         href="/#projects"
         className="inline-flex items-center gap-2 text-sm text-ink-muted hover:text-accent transition-colors"
       >
-        <ArrowLeft className="h-4 w-4" /> All projects
+        <ArrowLeft className="h-4 w-4" /> {tx.allProjects}
       </Link>
     </div>
   );

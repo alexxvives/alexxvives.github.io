@@ -182,6 +182,22 @@ export const t = {
     footer: {
       built: "Built with Next.js, Tailwind & a lot of coffee ☕",
     },
+    article: {
+      allProjects: "All projects",
+      onThisPage: "On this page",
+      nextProject: "Next project",
+      problem: "Problem",
+      approach: "Approach",
+      results: "Results",
+      learnings: "Learnings",
+      why: "Why:",
+      chosen: "chosen",
+    },
+    notFound: {
+      tagline: "Lost in latent space.",
+      description: "That page doesn't exist (or doesn't exist yet).",
+      backHome: "← Back home",
+    },
   },
 
   es: {
@@ -271,6 +287,22 @@ export const t = {
     },
     footer: {
       built: "Hecho con Next.js, Tailwind y mucho café ☕",
+    },
+    article: {
+      allProjects: "Todos los proyectos",
+      onThisPage: "En esta página",
+      nextProject: "Siguiente proyecto",
+      problem: "Problema",
+      approach: "Enfoque",
+      results: "Resultados",
+      learnings: "Aprendizajes",
+      why: "Por qué:",
+      chosen: "elegido",
+    },
+    notFound: {
+      tagline: "Perdido en el espacio latente.",
+      description: "Esa página no existe (o todavía no existe).",
+      backHome: "← Volver al inicio",
     },
   },
 } as const;

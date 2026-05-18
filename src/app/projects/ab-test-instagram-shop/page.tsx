@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Link from "next/link";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { getProject } from "@/content/projects";
+import { BackLink, NextProject as ArticleNextProject } from "../_article";
 
 export const metadata: Metadata = {
   title: "A/B Testing on Instagram's Shop — Alexandre Vives",
@@ -460,19 +458,10 @@ function FunnelTable() {
 // ── Page ───────────────────────────────────────────────────────────────────────
 
 export default function AbTestPage() {
-  const next = getProject("fico-approximation");
-
   return (
     <article className="pt-32 pb-24">
       {/* ── Back link */}
-      <div className="container-page">
-        <Link
-          href="/#projects"
-          className="inline-flex items-center gap-2 text-sm text-ink-muted hover:text-accent transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" /> All projects
-        </Link>
-      </div>
+      <BackLink />
 
       {/* ── Header */}
       <header className="container-page mt-10">
@@ -977,29 +966,7 @@ export default function AbTestPage() {
         </Prose>
 
         {/* ── Next project */}
-        {next && (
-          <div className="max-w-2xl mx-auto mt-24 pt-12 border-t border-border">
-            <Link
-              href={`/projects/${next.slug}`}
-              className="group block card p-8 hover:translate-y-[-2px] transition-transform"
-            >
-              <div className="flex items-start justify-between gap-6">
-                <div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-ink-subtle">
-                    Next project
-                  </div>
-                  <h3 className="font-display text-xl font-bold tracking-tight mt-2 group-hover:text-accent transition-colors">
-                    {next.title}
-                  </h3>
-                  <p className="text-sm text-ink-muted mt-2 line-clamp-2 max-w-lg">
-                    {next.blurb}
-                  </p>
-                </div>
-                <ArrowUpRight className="h-6 w-6 text-ink-subtle group-hover:text-accent group-hover:translate-x-1 group-hover:-translate-y-1 transition-all shrink-0" />
-              </div>
-            </Link>
-          </div>
-        )}
+        <ArticleNextProject slug="fico-approximation" />
       </div>
     </article>
   );
