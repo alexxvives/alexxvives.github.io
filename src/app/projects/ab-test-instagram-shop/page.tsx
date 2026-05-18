@@ -5,9 +5,9 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { getProject } from "@/content/projects";
 
 export const metadata: Metadata = {
-  title: "A/B Testing a Ranking Algorithm — Alexandre Vives",
+  title: "A/B Testing on Instagram's Shop — Alexandre Vives",
   description:
-    "End-to-end walkthrough of an A/B experiment on a social commerce ranking algorithm: from metric selection to the launch decision.",
+    "How we ran the A/B test for Instagram Shop's new ranking algorithm, from picking the right metric to making the launch call.",
 };
 
 // ── Layout helpers ─────────────────────────────────────────────────────────────
@@ -173,11 +173,12 @@ function ResultsMetrics() {
 
 function FunnelDiagram() {
   const layers = [
-    { label: "Visit", pct: 100, color: "#3b82f6", tag: false },
-    { label: "Searches an Item", pct: 82, color: "#22c55e", tag: false },
-    { label: "Browse Items", pct: 65, color: "#ca8a04", tag: true },
-    { label: "Views an Item", pct: 49, color: "#f97316", tag: false },
-    { label: "Purchase", pct: 34, color: "#ef4444", tag: false },
+    { label: "Enters Instagram Shop", pct: 100, color: "#3b82f6", tag: false },
+    { label: "Searches for an Item", pct: 82, color: "#22c55e", tag: false },
+    { label: "Browses Product Page", pct: 65, color: "#ca8a04", tag: true },
+    { label: "Add to Cart", pct: 48, color: "#f97316", tag: false },
+    { label: "Checkout", pct: 34, color: "#ef4444", tag: false },
+    { label: "Sale", pct: 22, color: "#9333ea", tag: false },
   ];
   return (
     <figure className="select-none">
@@ -207,8 +208,8 @@ function FunnelDiagram() {
       </div>
       <figcaption className="text-center text-xs text-ink-subtle mt-3">
         <span className="text-ink-muted font-medium">Fig 1.</span> The Shop tab user journey.
-        The ranking algorithm activates at &ldquo;Browse Items&rdquo; and shapes everything
-        downstream.
+        The ranking algorithm activates at &ldquo;Browses Product Page&rdquo; and shapes
+        everything downstream.
       </figcaption>
     </figure>
   );
@@ -487,11 +488,12 @@ export default function AbTestPage() {
             Work · Meta (Instagram) · Summer 2022
           </p>
           <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight leading-[1.08] mt-4">
-            A/B Testing a Ranking Algorithm: End-to-End Walkthrough
+            A/B Testing on Instagram&apos;s Shop
           </h1>
           <p className="mt-5 text-lg text-ink-muted leading-relaxed">
-            From choosing the right metric to signing off on the launch — a step-by-step
-            walkthrough of how a social commerce ranking experiment gets done rigorously.
+            The Shop team at Meta had a new ranking algorithm ready to go. Before shipping it to
+            everyone, we needed real evidence it worked. This walks through every design decision
+            that went into building that evidence.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             {["A/B Testing", "Experimentation", "Recommender Systems", "Statistical Inference"].map(
@@ -514,16 +516,15 @@ export default function AbTestPage() {
         {/* Opening */}
         <Prose>
           <P>
-            The Shop tab surfaces product recommendations using a ranking algorithm. The ML team
-            built a new version and wanted to ship it. Before doing that, they needed evidence it
-            actually improved what mattered — and confidence that evidence was real, not an artifact
-            of a poorly designed test.
+            The Shop tab uses a ranking algorithm to decide which products to show you, and in what
+            order. The ML team built a new version and wanted to roll it out. Before that, we needed
+            real evidence it actually moved the numbers, and that the evidence wasn&apos;t just an
+            artifact of a badly designed test.
           </P>
           <P>
-            Most of the hard work in experimentation happens before you write a single line of
-            analysis code. The decisions about what to measure, how to split users, how many you
-            need, and what checks to run before trusting the result — these shape everything. This
-            is a walkthrough of each one.
+            Most of the real work in experimentation happens before you touch any analysis code.
+            What to measure, how to split users, how many you need, what checks need to pass before
+            you trust the result. This is a walkthrough of each of those decisions.
           </P>
         </Prose>
 
@@ -533,9 +534,9 @@ export default function AbTestPage() {
             User Journey & Where the Algorithm Fits
           </SH>
           <P>
-            The user journey on the Shop tab has five stages. The ranking algorithm kicks in at{" "}
-            <B>Browse Items</B> — it decides which products to surface, and in what order, when a
-            user searches. Everything downstream is shaped by that one decision.
+            The user journey on the Shop tab has six steps. The ranking algorithm kicks in at{" "}
+            <B>Browses Product Page</B> — it decides which products show up in search results, and
+            in what order. Everything that happens after that is shaped by that ranking.
           </P>
         </Prose>
 
@@ -545,10 +546,10 @@ export default function AbTestPage() {
 
         <Prose>
           <P>
-            A better ranking could lift click-through rates, product views, add-to-cart events, and
-            purchases. But it could also inflate early funnel metrics while changing nothing
-            downstream — which is exactly why the <Em>choice of success metric</Em> is the most
-            consequential design decision in the experiment, not a detail to settle at the end.
+            A better ranking should lift CTR, product views, add to cart events, and purchases. But
+            it could also inflate early funnel metrics while doing nothing downstream, which is
+            exactly why the <Em>choice of success metric</Em> is the most consequential design
+            decision in the whole experiment.
           </P>
         </Prose>
 
@@ -572,20 +573,19 @@ export default function AbTestPage() {
               },
             ]}
             chosenLabel="Avg Revenue per User per Day"
-            reason="Conversion rate fires once per purchasing user, regardless of order value — a $5 phone case and a $200 jacket count identically. An algorithm that surfaces cheap, high-appeal impulse buys could win on conversion rate while quietly losing on the metric the business cares about. Revenue per user doesn't have this problem."
+            reason="Conversion rate fires once per purchasing user, regardless of order value. A $5 phone case and a $200 jacket count the same. An algorithm that surfaces cheap impulse buys could win on conversion rate while quietly losing on what the business actually cares about. Revenue per user doesn't have that problem."
           />
 
           <P>
-            The four properties a good metric must satisfy: <B>measurable</B> (computable from
-            server-side logs), <B>attributable</B> (traceable back to the treatment session),{" "}
-            <B>sensitive</B> (low enough variance to detect a 1% lift without needing 100M users),
-            and <B>timely</B> (a 14-day window is short enough to iterate on rapidly).
+            Four things a good metric needs: <B>measurable</B> (computable from server logs),{" "}
+            <B>attributable</B> (traceable back to the treatment session), <B>sensitive</B> (low
+            enough variance to detect a 1% lift without needing 100M users), and <B>timely</B> (14
+            days is short enough to iterate quickly).
           </P>
 
           <Callout>
-            Conversion rate is a volume signal. Revenue per user is a value signal. The difference
-            only looks academic until you ship an algorithm that wins on one while losing on the
-            other.
+            Conversion rate measures volume. Revenue per user measures value. The difference looks
+            academic right up until you ship an algorithm that wins on one while losing on the other.
           </Callout>
         </Prose>
 
@@ -611,7 +611,7 @@ export default function AbTestPage() {
               </span>
             </li>
           </ul>
-          <P>Three parameters get locked before the experiment starts — none are revisited once data starts flowing:</P>
+          <P>Three parameters get locked before the experiment starts. None of them change once data starts flowing:</P>
           <div className="mt-5 space-y-3">
             {[
               {
@@ -671,29 +671,26 @@ export default function AbTestPage() {
             chosenLabel="User"
             reason={
               <>
-                Session-level randomization lets the same user encounter both algorithms across
-                visits, violating the independence assumption the statistics depend on. Revenue per
-                user is a user-level metric — it needs a user-level randomization unit.{" "}
-                <C>user_id</C> is hashed into 1,000 buckets; each bucket is permanently assigned to
-                one arm.
+                Session level lets the same user see both algorithms across visits, which breaks the
+                independence assumption the stats rely on. Revenue per user is a user level metric,
+                so it needs a user level randomization unit. <C>user_id</C> gets hashed into 1,000
+                buckets, each permanently assigned to one arm.
               </>
             }
           />
 
           <SH3>Target Population</SH3>
           <P>
-            Not all users — only those who triggered at least one search on the Shop tab during the
-            experiment window. These are the users for whom the ranking algorithm actually
-            activates. Including users who never saw any ranking at all inflates the denominator
-            while adding noise, not signal.
+            Not all users, just those who triggered at least one search on the Shop tab during the
+            window. These are the only users for whom the ranking algorithm actually activates.
+            Including people who never saw any ranking just inflates the denominator and adds noise.
           </P>
 
           <SH3>Sample Size</SH3>
           <P>
-            Applying the standard two-sample formula <C>n ≈ 16σ²/Δ²</C> with baseline revenue
-            variance and a 1% MDE gives approximately <B>2.1M users per arm</B> (~4.2M total). At
-            Instagram Shop&apos;s traffic volume, that&apos;s roughly 1–2 weeks of data from the
-            target population.
+            Plugging baseline revenue variance and a 1% MDE into the standard two-sample formula{" "}
+            <C>n ≈ 16σ²/Δ²</C> gives about <B>2.1M users per arm</B> (4.2M total). At Instagram
+            Shop traffic volumes, that&apos;s roughly 1 to 2 weeks from the target population.
           </P>
 
           <SH3>Ramp Schedule</SH3>
@@ -718,21 +715,21 @@ export default function AbTestPage() {
                   t: "Instrumentation",
                   d: (
                     <>
-                      Every impression, click, add-to-cart, and purchase is logged with{" "}
-                      <C>user_id</C>, arm assignment, and a session tie so events can be attributed
-                      back to the correct treatment exposure. Event loss rate target: &lt; 0.5%.
+                      Every impression, click, add to cart, and purchase gets logged with{" "}
+                      <C>user_id</C>, arm assignment, and a session ID so events can be attributed
+                      to the correct treatment exposure. Target event loss rate: &lt; 0.5%.
                     </>
                   ),
                 },
                 {
                   n: "2",
                   t: "Guardrail monitoring",
-                  d: "Daily checks on crash rate, p95 latency, ads revenue per user, and hide-and-report rate. These catch unintended regressions before they hit too many users.",
+                  d: "Daily checks on crash rate, p95 latency, ads revenue per user, and hide and report rate. These catch unintended regressions before they affect too many users.",
                 },
                 {
                   n: "3",
                   t: "No peeking at the primary metric p-value",
-                  d: "This is the most violated rule in online experimentation. The end date is committed to before launch — it does not change based on what the data looks like at day 7.",
+                  d: "The end date is committed to before launch and doesn't change based on what the data looks like at day 7. This is the most violated rule in online experimentation.",
                 },
               ] as { n: string; t: string; d: ReactNode }[]
             ).map(({ n, t, d }) => (
@@ -749,10 +746,9 @@ export default function AbTestPage() {
           </ol>
 
           <Callout>
-            Every time you check the p-value mid-experiment and could potentially act on what you
-            see, you add a decision point to the test. With α = 0.05, checking daily over a 14-day
-            run can push your true false positive rate well above 5% — the pre-specified guarantee
-            no longer holds.
+            Every time you check the p-value mid-experiment and could act on what you see, you add
+            a decision point to the test. With α = 0.05, checking daily over a 14 day run can push
+            your true false positive rate well above 5%. The prespecified guarantee no longer holds.
           </Callout>
         </Prose>
 
@@ -762,7 +758,7 @@ export default function AbTestPage() {
             Validity Checks
           </SH>
           <P>
-            Four checks must pass before any result is read. All four serve the same purpose: ruling
+            Four checks need to pass before any result gets read. All four do the same thing: rule
             out alternative explanations before attributing what you see to the treatment.
           </P>
           <div className="mt-6 space-y-3">
@@ -773,7 +769,7 @@ export default function AbTestPage() {
                   t: "Instrumentation audit",
                   d: (
                     <>
-                      Join server-side and client-side logs. Event loss rate: <B>&lt; 0.3%</B>.
+                      Cross-reference server logs and client logs. Event loss rate: <B>&lt; 0.3%</B>.
                       Within tolerance.
                     </>
                   ),
@@ -802,7 +798,7 @@ export default function AbTestPage() {
                 {
                   n: "04",
                   t: "Novelty effect",
-                  d: "Week-2 lift was 91% of week-1. A decay toward zero would suggest users are reacting to novelty, not quality. 91% is stable.",
+                  d: "Week 2 lift was 91% of week 1. A decay toward zero would mean users are reacting to novelty, not quality. 91% is stable.",
                 },
               ] as { n: string; t: string; d: ReactNode }[]
             ).map(({ n, t, d }) => (
@@ -820,9 +816,9 @@ export default function AbTestPage() {
           </div>
 
           <Callout>
-            The AA test is the experimental equivalent of zeroing your scale before weighing
-            anything. If you skip it and the groups turn out unbalanced before treatment, every
-            number you report afterward is confounded — and there is no way to know.
+            The AA test is like zeroing your scale before you weigh anything. If you skip it and
+            the groups turn out unbalanced before treatment, everything you report afterward is
+            confounded and there&apos;s no way to know.
           </Callout>
         </Prose>
 
@@ -831,7 +827,7 @@ export default function AbTestPage() {
           <SH id="results" step="Step 06">
             The Results
           </SH>
-          <P>All five validity checks cleared. Only then were the results read.</P>
+          <P>All four validity checks cleared. Then we read the results.</P>
         </Prose>
 
         <Prose>
@@ -844,19 +840,19 @@ export default function AbTestPage() {
 
         <Prose>
           <P>
-            Revenue per user moved from <B>$25.00</B> (control) to <B>$26.10</B> (treatment) — a
-            relative lift of <B>+4.4%</B>. The p-value is 0.01, below the pre-specified α = 0.05
-            threshold. H₀ is rejected.
+            Revenue per user moved from <B>$25.00</B> in control to <B>$26.10</B> in treatment, a
+            relative lift of <B>+4.4%</B>. The p-value came in at 0.01, below the prespecified
+            α = 0.05 threshold. H₀ rejected.
           </P>
           <P>
             The 95% confidence interval is <B>[+3.4%, +5.4%]</B>. The entire interval sits above
-            the 1% MDE. The result is not just statistically significant — it is <Em>practically</Em>{" "}
-            significant. There is strong evidence for a real improvement of a meaningful size.
+            the 1% MDE. It&apos;s not just statistically significant, it&apos;s{" "}
+            <Em>practically</Em> significant. Real improvement of a meaningful size.
           </P>
           <SH3>Funnel check</SH3>
           <P>
-            A click lift that collapsed at checkout would suggest the algorithm surfaces
-            eye-catching but low-intent products. The lift propagated all the way through:
+            A CTR lift that collapsed at checkout would mean the algorithm is just surfacing
+            eye-catching but low-intent products. The lift held all the way through:
           </P>
         </Prose>
 
@@ -866,9 +862,9 @@ export default function AbTestPage() {
 
         <Prose>
           <P>
-            Heterogeneity breakdown: dormant users (no purchase in 90 days) <B>+6.9%</B>, APAC{" "}
+            Segment breakdown: dormant users (no purchase in 90 days) <B>+6.9%</B>, APAC{" "}
             <B>+5.1%</B>, high-frequency buyers (3+ prior purchases) <B>+0.2%</B>. The legacy
-            ranker was already well-calibrated for power users. The gain came from everyone else.
+            ranker was already well calibrated for power users. The gains came from everyone else.
           </P>
         </Prose>
 
@@ -878,9 +874,9 @@ export default function AbTestPage() {
             The Launch Decision
           </SH>
           <P>
-            A significant result with CI above the MDE is not automatically a launch. Three factors
-            need to clear. The forest plot below shows five possible experiment outcomes — only one
-            of them is a clean signal to ship.
+            A significant result with CI above the MDE doesn&apos;t automatically mean ship it.
+            Three things need to clear first. The forest plot below shows five possible outcomes.
+            Only one is a clean signal.
           </P>
         </Prose>
 
@@ -890,9 +886,9 @@ export default function AbTestPage() {
 
         <Prose>
           <P>
-            Our result is scenario 2: the CI is entirely above the +1% practical significance
-            threshold. Scenarios 1, 3, 4, and 5 would each warrant a different call — more data,
-            a redesign, or a definitive no. The three factors that closed the decision:
+            Our result is scenario 2: CI fully above the +1% threshold. The other scenarios would
+            each lead to a different call, more data, a redesign, or a hard no. Three things that
+            closed the decision:
           </P>
           <div className="mt-5 space-y-3">
             {[
@@ -909,7 +905,7 @@ export default function AbTestPage() {
               {
                 n: "3",
                 t: "False positive risk",
-                d: "p = 0.01, CI fully above the MDE. The probability that this is noise is negligible.",
+                d: "p = 0.01, CI fully above the MDE. The probability this is noise is negligible.",
               },
             ].map(({ n, t, d }) => (
               <div
@@ -934,7 +930,7 @@ export default function AbTestPage() {
             </p>
             <p className="text-sm text-ink-muted mt-1.5">
               The holdback runs as a long-horizon counterfactual to catch any delayed regressions
-              or GMV cannibalization effects invisible in a 14-day window.
+              or GMV cannibalization that wouldn&apos;t show up in a 14 day window.
             </p>
           </div>
         </Prose>
@@ -949,15 +945,15 @@ export default function AbTestPage() {
               [
                 {
                   t: "The metric was chosen before the test ran",
-                  d: "Revenue per user, not conversion rate — because the question was about GMV, not volume. Choosing the metric after seeing the data is the fastest way to invalidate an experiment.",
+                  d: "Revenue per user, not conversion rate, because the question was about GMV not volume. Choosing the metric after seeing the data is the fastest way to invalidate an experiment.",
                 },
                 {
                   t: "The end date was non-negotiable",
-                  d: "No peeking, no early stops, no extensions. Pre-committing to the end date is the only way the α = 0.05 guarantee remains valid across the entire run.",
+                  d: "No peeking, no early stops, no extensions. Committing to the end date beforehand is the only way the α = 0.05 guarantee stays valid.",
                 },
                 {
                   t: "The AA test ran the week before",
-                  d: "Not as a formality but as a genuine check. If the groups had been imbalanced before treatment, the entire readout would have been confounded.",
+                  d: "Not as a formality, but as a genuine check. If the groups had been unbalanced before treatment, the entire readout would have been confounded.",
                 },
               ] as { t: string; d: string }[]
             ).map(({ t, d }, i) => (

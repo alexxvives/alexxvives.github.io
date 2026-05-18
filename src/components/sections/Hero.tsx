@@ -98,16 +98,22 @@ export function Hero() {
             </div>
 
             {/* Floating stat chips */}
-            {/* Santander Bank — centered, half overflowing above portrait */}
-            <div className="absolute top-0 inset-x-0 flex justify-center pointer-events-none">
+            {/* Santander Bank — overflowing above portrait */}
+            <div className="absolute -top-10 sm:-top-12 inset-x-0 flex justify-center pointer-events-none">
               <motion.div
-                initial={{ opacity: 0, y: 8 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="-translate-y-[60%] rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-xl shadow-black/30 pointer-events-auto"
+                className="pointer-events-auto"
               >
-                <div className="font-mono text-lg sm:text-2xl text-accent font-semibold leading-none">Santander Bank</div>
-                <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-subtle mt-1">data scientist</div>
+                <motion.div
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                  className="rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-xl shadow-black/30"
+                >
+                  <div className="font-mono text-lg sm:text-2xl text-accent font-semibold leading-none">Santander Bank</div>
+                  <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-subtle mt-1">data scientist</div>
+                </motion.div>
               </motion.div>
             </div>
             {/* NYU — bottom left */}
@@ -147,14 +153,20 @@ function FloatingStat({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay }}
-      className={`absolute ${className} rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-xl shadow-black/30`}
+      className={`absolute ${className}`}
     >
-      <div className="font-mono text-lg sm:text-2xl text-accent font-semibold leading-none">
-        {value}
-      </div>
-      <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-subtle mt-1">
-        {label}
-      </div>
+      <motion.div
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: delay + 0.8 }}
+        className="rounded-2xl border border-border bg-bg-elev/90 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-3 shadow-xl shadow-black/30"
+      >
+        <div className="font-mono text-lg sm:text-2xl text-accent font-semibold leading-none">
+          {value}
+        </div>
+        <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-subtle mt-1">
+          {label}
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
