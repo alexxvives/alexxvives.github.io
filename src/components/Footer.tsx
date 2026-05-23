@@ -15,9 +15,6 @@ export function Footer() {
           <p className="font-mono text-xs text-ink-subtle">
             © {new Date().getFullYear()} {human.name}
           </p>
-          <p className="text-xs text-ink-subtle mt-1">
-            {tx.built}
-          </p>
         </div>
         <div className="flex items-center gap-4">
           <a

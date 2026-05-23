@@ -45,14 +45,45 @@ export function Navbar() {
       )}
     >
       <nav className="container-page flex h-16 items-center justify-between relative">
-        <Link
-          href="/"
-          aria-label="Home"
-          onClick={() => setOpen(false)}
-          className="group inline-flex items-center justify-center h-9 w-9 rounded-lg border border-border bg-bg-elev/60 backdrop-blur-md font-mono text-xs font-semibold text-ink hover:border-accent hover:text-accent transition-colors"
-        >
-          AV
-        </Link>
+        {/* Left slot: AV on desktop, flags on mobile */}
+        <div className="flex items-center">
+          <Link
+            href="/"
+            aria-label="Home"
+            onClick={() => setOpen(false)}
+            className="group max-md:hidden inline-flex items-center justify-center h-9 w-9 rounded-lg border border-border bg-bg-elev/60 backdrop-blur-md font-mono text-xs font-semibold text-ink hover:border-accent hover:text-accent transition-colors"
+          >
+            AV
+          </Link>
+          {/* Mobile-only flags */}
+          <div className="md:hidden flex items-center rounded-full border border-border overflow-hidden text-xs font-mono">
+            <button
+              onClick={() => lang !== "en" && toggle()}
+              aria-label="Switch to English"
+              className={cn(
+                "px-2.5 py-1 transition-colors",
+                lang === "en"
+                  ? "bg-accent/20 text-accent"
+                  : "text-ink-muted hover:text-accent"
+              )}
+            >
+              🇺🇸
+            </button>
+            <div className="w-px h-4 bg-border" />
+            <button
+              onClick={() => lang !== "es" && toggle()}
+              aria-label="Cambiar a español"
+              className={cn(
+                "px-2.5 py-1 transition-colors",
+                lang === "es"
+                  ? "bg-accent/20 text-accent"
+                  : "text-ink-muted hover:text-accent"
+              )}
+            >
+              🇪🇸
+            </button>
+          </div>
+        </div>
         <ul className="hidden md:flex items-center gap-8 text-sm text-ink-muted">
           {links.map((l) => (
             <li key={l.href}>
@@ -63,8 +94,8 @@ export function Navbar() {
           ))}
         </ul>
         <div className="flex items-center gap-2">
-          {/* Language toggle */}
-          <div className="flex items-center rounded-full border border-border overflow-hidden text-xs font-mono">
+          {/* Language toggle – desktop only */}
+          <div className="hidden md:flex items-center rounded-full border border-border overflow-hidden text-xs font-mono">
             <button
               onClick={() => lang !== "en" && toggle()}
               aria-label="Switch to English"

@@ -13,8 +13,8 @@ import {
   ReferenceLine,
 } from "recharts";
 
-const ACCENT = "#a3e635";
-const MUTED = "#a1a1aa";
+const ACCENT = "#15254e";
+const MUTED = "#969daf";
 
 // ─── Cumulative conversion lift over ramp ───
 const rampData = Array.from({ length: 14 }, (_, i) => {
@@ -125,7 +125,7 @@ export function ABTestVisuals() {
       >
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={rampData} margin={{ top: 8, right: 16, left: -8, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1f1f23" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#dce0ea" />
             <XAxis dataKey="day" stroke={MUTED} fontSize={11} />
             <YAxis
               stroke={MUTED}
@@ -135,8 +135,8 @@ export function ABTestVisuals() {
             />
             <Tooltip
               contentStyle={{
-                background: "#111113",
-                border: "1px solid #1f1f23",
+                background: "#ffffff",
+                border: "1px solid #dce0ea",
                 borderRadius: 8,
                 fontSize: 12,
               }}
@@ -172,7 +172,7 @@ export function ABTestVisuals() {
             layout="vertical"
             margin={{ top: 8, right: 32, left: 60, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#1f1f23" horizontal={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#dce0ea" horizontal={false} />
             <XAxis
               type="number"
               stroke={MUTED}
@@ -189,8 +189,8 @@ export function ABTestVisuals() {
             />
             <Tooltip
               contentStyle={{
-                background: "#111113",
-                border: "1px solid #1f1f23",
+                background: "#ffffff",
+                border: "1px solid #dce0ea",
                 borderRadius: 8,
                 fontSize: 12,
               }}
@@ -210,7 +210,7 @@ export function ABTestVisuals() {
         >
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={powerData} margin={{ top: 8, right: 16, left: -8, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1f1f23" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#dce0ea" />
               <XAxis
                 dataKey="n"
                 stroke={MUTED}
@@ -223,7 +223,7 @@ export function ABTestVisuals() {
                 tickFormatter={(v) => `${v}%`}
               />
               <Tooltip
-                contentStyle={{ background: "#111113", border: "1px solid #1f1f23", borderRadius: 8, fontSize: 12 }}
+                contentStyle={{ background: "#ffffff", border: "1px solid #dce0ea", borderRadius: 8, fontSize: 12 }}
                 formatter={(v: number) => `${v}%`}
               />
               <ReferenceLine y={80} stroke={MUTED} strokeDasharray="4 4" />
@@ -251,11 +251,11 @@ export function ABTestVisuals() {
               ]}
               margin={{ top: 8, right: 16, left: -8, bottom: 0 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#1f1f23" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#dce0ea" vertical={false} />
               <XAxis dataKey="day" stroke={MUTED} fontSize={11} />
               <YAxis stroke={MUTED} fontSize={11} tickFormatter={(v) => `${v}%`} domain={[0, 60]} />
               <Tooltip
-                contentStyle={{ background: "#111113", border: "1px solid #1f1f23", borderRadius: 8, fontSize: 12 }}
+                contentStyle={{ background: "#ffffff", border: "1px solid #dce0ea", borderRadius: 8, fontSize: 12 }}
                 formatter={(v: number) => `${v}% traffic`}
               />
               <Bar dataKey="share" radius={[6, 6, 0, 0]} fill={ACCENT} />

@@ -34,9 +34,6 @@ export function ProjectDetail({
             {project.category} · {project.date} · {project.org}
           </div>
           <h1 className="font-display text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight mt-4">{project.title}</h1>
-          <p className="mt-6 text-lg text-ink-muted leading-relaxed">
-            {project.blurb}
-          </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             {project.link && (

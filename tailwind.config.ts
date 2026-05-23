@@ -7,23 +7,23 @@ const config: Config = {
     extend: {
       colors: {
         bg: {
-          DEFAULT: "#0a0a0b",
-          elev: "#111113",
-          card: "#141417",
+          DEFAULT: "#fdfdfe",
+          elev: "#eff0f3",
+          card: "#e8eaef",
         },
         ink: {
-          DEFAULT: "#ededee",
-          muted: "#a1a1aa",
-          subtle: "#71717a",
+          DEFAULT: "#0e1014",
+          muted: "#5c6175",
+          subtle: "#969daf",
         },
         border: {
-          DEFAULT: "#1f1f23",
-          strong: "#2a2a2f",
+          DEFAULT: "#dce0ea",
+          strong: "#c8cdd9",
         },
         accent: {
-          DEFAULT: "#a3e635", // lime-400 / mint-lime
-          soft: "#bef264",
-          glow: "#65a30d",
+          DEFAULT: "#15254e", // deep navy
+          soft: "#1e3260",
+          glow: "#0e1014",
         },
       },
       fontFamily: {
@@ -33,7 +33,7 @@ const config: Config = {
       },
       backgroundImage: {
         "grid-fade":
-          "radial-gradient(ellipse at top, rgba(163,230,53,0.08), transparent 60%)",
+          "radial-gradient(ellipse at top, rgba(21,37,78,0.06), transparent 60%)",
         "noise":
           "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.5'/></svg>\")",
       },
@@ -49,8 +49,8 @@ const config: Config = {
           to: { opacity: "1", transform: "translateY(0)" },
         },
         pulseGlow: {
-          "0%,100%": { boxShadow: "0 0 0 0 rgba(163,230,53,0.4)" },
-          "50%": { boxShadow: "0 0 40px 6px rgba(163,230,53,0.15)" },
+          "0%,100%": { boxShadow: "0 0 0 0 rgba(21,37,78,0.25)" },
+          "50%": { boxShadow: "0 0 40px 6px rgba(21,37,78,0.1)" },
         },
       },
     },
