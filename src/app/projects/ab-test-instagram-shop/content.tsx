@@ -162,7 +162,19 @@ const en = {
   sampleTitle: "Sample Size",
   sampleP: <> Revenue per user is heavy-tailed (σ ≈ $30 on a $8.50 mean). Plugging raw variance and a 1% MDE into <C>n ≈ 16σ²/Δ²</C> gives <B>~4.2M users per arm</B>, about four weeks at Instagram Shop traffic levels. After the CUPED variance reduction described below, the effective variance halves and the required sample drops to <B>2.1M users per arm</B> (4.2M total), or roughly 1 to 2 weeks.</>,
   cupedTitle: "Variance Reduction (CUPED)",
-  cupedP: <>Revenue per user is heavy-tailed, which is why the naive sample size sat at 4.2M per arm. CUPED (Controlled-experiment Using Pre-experiment Data) corrects for this by adjusting each user&apos;s in-experiment revenue for their pre-experiment baseline: <C>Y_cv = Y − θ × revenue_pre</C>, where <C>θ = Cov(Y, X) / Var(X)</C>. Pre-experiment revenue is measured before randomization, so it is independent of treatment assignment. Subtracting it does not shift the estimated treatment effect. It removes noise that was already present in each user before the experiment started. With ρ ≈ 0.7 between pre- and in-experiment revenue, CUPED reduces variance by about 50%, and the required sample drops from 4.2M to <B>2.1M users per arm</B>.</>,
+  cupedP: (
+    <>
+      <p className="prose-text mt-5">Revenue per user is heavy-tailed: most sessions end with zero spend, the median buyer spends around $15, but a small number of very large orders drives the standard deviation to ~$30 on an $8.50 mean. That gap between σ and μ is what sends the naive two-sample formula to 4.2M users per arm.</p>
+      <HeavyTailChart />
+      <p className="prose-text mt-4">CUPED (Controlled-experiment Using Pre-experiment Data) reduces variance by exploiting a pattern that pre-dates the experiment: high-revenue users tend to be high-revenue both before and during the test. For each user i, the adjusted outcome is:</p>
+      <div className="font-mono text-xs text-accent bg-bg-elev/60 border border-border/60 px-3 py-2 rounded-md my-3 text-center">Y_cv(i) = Y(i) − θ × X(i)</div>
+      <p className="prose-text">Y(i) is the user&apos;s average daily revenue during the experiment. X(i) is their average daily revenue in the <span className="font-semibold text-ink">30-day window before the experiment started</span>. θ is the OLS regression coefficient of Y on X, which minimizes the variance of Y_cv:</p>
+      <div className="font-mono text-xs text-accent bg-bg-elev/60 border border-border/60 px-3 py-2 rounded-md my-3 text-center">θ = Cov(Y, X) / Var(X)</div>
+      <p className="prose-text">This is the slope from regressing in-experiment revenue on pre-experiment revenue. Intuitively: project Y onto the pre-experiment baseline, subtract the fitted part, keep the residual. The residual has lower variance because the portion of Y already baked in before randomization has been removed.</p>
+      <p className="prose-text mt-4"><span className="font-semibold text-ink">Why this does not bias the estimate.</span> X is measured before any treatment is assigned. Both arms are drawn from the same population, so pre-experiment distributions are identical in expectation. Subtracting θ × X from Y in both arms, the adjustment cancels in the treatment-minus-control difference. The expected treatment effect is unchanged. Only the noise goes down.</p>
+      <p className="prose-text mt-4"><span className="font-semibold text-ink">Applied to both arms, all users.</span> θ is estimated on the full pre-experiment population (all ~4.2M users per arm, treatment and control together, before randomization is revealed), then applied to every user in both arms alike. The adjusted variance is Var(Y_cv) = Var(Y) × (1 − ρ²). With ρ ≈ 0.7 between 30-day pre-experiment revenue and in-experiment revenue, that is Var(Y) × (1 − 0.49) = <B>0.51 × Var(Y)</B>. Since sample size scales linearly with variance: 4.2M × 0.51 ≈ <B>2.1M users per arm</B>.</p>
+    </>
+  ),
   canaryTitle: "Canary Rollout",
   canaryP: <> Before the main experiment, a <B>1/99 canary</B> deploys the new algorithm to 1% of traffic while 99% stays on control. The only guardrails monitored are crash rate, p95 latency, and hide and report rate. If any breach, the canary stops. If all clear, the canary data is <span className="text-red-400 font-medium">discarded</span> and the 50/50 experiment runs on that same 99%.</>,
   durationTitle: "Experiment Duration",
@@ -396,7 +408,19 @@ const es: typeof en = {
   sampleTitle: "Tamaño Muestral",
   sampleP: <> Los ingresos por usuario tienen cola pesada (σ ≈ $30 sobre una media de $8,50). Introduciendo la varianza bruta y un EMD del 1% en <C>n ≈ 16σ²/Δ²</C> se obtienen <B>~4,2M de usuarios por brazo</B>, unas cuatro semanas al ritmo de tráfico de Instagram Shop. Con la reducción de varianza por CUPED descrita abajo, la varianza efectiva se reduce a la mitad y el tamaño muestral baja a <B>2,1M de usuarios por brazo</B> (4,2M en total), o aproximadamente 1 a 2 semanas.</>,
   cupedTitle: "Reducción de Varianza (CUPED)",
-  cupedP: <>Los ingresos por usuario tienen cola pesada, por eso el tamaño muestral naive era de 4,2M por brazo. CUPED (Controlled-experiment Using Pre-experiment Data) lo corrige ajustando los ingresos de cada usuario en el experimento por su baseline pre-experimento: <C>Y_cv = Y − θ × ingresos_pre</C>, donde <C>θ = Cov(Y, X) / Var(X)</C>. Los ingresos pre-experimento se miden antes de la asignación aleatoria, así que son independientes del tratamiento. Restarlos no desplaza la estimación del efecto. Solo elimina el ruido que ya existía en cada usuario antes de que el experimento comenzara. Con ρ ≈ 0,7 entre ingresos pre y durante el experimento, CUPED reduce la varianza en un 50%, y el tamaño muestral baja de 4,2M a <B>2,1M de usuarios por brazo</B>.</>,
+  cupedP: (
+    <>
+      <p className="prose-text mt-5">Los ingresos por usuario tienen cola pesada: la mayoría de las sesiones terminan sin gasto, el comprador mediano gasta unos $15, pero un pequeño número de pedidos muy grandes sube la desviación típica a ~$30 sobre una media de $8,50. Esa brecha entre σ y μ es lo que lleva la fórmula naive de dos muestras a 4,2M de usuarios por brazo.</p>
+      <HeavyTailChart />
+      <p className="prose-text mt-4">CUPED (Controlled-experiment Using Pre-experiment Data) reduce la varianza aprovechando un patrón anterior al experimento: los usuarios de alto gasto tienden a serlo tanto antes como durante el test. Para cada usuario i, el resultado ajustado es:</p>
+      <div className="font-mono text-xs text-accent bg-bg-elev/60 border border-border/60 px-3 py-2 rounded-md my-3 text-center">Y_cv(i) = Y(i) − θ × X(i)</div>
+      <p className="prose-text">Y(i) son los ingresos diarios medios del usuario durante el experimento. X(i) son sus ingresos diarios medios en la <span className="font-semibold text-ink">ventana de 30 días anteriores al experimento</span>. θ es el coeficiente de regresión OLS de Y sobre X, que minimiza la varianza de Y_cv:</p>
+      <div className="font-mono text-xs text-accent bg-bg-elev/60 border border-border/60 px-3 py-2 rounded-md my-3 text-center">θ = Cov(Y, X) / Var(X)</div>
+      <p className="prose-text">Esta es la pendiente de la regresión de ingresos en el experimento sobre ingresos pre-experimento. Intuitivamente: se proyecta Y sobre el baseline pre-experimento, se resta la parte ajustada y se conserva el residuo. El residuo tiene menos varianza porque se ha eliminado la porción de Y que ya estaba incorporada antes de la aleatorización.</p>
+      <p className="prose-text mt-4"><span className="font-semibold text-ink">Por qué esto no sesga la estimación.</span> X se mide antes de asignar ningún tratamiento. Ambos brazos se extraen de la misma población, por lo que las distribuciones pre-experimento son idénticas en esperanza. Al restar θ × X de Y en ambos brazos, el ajuste se cancela en la diferencia tratamiento menos control. El efecto del tratamiento esperado no cambia. Solo baja el ruido.</p>
+      <p className="prose-text mt-4"><span className="font-semibold text-ink">Aplicado a ambos brazos, todos los usuarios.</span> θ se estima sobre la población completa pre-experimento (todos los ~4,2M de usuarios por brazo, tratamiento y control juntos, antes de revelar la aleatorización), y luego se aplica a cada usuario en ambos brazos por igual. La varianza ajustada es Var(Y_cv) = Var(Y) × (1 − ρ²). Con ρ ≈ 0,7 entre ingresos pre-experimento a 30 días e ingresos durante el experimento, eso es Var(Y) × (1 − 0,49) = <B>0,51 × Var(Y)</B>. Como el tamaño muestral escala linealmente con la varianza: 4,2M × 0,51 ≈ <B>2,1M de usuarios por brazo</B>.</p>
+    </>
+  ),
   canaryTitle: "Lanzamiento Canario",
   canaryP: <> Antes del experimento principal, un <B>canario 1/99</B> despliega el nuevo algoritmo al 1% del tráfico mientras el 99% permanece en control. Los únicos guardianes monitorizados son la tasa de fallos, la latencia p95 y la tasa de ocultar y denunciar. Si alguno falla, el canario se detiene. Si todo está bien, los datos del canario se <span className="text-red-400 font-medium">descartan</span> y el experimento 50/50 corre en ese mismo 99%.</>,
   durationTitle: "Duración del Experimento",
@@ -614,6 +638,71 @@ function RevenueChart({ tx }: { tx: typeof en }) {
   );
 }
 
+function HeavyTailChart() {
+  const { lang } = useLang();
+  const title = lang === "es"
+    ? "Distribución de ingresos por usuario expuesto"
+    : "Revenue distribution per exposed user";
+  const caption = lang === "es"
+    ? "Fig · La mayoría de los usuarios tienen ingresos en cero. Unos pocos pedidos de alto valor (rojo) forman la cola derecha larga que infla σ hasta ~$30 sobre una media de $8,50."
+    : "Fig · Most users have zero revenue. A small number of high-value orders (red) form the long right tail that inflates σ to ~$30 on an $8.50 mean.";
+  const W = 520, H = 195;
+  const pl = 42, pr = 20, pt = 18, pb = 50;
+  const cW = W - pl - pr, cH = H - pt - pb;
+  const bars = [
+    { x: "$0", pct: 72 },
+    { x: "$1\u2013$15", pct: 12 },
+    { x: "$15\u2013$30", pct: 7 },
+    { x: "$30\u2013$60", pct: 4 },
+    { x: "$60\u2013$150", pct: 3 },
+    { x: "$150+", pct: 2 },
+  ];
+  const maxPct = 80;
+  const n = bars.length;
+  const slotW = cW / n;
+  const gap = slotW * 0.25;
+  const bw = slotW - gap;
+  const yv = (v: number) => pt + ((maxPct - v) / maxPct) * cH;
+  const xv = (i: number) => pl + i * slotW + gap / 2;
+  const meanX = xv(1) + bw / 2;
+  return (
+    <figure className="select-none my-6">
+      <div className="rounded-xl bg-bg-elev/50 border border-border p-5 pb-3">
+        <p className="text-sm font-medium text-ink text-center mb-3">{title}</p>
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" aria-hidden="true">
+          {[0, 20, 40, 60, 80].map(v => (
+            <g key={v}>
+              <line x1={pl} y1={yv(v)} x2={pl + cW} y2={yv(v)} stroke="rgba(14,16,20,0.07)" strokeDasharray="4,3" />
+              <text x={pl - 5} y={yv(v) + 3.5} textAnchor="end" fill="rgba(14,16,20,0.38)" fontSize={9}>{v}%</text>
+            </g>
+          ))}
+          {bars.map((b, i) => {
+            const x = xv(i);
+            const barH = (b.pct / maxPct) * cH;
+            const y = yv(b.pct);
+            const isLast = i === bars.length - 1;
+            const fill = isLast ? "#ef4444" : i === 0 ? "#969daf" : "#15254e";
+            const op = isLast ? 0.75 : i === 0 ? 0.45 : 0.65;
+            return (
+              <g key={b.x}>
+                <rect x={x} y={y} width={bw} height={barH} fill={fill} fillOpacity={op} rx={2} />
+                <text x={x + bw / 2} y={y - 5} textAnchor="middle" fill={isLast ? "#ef4444" : "rgba(14,16,20,0.4)"} fontSize={9}>{b.pct}%</text>
+                <text x={x + bw / 2} y={H - pb + 14} textAnchor="middle" fill="rgba(14,16,20,0.45)" fontSize={9}>{b.x}</text>
+              </g>
+            );
+          })}
+          <line x1={pl} y1={pt} x2={pl} y2={pt + cH} stroke="rgba(14,16,20,0.15)" />
+          <line x1={pl} y1={pt + cH} x2={pl + cW} y2={pt + cH} stroke="rgba(14,16,20,0.15)" />
+          <line x1={meanX} y1={pt + 2} x2={meanX} y2={pt + cH} stroke="#f97316" strokeWidth={1.2} strokeDasharray="3,2" />
+          <text x={meanX + 3} y={pt + 12} fill="#f97316" fontSize={8.5}>mean $8.50</text>
+          <text x={pl + cW} y={H - 8} textAnchor="end" fill="rgba(14,16,20,0.3)" fontSize={8}>revenue per user (experiment window)</text>
+        </svg>
+      </div>
+      <figcaption className="text-center text-xs text-ink-subtle mt-2">{caption}</figcaption>
+    </figure>
+  );
+}
+
 function CIForestPlot({ tx }: { tx: typeof en }) {
   const W = 500, H = 260;
   const pl = 52, pr = 28, pt = 25, pb = 50;
@@ -794,7 +883,7 @@ export default function AbTestContent() {
             ))}
           </div>
           <SH3>{tx.cupedTitle}</SH3>
-          <P>{tx.cupedP}</P>
+          {tx.cupedP}
         </Prose>
 
         <Prose>
