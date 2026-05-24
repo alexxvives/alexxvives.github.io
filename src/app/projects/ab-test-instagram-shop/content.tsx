@@ -160,9 +160,9 @@ const en = {
   targetTitle: "Target Population",
   targetP: "Not all users, just those who opened the Shop tab at least once during the experiment window. These are the only users who actually saw the discovery feed and were exposed to the ranking. Including users who never visited the Shop tab inflates the denominator and dilutes the signal.",
   sampleTitle: "Sample Size",
-  sampleP: <> Revenue per user is heavy-tailed (σ ≈ $30 on a $8.50 mean). The naive two-sample formula <C>n ≈ 16σ²/Δ²</C> gives ~<B>4.2M users per arm</B> — about four weeks at Instagram Shop traffic levels, too slow to iterate. The CUPED adjustment below halves the effective variance, bringing the target down to <B>2.1M users per arm</B> (4.2M total), or roughly 1 to 2 weeks.</>,
+  sampleP: <> Revenue per user is heavy-tailed (σ ≈ $30 on a $8.50 mean). Plugging raw variance and a 1% MDE into <C>n ≈ 16σ²/Δ²</C> gives <B>~4.2M users per arm</B>, about four weeks at Instagram Shop traffic levels. After the CUPED variance reduction described below, the effective variance halves and the required sample drops to <B>2.1M users per arm</B> (4.2M total), or roughly 1 to 2 weeks.</>,
   cupedTitle: "Variance Reduction (CUPED)",
-  cupedP: <>Revenue per user is heavy-tailed: a handful of large orders dominates variance. CUPED pre-specifies a covariate adjustment — each user&apos;s in-experiment revenue is adjusted by subtracting <C>θ × revenue_pre</C>, where <C>θ = Cov(Y, X) / Var(X)</C> estimated from the pre-experiment window. Because pre-experiment revenue is measured before randomization, it is independent of treatment assignment: subtracting it does not bias the effect estimate, only eliminates pre-existing noise. With ρ ≈ 0.7 between pre- and in-experiment revenue, CUPED cuts effective variance by <B>~50%</B>, halving the required sample size.</>,
+  cupedP: <>Revenue per user is heavy-tailed, which is why the naive sample size sat at 4.2M per arm. CUPED (Controlled-experiment Using Pre-experiment Data) corrects for this by adjusting each user&apos;s in-experiment revenue for their pre-experiment baseline: <C>Y_cv = Y − θ × revenue_pre</C>, where <C>θ = Cov(Y, X) / Var(X)</C>. Pre-experiment revenue is measured before randomization, so it is independent of treatment assignment. Subtracting it does not shift the estimated treatment effect. It removes noise that was already present in each user before the experiment started. With ρ ≈ 0.7 between pre- and in-experiment revenue, CUPED reduces variance by about 50%, and the required sample drops from 4.2M to <B>2.1M users per arm</B>.</>,
   canaryTitle: "Canary Rollout",
   canaryP: <> Before the main experiment, a <B>1/99 canary</B> deploys the new algorithm to 1% of traffic while 99% stays on control. The only guardrails monitored are crash rate, p95 latency, and hide and report rate. If any breach, the canary stops. If all clear, the canary data is <span className="text-red-400 font-medium">discarded</span> and the 50/50 experiment runs on that same 99%.</>,
   durationTitle: "Experiment Duration",
@@ -394,9 +394,9 @@ const es: typeof en = {
   targetTitle: "Población Objetivo",
   targetP: "No todos los usuarios, solo los que abrieron la pestaña Shop al menos una vez durante la ventana del experimento. Son los únicos usuarios que vieron el feed de descubrimiento y estuvieron expuestos al ranking. Incluir usuarios que nunca visitaron la pestaña Shop inflaría el denominador y diluiría la señal.",
   sampleTitle: "Tamaño Muestral",
-  sampleP: <> Los ingresos por usuario tienen cola pesada (σ ≈ $30 sobre una media de $8,50). La fórmula naive de dos muestras <C>n ≈ 16σ²/Δ²</C> da ~<B>4,2M de usuarios por brazo</B> — unas cuatro semanas al ritmo de tráfico de Instagram Shop, demasiado lento para iterar. El ajuste CUPED (ver abajo) divide la varianza efectiva a la mitad, reduciendo el objetivo real a <B>2,1M de usuarios por brazo</B> (4,2M en total), o aproximadamente 1 a 2 semanas.</>,
+  sampleP: <> Los ingresos por usuario tienen cola pesada (σ ≈ $30 sobre una media de $8,50). Introduciendo la varianza bruta y un EMD del 1% en <C>n ≈ 16σ²/Δ²</C> se obtienen <B>~4,2M de usuarios por brazo</B>, unas cuatro semanas al ritmo de tráfico de Instagram Shop. Con la reducción de varianza por CUPED descrita abajo, la varianza efectiva se reduce a la mitad y el tamaño muestral baja a <B>2,1M de usuarios por brazo</B> (4,2M en total), o aproximadamente 1 a 2 semanas.</>,
   cupedTitle: "Reducción de Varianza (CUPED)",
-  cupedP: <>Los ingresos por usuario tienen cola pesada: unos pocos pedidos grandes dominan la varianza. CUPED pre-especifica un ajuste por covariable — los ingresos de cada usuario en el experimento se ajustan restando <C>θ × ingresos_pre</C>, donde <C>θ = Cov(Y, X) / Var(X)</C> estimado sobre la ventana pre-experimento. Como los ingresos pre-experimento se miden antes de la asignación aleatoria, son independientes del tratamiento: restarlos no sesga la estimación del efecto, solo elimina el ruido preexistente. Con ρ ≈ 0,7 entre ingresos pre y durante el experimento, CUPED reduce la varianza efectiva en <B>~50%</B>, dividiendo el tamaño muestral requerido a la mitad.</>,
+  cupedP: <>Los ingresos por usuario tienen cola pesada, por eso el tamaño muestral naive era de 4,2M por brazo. CUPED (Controlled-experiment Using Pre-experiment Data) lo corrige ajustando los ingresos de cada usuario en el experimento por su baseline pre-experimento: <C>Y_cv = Y − θ × ingresos_pre</C>, donde <C>θ = Cov(Y, X) / Var(X)</C>. Los ingresos pre-experimento se miden antes de la asignación aleatoria, así que son independientes del tratamiento. Restarlos no desplaza la estimación del efecto. Solo elimina el ruido que ya existía en cada usuario antes de que el experimento comenzara. Con ρ ≈ 0,7 entre ingresos pre y durante el experimento, CUPED reduce la varianza en un 50%, y el tamaño muestral baja de 4,2M a <B>2,1M de usuarios por brazo</B>.</>,
   canaryTitle: "Lanzamiento Canario",
   canaryP: <> Antes del experimento principal, un <B>canario 1/99</B> despliega el nuevo algoritmo al 1% del tráfico mientras el 99% permanece en control. Los únicos guardianes monitorizados son la tasa de fallos, la latencia p95 y la tasa de ocultar y denunciar. Si alguno falla, el canario se detiene. Si todo está bien, los datos del canario se <span className="text-red-400 font-medium">descartan</span> y el experimento 50/50 corre en ese mismo 99%.</>,
   durationTitle: "Duración del Experimento",
@@ -781,9 +781,8 @@ export default function AbTestContent() {
             {([
               { n: "01", title: tx.targetTitle, body: tx.targetP },
               { n: "02", title: tx.sampleTitle, body: tx.sampleP },
-              { n: "03", title: tx.cupedTitle, body: tx.cupedP },
-              { n: "04", title: tx.canaryTitle, body: tx.canaryP },
-              { n: "05", title: tx.durationTitle, body: tx.durationP },
+              { n: "03", title: tx.canaryTitle, body: tx.canaryP },
+              { n: "04", title: tx.durationTitle, body: tx.durationP },
             ] as { n: string; title: string; body: React.ReactNode }[]).map(({ n, title, body }) => (
               <div key={n} className="flex gap-4 rounded-lg bg-bg-elev/30 border border-border px-4 py-4">
                 <span className="font-mono text-xs text-accent shrink-0 mt-0.5 w-7">{n}</span>
@@ -794,6 +793,8 @@ export default function AbTestContent() {
               </div>
             ))}
           </div>
+          <SH3>{tx.cupedTitle}</SH3>
+          <P>{tx.cupedP}</P>
         </Prose>
 
         <Prose>
