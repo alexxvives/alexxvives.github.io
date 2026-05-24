@@ -160,7 +160,9 @@ const en = {
   targetTitle: "Target Population",
   targetP: "Not all users, just those who opened the Shop tab at least once during the experiment window. These are the only users who actually saw the discovery feed and were exposed to the ranking. Including users who never visited the Shop tab inflates the denominator and dilutes the signal.",
   sampleTitle: "Sample Size",
-  sampleP: <> Plugging baseline revenue variance and a 1% MDE into the standard two-sample formula <C>n ≈ 16σ²/Δ²</C> gives about <B>2.1M users per arm</B> (4.2M total). At Instagram Shop traffic volumes, that&apos;s roughly 1 to 2 weeks from the target population.</>,
+  sampleP: <> Revenue per user is heavy-tailed (σ ≈ $30 on a $8.50 mean). The naive two-sample formula <C>n ≈ 16σ²/Δ²</C> gives ~<B>4.2M users per arm</B> — about four weeks at Instagram Shop traffic levels, too slow to iterate. The CUPED adjustment below halves the effective variance, bringing the target down to <B>2.1M users per arm</B> (4.2M total), or roughly 1 to 2 weeks.</>,
+  cupedTitle: "Variance Reduction (CUPED)",
+  cupedP: <>Revenue per user is heavy-tailed: a handful of large orders dominates variance. CUPED pre-specifies a covariate adjustment — each user&apos;s in-experiment revenue is adjusted by subtracting <C>θ × revenue_pre</C>, where <C>θ = Cov(Y, X) / Var(X)</C> estimated from the pre-experiment window. Because pre-experiment revenue is measured before randomization, it is independent of treatment assignment: subtracting it does not bias the effect estimate, only eliminates pre-existing noise. With ρ ≈ 0.7 between pre- and in-experiment revenue, CUPED cuts effective variance by <B>~50%</B>, halving the required sample size.</>,
   canaryTitle: "Canary Rollout",
   canaryP: <> Before the main experiment, a <B>1/99 canary</B> deploys the new algorithm to 1% of traffic while 99% stays on control. The only guardrails monitored are crash rate, p95 latency, and hide and report rate. If any breach, the canary stops. If all clear, the canary data is <span className="text-red-400 font-medium">discarded</span> and the 50/50 experiment runs on that same 99%.</>,
   durationTitle: "Experiment Duration",
@@ -270,7 +272,7 @@ const en = {
   gapsFixPartial: "partial fix",
   gapsFixRedesign: "needs redesign",
   gapsStep: "Honest Assessment",
-  gapsTitle: "Five Things This Test Doesn't Fully Address",
+  gapsTitle: "Four Things This Test Doesn't Fully Address",
   gapsP1: "A significant result doesn't mean the experiment was perfect. These are the gaps worth knowing:",
   gapsItems: [
     {
@@ -281,24 +283,18 @@ const en = {
     },
     {
       n: "02",
-      t: "Heavy-tailed revenue",
-      d: "Revenue per user is heavy-tailed. A handful of large orders drives most variance. A bootstrap CI was run as a robustness check; both the t-test and bootstrap returned [+3.4%, +5.4%]. The right fix is at design time: pre-specify log-transformed revenue as the primary metric (reduces sensitivity to extremes), or apply CUPED using pre-experiment revenue as a covariate (typically cuts variance by 20–50%). Both require no additional data and would have narrowed the CI or reached the same power with a smaller sample.",
-      fix: "addressable" as const,
-    },
-    {
-      n: "03",
       t: "Multiple testing on funnel metrics",
       d: "Five secondary funnel metrics were read alongside the primary. Without Bonferroni or Benjamini-Hochberg correction, the family-wise false positive rate exceeds the reported α = 0.05. The primary metric is pre-specified and clean; the secondary lifts should carry a caveat. Applying Benjamini-Hochberg correction to the five funnel metrics takes one step and should be done before reading them.",
       fix: "addressable" as const,
     },
     {
-      n: "04",
+      n: "03",
       t: "Algorithm warmup",
       d: "Discovery models learn from engagement signals. The algorithm at day 14 has seen far less data than it will at day 90. The measured lift may underestimate the eventual steady-state gain, and a warmed-up control vs. a cold treatment creates a small but real asymmetry in the comparison. The 90-day holdback captures the steady-state lift; the warmup asymmetry within the primary 14-day window is harder to eliminate.",
       fix: "partial" as const,
     },
     {
-      n: "05",
+      n: "04",
       t: "Discovery and search displacement",
       d: "If users find products through the discovery feed, they search less. That's good for this experiment but could suppress search CTR, a metric owned by a different team. A cross-surface check (discovery impressions vs. subsequent search rate per arm) wasn't included but can be queried from existing server logs.",
       fix: "addressable" as const,
@@ -398,7 +394,9 @@ const es: typeof en = {
   targetTitle: "Población Objetivo",
   targetP: "No todos los usuarios, solo los que abrieron la pestaña Shop al menos una vez durante la ventana del experimento. Son los únicos usuarios que vieron el feed de descubrimiento y estuvieron expuestos al ranking. Incluir usuarios que nunca visitaron la pestaña Shop inflaría el denominador y diluiría la señal.",
   sampleTitle: "Tamaño Muestral",
-  sampleP: <> Introduciendo la varianza de ingresos base y un EMD del 1% en la fórmula estándar de dos muestras <C>n ≈ 16σ²/Δ²</C> se obtienen aproximadamente <B>2,1M de usuarios por brazo</B> (4,2M en total). Con los volúmenes de tráfico de Instagram Shop, eso es aproximadamente 1 a 2 semanas de la población objetivo.</>,
+  sampleP: <> Los ingresos por usuario tienen cola pesada (σ ≈ $30 sobre una media de $8,50). La fórmula naive de dos muestras <C>n ≈ 16σ²/Δ²</C> da ~<B>4,2M de usuarios por brazo</B> — unas cuatro semanas al ritmo de tráfico de Instagram Shop, demasiado lento para iterar. El ajuste CUPED (ver abajo) divide la varianza efectiva a la mitad, reduciendo el objetivo real a <B>2,1M de usuarios por brazo</B> (4,2M en total), o aproximadamente 1 a 2 semanas.</>,
+  cupedTitle: "Reducción de Varianza (CUPED)",
+  cupedP: <>Los ingresos por usuario tienen cola pesada: unos pocos pedidos grandes dominan la varianza. CUPED pre-especifica un ajuste por covariable — los ingresos de cada usuario en el experimento se ajustan restando <C>θ × ingresos_pre</C>, donde <C>θ = Cov(Y, X) / Var(X)</C> estimado sobre la ventana pre-experimento. Como los ingresos pre-experimento se miden antes de la asignación aleatoria, son independientes del tratamiento: restarlos no sesga la estimación del efecto, solo elimina el ruido preexistente. Con ρ ≈ 0,7 entre ingresos pre y durante el experimento, CUPED reduce la varianza efectiva en <B>~50%</B>, dividiendo el tamaño muestral requerido a la mitad.</>,
   canaryTitle: "Lanzamiento Canario",
   canaryP: <> Antes del experimento principal, un <B>canario 1/99</B> despliega el nuevo algoritmo al 1% del tráfico mientras el 99% permanece en control. Los únicos guardianes monitorizados son la tasa de fallos, la latencia p95 y la tasa de ocultar y denunciar. Si alguno falla, el canario se detiene. Si todo está bien, los datos del canario se <span className="text-red-400 font-medium">descartan</span> y el experimento 50/50 corre en ese mismo 99%.</>,
   durationTitle: "Duración del Experimento",
@@ -508,7 +506,7 @@ const es: typeof en = {
   gapsFixPartial: "solución parcial",
   gapsFixRedesign: "requiere rediseño",
   gapsStep: "Evaluación Honesta",
-  gapsTitle: "Cinco Cosas que este Test No Aborda del Todo",
+  gapsTitle: "Cuatro Cosas que este Test No Aborda del Todo",
   gapsP1: "Un resultado significativo no significa que el experimento fuera perfecto. Estas son las limitaciones que vale la pena conocer:",
   gapsItems: [
     {
@@ -519,24 +517,18 @@ const es: typeof en = {
     },
     {
       n: "02",
-      t: "Ingresos con cola pesada",
-      d: "Los ingresos por usuario tienen cola pesada. Unos pocos pedidos grandes generan la mayor parte de la varianza. Se usó un IC bootstrap como verificación de robustez; tanto el t-test como el bootstrap devuelven [+3,4%, +5,4%]. La corrección adecuada ocurre en el diseño: pre-especificar ingresos log-transformados como métrica primaria (reduce la sensibilidad a extremos), o aplicar CUPED usando ingresos pre-experimento como covariable (típicamente reduce la varianza en un 20–50%). Ambas opciones no requieren datos adicionales y habrían estrechado el IC o alcanzado la misma potencia con una muestra menor.",
-      fix: "addressable" as const,
-    },
-    {
-      n: "03",
       t: "Testing múltiple en métricas de embudo",
       d: "Se leyeron cinco métricas secundarias de embudo junto con la primaria. Sin corrección Bonferroni o Benjamini-Hochberg, la tasa de falsos positivos familiar supera el α = 0,05 reportado. La métrica primaria está preespecificada y es sólida; los uplift secundarios deberían llevar una advertencia. Aplicar la corrección Benjamini-Hochberg a las cinco métricas de embudo es un paso directo y debería hacerse antes de leerlas.",
       fix: "addressable" as const,
     },
     {
-      n: "04",
+      n: "03",
       t: "Calentamiento del algoritmo",
       d: "Los modelos de descubrimiento aprenden de las señales de engagement. El algoritmo en el día 14 ha visto mucho menos datos que en el día 90. El uplift medido puede infraestimar la ganancia eventual en estado estable, y comparar un control calentado con un tratamiento frío crea una pequeña pero real asimetría en la comparación. El holdback de 90 días captura el uplift en estado estable; la asimetría dentro de la ventana principal de 14 días es más difícil de eliminar.",
       fix: "partial" as const,
     },
     {
-      n: "05",
+      n: "04",
       t: "Desplazamiento descubrimiento y búsqueda",
       d: "Si los usuarios encuentran productos a través del feed de descubrimiento, buscan menos. Eso es bueno para este experimento pero podría suprimir el CTR de búsqueda, una métrica de otro equipo. No se incluyó una comprobación entre superficies (impresiones de descubrimiento vs. tasa posterior de búsqueda por brazo), pero puede consultarse desde los registros del servidor existentes.",
       fix: "addressable" as const,
@@ -789,8 +781,9 @@ export default function AbTestContent() {
             {([
               { n: "01", title: tx.targetTitle, body: tx.targetP },
               { n: "02", title: tx.sampleTitle, body: tx.sampleP },
-              { n: "03", title: tx.canaryTitle, body: tx.canaryP },
-              { n: "04", title: tx.durationTitle, body: tx.durationP },
+              { n: "03", title: tx.cupedTitle, body: tx.cupedP },
+              { n: "04", title: tx.canaryTitle, body: tx.canaryP },
+              { n: "05", title: tx.durationTitle, body: tx.durationP },
             ] as { n: string; title: string; body: React.ReactNode }[]).map(({ n, title, body }) => (
               <div key={n} className="flex gap-4 rounded-lg bg-bg-elev/30 border border-border px-4 py-4">
                 <span className="font-mono text-xs text-accent shrink-0 mt-0.5 w-7">{n}</span>
